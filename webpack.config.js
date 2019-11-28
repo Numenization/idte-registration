@@ -1,47 +1,57 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: { index: "./src/main/websrc/index.jsx" },
+  entry: {
+    index: './src/main/websrc/index.jsx',
+    testpage: './src/main/websrc/testpage.jsx'
+  },
   output: {
-    path: path.resolve(__dirname, "./src/main/webapp"),
-    filename: "[name]-bundle.js",
-    publicPath: "idte/"
+    path: path.resolve(__dirname, './src/main/webapp'),
+    filename: '[name]-bundle.js',
+    publicPath: '/idte/'
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: ["babel-loader"]
+        use: ['babel-loader']
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        use: ["file-loader"]
+        use: ['file-loader']
       }
     ]
   },
   resolve: {
-    extensions: ["*", ".js", ".jsx"]
+    extensions: ['*', '.js', '.jsx']
   },
-  mode: "development",
+  mode: 'development',
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/main/websrc/index.html"
+      chunks: ['index'],
+      template: './src/main/websrc/template.html',
+      filename: 'index.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['testpage'],
+      template: './src/main/websrc/template.html',
+      filename: 'testpage.html'
     })
   ],
   devServer: {
-    contentBase: path.join(__dirname, "./dist"),
+    contentBase: path.join(__dirname, './dist'),
     watchContentBase: true,
     historyApiFallback: true,
     proxy: [
       {
-        context: ["/api", "/auth"],
-        target: "http://localhost:5000",
+        context: ['/api', '/auth'],
+        target: 'http://localhost:5000',
         secure: false
       }
     ],

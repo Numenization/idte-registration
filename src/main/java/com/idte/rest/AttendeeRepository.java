@@ -3,9 +3,9 @@ package com.idte.rest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-import com.idte.rest.data.TestUser;
+import com.idte.rest.data.Attendee;
 
-@RepositoryRestResource(path = "users")
-public interface UserRepository extends JpaRepository<TestUser, String> {
+@RepositoryRestResource(exported = false)
+public interface AttendeeRepository extends JpaRepository<Attendee, String> {
 
 }

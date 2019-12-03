@@ -1,13 +1,19 @@
 package com.idte.rest.data;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Entity
-public abstract class Attendee {
+public class Attendee {
     @Id
+    protected String id;
     @Email
     protected String email;
     @NotNull
@@ -23,7 +29,24 @@ public abstract class Attendee {
     @NotNull
     protected String city;
     protected String dateCreated;
+    protected String lastModified;
     protected String comments;
+
+    public void createId() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        try {
+            byte[] bytes = email.getBytes("UTF-8");
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            byte[] hashedEmail = md5.digest(bytes);
+            id = UUID.nameUUIDFromBytes(hashedEmail).toString();
+        }
+        catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public void setEmail(String email) {
         this.email = email;
@@ -61,8 +84,16 @@ public abstract class Attendee {
         this.dateCreated = dateCreated;
     }
 
+    public void setLastModified(String lastModified) {
+        this.lastModified = lastModified;
+    }
+
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getEmail() {
@@ -99,6 +130,10 @@ public abstract class Attendee {
 
     public String getDateCreated() {
         return dateCreated;
+    }
+
+    public String getLastModified() {
+        return lastModified;
     }
 
     public String getComments() {

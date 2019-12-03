@@ -26,6 +26,23 @@ public class Supplier extends Attendee {
         return company;
     }
 
+    public static Supplier from(Supplier supplier) {
+        Supplier newSupplier = new Supplier();
+
+        newSupplier.email = supplier.email;
+        newSupplier.firstName = supplier.firstName;
+        newSupplier.lastName = supplier.lastName;
+        newSupplier.nickname = supplier.nickname;
+        newSupplier.phoneNumber = supplier.phoneNumber;
+        newSupplier.cellNumber = supplier.cellNumber;
+        newSupplier.country = supplier.country;
+        newSupplier.city = supplier.city;
+        newSupplier.technologyNumber = supplier.technologyNumber;
+        newSupplier.company = supplier.company;
+
+        return newSupplier;
+    }
+
     @Override
     public String toString() {
         return "Supplier{email='" + this.email + "' firstName='" + this.firstName + 

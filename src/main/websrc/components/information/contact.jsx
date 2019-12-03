@@ -6,7 +6,7 @@ import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import '../../css/styles.css';
 
-class WaiverPage extends React.Component {
+class ContactPage extends React.Component {
   render() {
     return (
       <div className='container'>
@@ -15,21 +15,19 @@ class WaiverPage extends React.Component {
         </div>
 
         <div className='top'>
-          <Header/>
-          <NavBar/>
+            <Header />
+            <NavBar />
         </div>
 
         <div className='content'>
-          <h1>Registration Digital Waiver</h1>
-            <p>
-                Hello, you are about to sign this form are you sure you want to do this
-                {' '}
-            </p>
-            <div className="registration-form">
-              <button>
-              < a href='registerform.html'><font color='white'>Sign</font></a>  
-              </button>
-            </div>
+            <h1>Contact IDTE Team</h1>
+            <h3>Ways to contact us:</h3>
+            <ul>
+                <li>
+                Email: <a href=''>example@email.com</a>
+                </li>
+                <li>Phone: (800) 555-5555</li>
+            </ul>
         </div>
 
         <Footer />
@@ -38,4 +36,4 @@ class WaiverPage extends React.Component {
   }
 }
 
-ReactDOM.render(<WaiverPage />, document.getElementById('app'));
+ReactDOM.render(<ContactPage />, document.getElementById('app'));

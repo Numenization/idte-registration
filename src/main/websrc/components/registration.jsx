@@ -21,11 +21,11 @@ class RegistrationPage extends React.Component {
 
         <div className='content'>
           <div className='registration-buttons'>
-            <h1>Registration Page</h1>
+            <h1>Registration</h1>
             <p>Sample Text</p>
-            <a href='/register/form'>Register as Supplier (Ford)</a>
-            <a href='/register/form'>Register as Supplier (Other)</a>
-            <a href='/register/form'>Register as Presenter</a>
+            <a href='registerwaiver.html'><font color='white'>Register as Supplier (Ford)</font></a>
+            <a href='registerwaiver.html'><font color='white'>Register as Supplier (Other)</font></a>
+            <a href='registerwaiver.html'><font color='white'>Register as Presenter</font></a>
           </div>
         </div>
 

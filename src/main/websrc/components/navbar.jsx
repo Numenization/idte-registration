@@ -11,36 +11,36 @@ class NavBar extends React.Component {
           </li>
 
           <li>
-            <a href='registerwaiver.html'>Register</a>
+            <a href='registration.html'>Register</a>
           </li>
 
           <li>
-            <a href='index.html'>Technology<br/>Submission </a>
+            <a href='technologywaiver.html'>Technology<br/>Submission </a>
           </li>
 
           <li>
-            <a id='tiered' href='index.html'>Information</a>
+            <a id='tiered' href='info.html'>Information</a>
 
             <div className="navbar-second-tier">
               <ul>
                 <li>
-                  <a href='index.html'>Event Info/FAQ</a>
+                  <a href='faq.html'>Event Info/FAQ</a>
                 </li>
                 <li>
-                  <a href='index.html'>Event Map</a>
+                  <a href='map.html'>Event Map</a>
                 </li>
                 <li>
-                  <a href='index.html'>Display Layout</a>
+                  <a href='eventlayout.html'>Display Layout</a>
                 </li>
                 <li>
-                  <a href='index.html'>Contact IDTE</a>
+                  <a href='contact.html'>Contact IDTE</a>
                 </li>
               </ul>
             </div>
           </li>
 
           <li>
-            <a href='index.html'>Admin</a>
+            <a href='admin.html'>Admin</a>
           </li>
         </ul>
       </div>

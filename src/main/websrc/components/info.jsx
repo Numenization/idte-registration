@@ -24,16 +24,16 @@ class InfoPage extends React.Component {
             <p>Sample Text</p>
             <ul>
                 <li>
-                <a href='/info/faq'><font color='blue'>Event Info/FAQ</font></a>
+                <a href='faq.html'><font color='blue'>Event Info/FAQ</font></a>
                 </li>
                 <li>
-                <a href='/info/map'><font color='blue'>Event Map</font></a>
+                <a href='map.html'><font color='blue'>Event Map</font></a>
                 </li>
                 <li>
-                <a href='/info/display'><font color='blue'>Display Layout</font></a>
+                <a href='eventlayout.html'><font color='blue'>Display Layout</font></a>
                 </li>
                 <li>
-                <a href='/info/contact'><font color='blue'>Contact IDTE Team</font></a>
+                <a href='contact.html'><font color='blue'>Contact IDTE Team</font></a>
                 </li>
             </ul>
         </div>

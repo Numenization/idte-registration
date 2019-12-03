@@ -4,7 +4,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: {
     index: './src/main/websrc/index.jsx',
-    testpage: './src/main/websrc/testpage.jsx'
+    testpage: './src/main/websrc/testpage.jsx',
+    registration: "./src/main/websrc/components/registration.jsx",
+    registerwaiver: "./src/main/websrc/components/registration/registerwaiver.jsx"
   },
   output: {
     path: path.resolve(__dirname, './src/main/webapp'),
@@ -42,6 +44,16 @@ module.exports = {
       chunks: ['testpage'],
       template: './src/main/websrc/template.html',
       filename: 'testpage.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['registration'],
+      template: './src/main/websrc/template.html',
+      filename: 'registration.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['registerwaiver'],
+      template: './src/main/websrc/template.html',
+      filename: 'registerwaiver.html'
     })
   ],
   devServer: {

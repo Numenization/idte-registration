@@ -63,29 +63,11 @@ class App extends React.Component {
               </Route>
 
               <Route path='/register/waiver'>
-                <h1>Digital Waiver</h1>
-                <p>
-                  Sample Text Sample Text Sample Text Sample Text Sample Text
-                  Sample Text Sample Text Sample Text Sample Text Sample Text
-                  Sample Text Sample Text Sample Text Sample Text Sample Text
-                  Sample Text Sample Text Sample Text Sample Text Sample Text
-                  Sample Text Sample Text Sample Text Sample Text Sample Text
-                  Sample Text Sample Text Sample Text Sample Text Sample Text
-                  Sample Text Sample Text Sample Text Sample Text Sample Text
-                  Sample Text Sample Text Sample Text Sample Text Sample Text
-                  Sample Text Sample Text{' '}
-                </p>
-                <a href='/register'>Sign</a>
+                
               </Route>
 
               <Route path='/register'>
-                <div className='registration-buttons'>
-                  <h1>Registration Page</h1>
-                  <p>Sample Text</p>
-                  <a href='/register/form'>Register as Supplier (Ford)</a>
-                  <a href='/register/form'>Register as Supplier (Other)</a>
-                  <a href='/register/form'>Register as Presenter</a>
-                </div>
+                
               </Route>
 
               <Route path='/technologies/waiver'>

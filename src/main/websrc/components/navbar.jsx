@@ -7,52 +7,40 @@ class NavBar extends React.Component {
       <div className="navbar">
         <ul>
           <li>
-            <NavLink exact to="/" activeClassName="active">
-              Home
-            </NavLink>
+            <a href='index.html'>Home</a>
           </li>
 
           <li>
-            <NavLink to="/register/waiver" activeClassName="active">
-              Register
-            </NavLink>
+            <a href='registerwaiver.html'>Register</a>
           </li>
 
           <li>
-            <NavLink to="/technologies" activeClassName="active">
-              Technology Submission
-            </NavLink>
+            <a href='index.html'>Technology<br/>Submission </a>
           </li>
 
           <li>
-            <NavLink id="tiered" to="/info" activeClassName="active">
-              Information
-            </NavLink>
+            <a id='tiered' href='index.html'>Information</a>
 
             <div className="navbar-second-tier">
               <ul>
                 <li>
-                  <NavLink to="/info/faq">Event Info/FAQ</NavLink>
+                  <a href='index.html'>Event Info/FAQ</a>
                 </li>
                 <li>
-                  <NavLink to="/info/map">Event Map</NavLink>
+                  <a href='index.html'>Event Map</a>
                 </li>
                 <li>
-                  <NavLink to="/info/display">Display Layout</NavLink>
+                  <a href='index.html'>Display Layout</a>
                 </li>
                 <li>
-                  <NavLink className="last" to="/info/contact">
-                    Contact IDTE
-                  </NavLink>
+                  <a href='index.html'>Contact IDTE</a>
                 </li>
               </ul>
             </div>
           </li>
 
           <li>
-            <NavLink to="/admin" activeClassName="active">
-              Admin
-            </NavLink>
+            <a href='index.html'>Admin</a>
           </li>
         </ul>
       </div>

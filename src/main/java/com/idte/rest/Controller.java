@@ -34,7 +34,7 @@ public class Controller {
     private EvaluatorRepository evaluators;
 
     // get all of either attendees, suppliers, or evaluators
-    @GetMapping(path="/attendees")
+    @GetMapping(path="/attendees/all")
     public Iterable<Attendee> findAllAttendees() {
         return attendees.findAll();
     }
@@ -47,13 +47,33 @@ public class Controller {
         return evaluators.findAll();
     }
 
-    // get from email
-    @GetMapping(path="/{email}")
-    public Attendee findAttendeeByEmail(@PathVariable("email") String search) {
+    // // get from email
+    // @GetMapping(path="/{email}")
+    // public Attendee findAttendeeByEmail(@PathVariable("email") String search) {
+    //     Attendee find = new Attendee();
+    //     find.setEmail(search);
+    //     Example<Attendee> example = Example.of(find);
+    //     return attendees.findOne(example).orElse(null);
+    // }
+    
+    // get from email or id in json
+    @GetMapping(path="/attendees")
+    public Object findAttendee(@RequestBody Map<String, String> json) {
         Attendee find = new Attendee();
-        find.setEmail(search);
+        if(json.get("email") != null) {
+            find.setEmail(json.get("email"));
+        }
+        if(json.get("id") != null) {
+            find.setId(json.get("id"));
+        }
         Example<Attendee> example = Example.of(find);
-        return attendees.findOne(example).orElse(null);
+        Attendee attendee = attendees.findOne(example).orElse(null);
+        if(attendee != null) {
+            return new ResponseEntity<>(attendee, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     // create a new supplier

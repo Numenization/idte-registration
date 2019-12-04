@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import com.idte.rest.data.AttendeeRepository;
+import com.idte.rest.data.EvaluatorRepository;
+import com.idte.rest.data.SupplierRepository;
 import com.idte.rest.data.Attendee;
 import com.idte.rest.data.Error;
 import com.idte.rest.data.Evaluator;
@@ -24,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path="/idte")
-public class Controller {
+public class AttendeeController {
     @Autowired
     private AttendeeRepository attendees;
     @Autowired

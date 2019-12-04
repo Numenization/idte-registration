@@ -30,6 +30,7 @@ public class Attendee {
     protected String city;
     protected String dateCreated;
     protected String lastModified;
+    protected String modifiedBy;
     protected String comments;
 
     public void createId() throws UnsupportedEncodingException, NoSuchAlgorithmException {
@@ -88,6 +89,10 @@ public class Attendee {
         this.lastModified = lastModified;
     }
 
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
     public void setComments(String comments) {
         this.comments = comments;
     }
@@ -134,6 +139,10 @@ public class Attendee {
 
     public String getLastModified() {
         return lastModified;
+    }
+
+    public String getModifiedBy() {
+        return modifiedBy;
     }
 
     public String getComments() {

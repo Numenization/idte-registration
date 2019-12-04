@@ -214,9 +214,9 @@ public class Controller {
             DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
             Date date = new Date();
             String currentDateTime = dateFormat.format(date);
-
             attendee.setLastModified(currentDateTime);
-            
+
+            attendees.save(attendee);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         else {

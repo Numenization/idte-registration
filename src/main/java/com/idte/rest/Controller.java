@@ -11,8 +11,6 @@ import com.idte.rest.data.Evaluator;
 import com.idte.rest.data.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JsonParser;
-import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +32,7 @@ public class Controller {
     @Autowired
     private EvaluatorRepository evaluators;
 
+    // get all of either attendees, suppliers, or evaluators
     @GetMapping(path="/attendees")
     public Iterable<Attendee> findAllAttendees() {
         return attendees.findAll();
@@ -56,6 +55,7 @@ public class Controller {
         return attendees.findOne(example).orElse(null);
     }
 
+    // create a new supplier
     @PostMapping(path = "/suppliers", consumes = "application/json", produces = "application/json")
     public Object createSupplier(@RequestBody Supplier attendee) {
         // extract request info into new supplier object
@@ -86,6 +86,7 @@ public class Controller {
         }
     }
 
+    // create a new evaluator
     @PostMapping(path = "/evaluators", consumes = "application/json", produces = "application/json")
     public Object createEvaluator(@RequestBody Evaluator attendee) {
         // extract request info into new supplier object

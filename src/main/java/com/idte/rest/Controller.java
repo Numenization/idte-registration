@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -117,6 +118,7 @@ public class Controller {
         }
     }
 
+    // update an attendees fields in the database
     @PutMapping(path = "/attendees")
     public Object updateAttendee(@RequestBody Map<String, String> json) {
         // no matter what, we need the original email of the attendee to perform this update
@@ -224,5 +226,24 @@ public class Controller {
         }
     }
 
-    // TODO: Delete attendee
+    // delete an attendee from the database
+    @DeleteMapping(path = "/{search}")
+    public Object delete(@RequestBody Map<String, String> json) {
+        // try to find the requested user to delete
+        Attendee find = new Attendee();
+        if(json.get("email") != null) {
+            find.setEmail(json.get("email"));
+        }
+        Example<Attendee> example = Example.of(find);
+        Attendee attendee = attendees.findOne(example).orElse(null);
+
+        // if we cant find it send 404
+        if(attendee == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // we found it so lets delete it
+        attendees.delete(attendee);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -240,7 +240,7 @@ public class AttendeeController {
     }
 
     // delete an attendee from the database
-    @DeleteMapping(path = "/{search}")
+    @DeleteMapping(path = "/attendees")
     public Object delete(@RequestBody Map<String, String> json) {
         // try to find the requested user to delete
         Attendee find = new Attendee();

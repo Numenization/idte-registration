@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,15 +45,6 @@ public class Controller {
     public Iterable<Evaluator> findAllEvaluators() {
         return evaluators.findAll();
     }
-
-    // // get from email
-    // @GetMapping(path="/{email}")
-    // public Attendee findAttendeeByEmail(@PathVariable("email") String search) {
-    //     Attendee find = new Attendee();
-    //     find.setEmail(search);
-    //     Example<Attendee> example = Example.of(find);
-    //     return attendees.findOne(example).orElse(null);
-    // }
     
     // get from email or id in json
     @GetMapping(path="/attendees")

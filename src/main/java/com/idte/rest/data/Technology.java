@@ -1,5 +1,10 @@
 package com.idte.rest.data;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -22,6 +27,37 @@ public class Technology {
   protected String lastModified;
   protected String modifiedBy;
   protected String comments;
+
+  public static Technology from(Technology technology) {
+    Technology newTechnology = new Technology();
+
+    newTechnology.id = technology.id;
+    newTechnology.title = technology.title;
+    newTechnology.description = technology.description;
+    newTechnology.category = technology.category;
+    newTechnology.type = technology.type;
+    newTechnology.shippingCity = technology.shippingCity;
+    newTechnology.shippingCountry = technology.shippingCountry;
+    newTechnology.source = technology.source;
+    newTechnology.fordContact = technology.fordContact;
+    newTechnology.fordPresenter = technology.fordPresenter;
+    newTechnology.director = technology.director;
+    newTechnology.supplierCompany = technology.supplierCompany;
+
+    return newTechnology;
+  }
+
+  public void createId() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    try {
+        byte[] bytes = title.getBytes("UTF-8");
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        byte[] hashedEmail = md5.digest(bytes);
+        id = UUID.nameUUIDFromBytes(hashedEmail).toString();
+    }
+    catch (Exception e) {
+        throw e;
+    }
+  }
 
   public void setId(String id) {
     this.id = id;

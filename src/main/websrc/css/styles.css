@@ -367,3 +367,74 @@ button:hover {
 a {
   text-decoration: none;
 }
+
+/* Admin CSS */
+
+.admin-buttons {
+
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
+}
+  .admin-buttons a {
+  margin: 0.5em;
+  padding: 0.2em 0;
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid black;
+  font-size: 115%;
+  border-radius: 5px;
+  background-color: #24489f;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+}
+
+.on-off-registration  {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
+}
+.on-off-registration a {
+  margin: 0.5em;
+  padding: 0.2em 0;
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid black;
+  font-size: 115%;
+  border-radius: 5px;
+  background-color: #24489f;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+}
+.submit{
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
+}
+.submit a {
+  margin: 0.5em;
+  padding: 0.2em 0;
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid black;
+  font-size: 115%;
+  border-radius: 5px;
+  background-color: #24489f;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+}

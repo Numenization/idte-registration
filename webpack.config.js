@@ -12,6 +12,11 @@ module.exports = {
     technologywaiver: "./src/main/websrc/components/technology/technologywaiver.jsx",
     info: "./src/main/websrc/components/info.jsx",
     admin: "./src/main/websrc/components/admin/admin.jsx",
+    changeregistration: "./src/main/websrc/components/admin/changeregistration.jsx",
+    attendeecheckin: "./src/main/websrc/components/admin/attendeecheckin.jsx",
+    attendeesearch: "./src/main/websrc/components/admin/attendeesearch.jsx",
+    editattendees: "./src/main/websrc/components/admin/editattendees.jsx",
+    edittechnologies: "./src/main/websrc/components/admin/edittechnologies.jsx",
     faq: "./src/main/websrc/components/information/faq.jsx",
     map: "./src/main/websrc/components/information/map.jsx",
     eventlayout: "./src/main/websrc/components/information/eventlayout.jsx",
@@ -108,6 +113,31 @@ module.exports = {
       chunks: ['contact'],
       template: './src/main/websrc/template.html',
       filename: 'contact.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['changeregistration'],
+      template: './src/main/websrc/template.html',
+      filename: 'changeregistration.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['attendeecheckin'],
+      template: './src/main/websrc/template.html',
+      filename: 'attendeecheckin.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['attendeesearch'],
+      template: './src/main/websrc/template.html',
+      filename: 'attendeesearch.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['editattendees'],
+      template: './src/main/websrc/template.html',
+      filename: 'editattendees.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['edittechnologies'],
+      template: './src/main/websrc/template.html',
+      filename: 'edittechnologies.html'
     })
   ],
   devServer: {

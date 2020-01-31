@@ -35,7 +35,7 @@ class TestPage extends React.Component {
 
               <label>*Concept Type:</label>
               <input type='text'></input>
-
+              
               <label>*Shipping City:</label>
               <input type='text'></input>
 
@@ -56,7 +56,9 @@ class TestPage extends React.Component {
 
               <label>*Supplier Company:</label>
               <input type='text'></input>
-            </form>
+
+              
+              </form>
             <button>Submit Registration</button>
           </div>
         </div>

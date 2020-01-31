@@ -15,25 +15,24 @@ class AdminPage extends React.Component {
         </div>
 
         <div className='top'>
-            <Header />
-            <NavBar />
+          <Header />
+          <NavBar />
         </div>
 
         <div className='content'>
           <h1>Administration</h1>
           <p>Administration abilities listed below:</p>
 
-        
           <div className='admin-buttons'>
-            <a href = 'edittechnologies.html'> Edit Technologies</a>
+            <a href='edittechnologies.html'> Edit Technologies</a>
             <a>Edit Event Dates</a>
             <a href='changeregistration.html'>Open/Close Registration</a>
             <a href='attendeecheckin.html'>Attendee Checkin</a>
             <a href='editattendees.html'>Edit Attendees</a>
-
-           </div>
+            <a href='database.html'>Database Administration</a>
+          </div>
         </div>
-    
+
         <Footer />
       </div>
     );

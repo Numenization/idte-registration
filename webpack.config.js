@@ -5,22 +5,27 @@ module.exports = {
   entry: {
     index: './src/main/websrc/index.jsx',
     testpage: './src/main/websrc/testpage.jsx',
-    registration: "./src/main/websrc/components/registration.jsx",
-    registerwaiver: "./src/main/websrc/components/registration/registerwaiver.jsx",
-    registerform: "./src/main/websrc/components/registration/registerform.jsx",
-    technologyform: "./src/main/websrc/components/technology/technologyform.jsx",
-    technologywaiver: "./src/main/websrc/components/technology/technologywaiver.jsx",
-    info: "./src/main/websrc/components/info.jsx",
-    admin: "./src/main/websrc/components/admin/admin.jsx",
-    changeregistration: "./src/main/websrc/components/admin/changeregistration.jsx",
-    attendeecheckin: "./src/main/websrc/components/admin/attendeecheckin.jsx",
-    attendeesearch: "./src/main/websrc/components/admin/attendeesearch.jsx",
-    editattendees: "./src/main/websrc/components/admin/editattendees.jsx",
-    edittechnologies: "./src/main/websrc/components/admin/edittechnologies.jsx",
-    faq: "./src/main/websrc/components/information/faq.jsx",
-    map: "./src/main/websrc/components/information/map.jsx",
-    eventlayout: "./src/main/websrc/components/information/eventlayout.jsx",
-    contact: "./src/main/websrc/components/information/contact.jsx"
+    registration: './src/main/websrc/components/registration.jsx',
+    registerwaiver:
+      './src/main/websrc/components/registration/registerwaiver.jsx',
+    registerform: './src/main/websrc/components/registration/registerform.jsx',
+    technologyform:
+      './src/main/websrc/components/technology/technologyform.jsx',
+    technologywaiver:
+      './src/main/websrc/components/technology/technologywaiver.jsx',
+    info: './src/main/websrc/components/info.jsx',
+    admin: './src/main/websrc/components/admin/admin.jsx',
+    changeregistration:
+      './src/main/websrc/components/admin/changeregistration.jsx',
+    attendeecheckin: './src/main/websrc/components/admin/attendeecheckin.jsx',
+    attendeesearch: './src/main/websrc/components/admin/attendeesearch.jsx',
+    editattendees: './src/main/websrc/components/admin/editattendees.jsx',
+    edittechnologies: './src/main/websrc/components/admin/edittechnologies.jsx',
+    database: './src/main/websrc/components/admin/database.jsx',
+    faq: './src/main/websrc/components/information/faq.jsx',
+    map: './src/main/websrc/components/information/map.jsx',
+    eventlayout: './src/main/websrc/components/information/eventlayout.jsx',
+    contact: './src/main/websrc/components/information/contact.jsx'
   },
   output: {
     path: path.resolve(__dirname, './src/main/webapp'),
@@ -138,6 +143,11 @@ module.exports = {
       chunks: ['edittechnologies'],
       template: './src/main/websrc/template.html',
       filename: 'edittechnologies.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['database'],
+      template: './src/main/websrc/template.html',
+      filename: 'database.html'
     })
   ],
   devServer: {
@@ -151,7 +161,7 @@ module.exports = {
         secure: false
       }
     ],
-    port: 8080,
+    port: 8090,
     overlay: {
       warnings: true,
       errors: true

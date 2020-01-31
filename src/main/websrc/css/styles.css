@@ -203,6 +203,60 @@ button:hover {
   /*height: calc(100vh - (72px + 10em));*/
 }
 
+#link-button {
+  margin: 0.5em;
+  padding: 0.2em 0.2em;
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid black;
+  font-size: 115%;
+  border-radius: 5px;
+  background-color: #24489f;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+}
+
+#link-button:hover {
+  background-color: #24789f;
+  cursor: pointer;
+}
+
+.admin-database-table {
+  width: 100%;
+  margin: 0.5em 0;
+  padding: 0;
+  border: 1px solid black;
+  border-spacing: 0;
+}
+
+.admin-database-table thead {
+  font-weight: bold;
+}
+
+.admin-database-table thead tr td {
+  border-bottom: 1px solid black;
+  padding: 0.2em;
+}
+
+.admin-database-table tbody tr {
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+}
+
+.admin-database-table tbody tr:hover {
+  background-color: #b1e1f7;
+  cursor: pointer;
+}
+
+.admin-database-table tbody tr td {
+  padding: 0.2em;
+}
+
 /* Home Page CSS */
 
 .home-container {
@@ -371,14 +425,13 @@ a {
 /* Admin CSS */
 
 .admin-buttons {
-
   display: flex;
   flex-direction: column;
   width: 60%;
   margin: 0 auto;
   text-align: center;
 }
-  .admin-buttons a {
+.admin-buttons a {
   margin: 0.5em;
   padding: 0.2em 0;
   text-decoration: none;
@@ -394,7 +447,7 @@ a {
   -o-transition: background-color 100ms linear;
 }
 
-.on-off-registration  {
+.on-off-registration {
   display: flex;
   flex-direction: column;
   width: 60%;
@@ -416,7 +469,7 @@ a {
   -moz-transition: background-color 100ms linear;
   -o-transition: background-color 100ms linear;
 }
-.submit{
+.submit {
   display: flex;
   flex-direction: column;
   width: 60%;

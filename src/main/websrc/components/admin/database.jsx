@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Header from '../header.jsx';
 import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
+import { Table, TableRow } from '../general/table.jsx';
 import '../../css/styles.css';
 
 class DatabasePage extends React.Component {
@@ -11,7 +12,8 @@ class DatabasePage extends React.Component {
     this.state = {
       attendees: [],
       error: null,
-      selectedUser: null
+      selectedUser: null,
+      loading: false
     };
 
     this.getAttendees = this.getAttendees.bind(this);
@@ -20,6 +22,15 @@ class DatabasePage extends React.Component {
   getAttendees() {
     // because suppliers and evaluators cannot be determined from a normal get without some
     // parsing and checking, we're just going to get them separately and append their type to them here
+
+    this.setState({
+      // no error, lets set up the data
+      attendees: this.state.attendees,
+      error: this.state.error,
+      selectedUser: this.state.selectedUser,
+      loading: true
+    });
+
     fetch('/idte/suppliers', {
       // send request to server
       method: 'get',
@@ -44,7 +55,8 @@ class DatabasePage extends React.Component {
             // no error, lets set up the data
             attendees: newAttendees,
             error: this.state.error,
-            selectedUser: this.state.selectedUser
+            selectedUser: this.state.selectedUser,
+            loading: this.state.loading
           });
         });
       })
@@ -54,46 +66,59 @@ class DatabasePage extends React.Component {
           // put it in the state
           attendees: this.state.attendees,
           error: err,
-          selectedUser: this.state.selectedUser
+          selectedUser: this.state.selectedUser,
+          loading: this.state.loading
         });
-      });
-
-    fetch('/idte/evaluators', {
-      // send request to server
-      method: 'get',
-      headers: { 'Content-Type': 'application/json' }
-    })
-      .then(res => {
-        // check to see if we got a good response
-        if (res.ok) return res.json();
-        else return Promise.reject(Error(res.status));
       })
-      .then(body => {
-        // check for an error message in the response
-        if (body.message) {
-          // theres an error
-          return Promise.reject(Error(body.message));
-        }
-        body.forEach(evaluator => {
-          evaluator.type = 'Evaluator';
-          var newAttendees = this.state.attendees;
-          newAttendees.push(evaluator);
-          this.setState({
-            // no error, lets set up the data
-            attendees: newAttendees,
-            error: this.state.error,
-            selectedUser: this.state.selectedUser
+      .finally(() => {
+        fetch('/idte/evaluators', {
+          // send request to server
+          method: 'get',
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(res => {
+            // check to see if we got a good response
+            if (res.ok) return res.json();
+            else return Promise.reject(Error(res.status));
+          })
+          .then(body => {
+            // check for an error message in the response
+            if (body.message) {
+              // theres an error
+              return Promise.reject(Error(body.message));
+            }
+            body.forEach(evaluator => {
+              evaluator.type = 'Evaluator';
+              var newAttendees = this.state.attendees;
+              newAttendees.push(evaluator);
+              this.setState({
+                // no error, lets set up the data
+                attendees: newAttendees,
+                error: this.state.error,
+                selectedUser: this.state.selectedUser,
+                loading: this.state.loading
+              });
+            });
+          })
+          .catch(err => {
+            // error handling
+            this.setState({
+              // put it in the state
+              attendees: this.state.attendees,
+              error: err,
+              selectedUser: this.state.selectedUser,
+              loading: this.state.loading
+            });
+          })
+          .finally(() => {
+            this.setState({
+              // no error, lets set up the data
+              attendees: this.state.attendees,
+              error: this.state.error,
+              selectedUser: this.state.selectedUser,
+              loading: false
+            });
           });
-        });
-      })
-      .catch(err => {
-        // error handling
-        this.setState({
-          // put it in the state
-          attendees: this.state.attendees,
-          error: err,
-          selectedUser: this.state.selectedUser
-        });
       });
   }
 
@@ -108,18 +133,29 @@ class DatabasePage extends React.Component {
 
     //console.log(this.state.attendees);
 
+    const tableColumns = [
+      'Type',
+      'First Name',
+      'Last Name',
+      'Email',
+      'Date Created',
+      'Last Modified',
+      'Modified By'
+    ];
+
+    const dataColumns = [
+      'type',
+      'firstName',
+      'lastName',
+      'email',
+      'dateCreated',
+      'lastModified',
+      'modifiedBy'
+    ];
+
     const tbody = this.state.attendees
-      ? this.state.attendees.map((user, i) => {
-          return (
-            <tr key={i}>
-              <td>{user.type}</td>
-              <td>{user.firstName + ' ' + user.lastName}</td>
-              <td>{user.email}</td>
-              <td>{user.dateCreated}</td>
-              <td>{user.lastModified}</td>
-              <td>{user.modifiedBy}</td>
-            </tr>
-          );
+      ? this.state.attendees.map((user, key) => {
+          return <TableRow key={key} data={user} columns={dataColumns} />;
         })
       : null;
 
@@ -143,19 +179,14 @@ class DatabasePage extends React.Component {
         <div className='content'>
           <h1>Database Administration Interface</h1>
 
-          <table className='admin-database-table'>
-            <thead>
-              <tr>
-                <td>Type</td>
-                <td>Name</td>
-                <td>Email</td>
-                <td>Date Created</td>
-                <td>Last Modified</td>
-                <td>Modified By</td>
-              </tr>
-            </thead>
-            <tbody>{tbody}</tbody>
-          </table>
+          <Table
+            className='admin-database-table'
+            columns={tableColumns}
+            loading={this.state.loading}
+            columns={tableColumns}
+          >
+            {tbody}
+          </Table>
 
           <button id='link-button' style={buttonWidth}>
             Add entry to Attendees

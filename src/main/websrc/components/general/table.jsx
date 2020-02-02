@@ -14,10 +14,18 @@ class TableRow extends React.Component {
     const cols = this.props.columns;
 
     return (
-      <tr className={className} key={id}>
+      <tr
+        className={className}
+        key={id}
+        data-columns={JSON.stringify(this.state.data)}
+      >
         {cols.map((col, i) => {
           if (this.state.data.hasOwnProperty(col)) {
-            return <td key={i}>{this.state.data[col]}</td>;
+            return (
+              <td key={i} onClick={onClick}>
+                {this.state.data[col]}
+              </td>
+            );
           }
         })}
       </tr>
@@ -92,7 +100,8 @@ class Table extends React.Component {
     const className = this.props.className;
     const rows = this.props.children;
 
-    const size = 'calc(100% * ' + (this.props.children.length + 1) + ')';
+    // const size = 'calc(100% * ' + (this.props.children.length + 1) + ')';
+    const size = '100%';
 
     const resizeDivStyle = {
       top: 0,

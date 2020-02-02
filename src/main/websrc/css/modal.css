@@ -1,0 +1,42 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 10em;
+}
+
+.modal {
+  background-color: white;
+  margin: 0 auto;
+  padding: 1em;
+}
+
+.modal-close-button {
+  display: block;
+  float: right;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  background-color: white;
+}
+
+.modal-close-button:hover {
+  font-weight: bold;
+}
+
+.modal-two-col-table td {
+  padding: 0.5em;
+  padding-left: 0;
+}
+
+.modal-two-col-table td span {
+  float: left;
+  padding-right: 0.5em;
+}
+
+.modal-two-col-table td input {
+  float: right;
+}

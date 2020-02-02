@@ -5,6 +5,7 @@ import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import { Table, TableRow } from '../general/table.jsx';
 import '../../css/styles.css';
+import Modal from '../general/modal.jsx';
 
 class DatabasePage extends React.Component {
   constructor(props) {
@@ -13,10 +14,13 @@ class DatabasePage extends React.Component {
       attendees: [],
       error: null,
       selectedUser: null,
-      loading: false
+      loading: false,
+      showModal: false
     };
 
     this.getAttendees = this.getAttendees.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.rowClick = this.rowClick.bind(this);
   }
 
   getAttendees() {
@@ -28,7 +32,8 @@ class DatabasePage extends React.Component {
       attendees: this.state.attendees,
       error: this.state.error,
       selectedUser: this.state.selectedUser,
-      loading: true
+      loading: true,
+      showModal: this.state.showModal
     });
 
     fetch('/idte/suppliers', {
@@ -56,7 +61,8 @@ class DatabasePage extends React.Component {
             attendees: newAttendees,
             error: this.state.error,
             selectedUser: this.state.selectedUser,
-            loading: this.state.loading
+            loading: this.state.loading,
+            showModal: this.state.showModal
           });
         });
       })
@@ -67,7 +73,8 @@ class DatabasePage extends React.Component {
           attendees: this.state.attendees,
           error: err,
           selectedUser: this.state.selectedUser,
-          loading: this.state.loading
+          loading: this.state.loading,
+          showModal: this.state.showModal
         });
       })
       .finally(() => {
@@ -96,7 +103,8 @@ class DatabasePage extends React.Component {
                 attendees: newAttendees,
                 error: this.state.error,
                 selectedUser: this.state.selectedUser,
-                loading: this.state.loading
+                loading: this.state.loading,
+                showModal: this.state.showModal
               });
             });
           })
@@ -107,7 +115,8 @@ class DatabasePage extends React.Component {
               attendees: this.state.attendees,
               error: err,
               selectedUser: this.state.selectedUser,
-              loading: this.state.loading
+              loading: this.state.loading,
+              showModal: this.state.showModal
             });
           })
           .finally(() => {
@@ -116,10 +125,40 @@ class DatabasePage extends React.Component {
               attendees: this.state.attendees,
               error: this.state.error,
               selectedUser: this.state.selectedUser,
-              loading: false
+              loading: false,
+              showModal: this.state.showModal
             });
           });
       });
+  }
+
+  toggleModal() {
+    this.setState({
+      attendees: this.state.attendees,
+      error: this.state.error,
+      selectedUser: this.state.selectedUser,
+      loading: this.state.loading,
+      showModal: !this.state.showModal
+    });
+  }
+
+  rowClick(e) {
+    const columnData = JSON.parse(
+      e.target.parentElement.getAttribute('data-columns')
+    );
+    console.log(columnData);
+    this.setState(
+      {
+        attendees: this.state.attendees,
+        error: this.state.error,
+        selectedUser: columnData,
+        loading: this.state.loading,
+        showModal: this.state.showModal
+      },
+      () => {
+        this.toggleModal();
+      }
+    );
   }
 
   componentDidMount() {
@@ -155,7 +194,14 @@ class DatabasePage extends React.Component {
 
     const tbody = this.state.attendees
       ? this.state.attendees.map((user, key) => {
-          return <TableRow key={key} data={user} columns={dataColumns} />;
+          return (
+            <TableRow
+              key={key}
+              data={user}
+              columns={dataColumns}
+              onClick={this.rowClick}
+            />
+          );
         })
       : null;
 
@@ -164,6 +210,131 @@ class DatabasePage extends React.Component {
       display: 'inline-block',
       boxSizing: 'border-box'
     };
+
+    const selectedUser = this.state.selectedUser;
+    const editModalInner = selectedUser ? (
+      <div>
+        <h2>Edit Attendee</h2>
+        <span>Attendee ID: {selectedUser.id}</span>
+        <br />
+        <span>Attendee Type: {selectedUser.type}</span>
+        <br />
+        <table className='modal-two-col-table'>
+          <tbody>
+            <tr>
+              <td>
+                <span>First Name: </span>
+                <input
+                  type='text'
+                  value={selectedUser.firstName}
+                  id='fname'
+                ></input>
+              </td>
+              <td>
+                <span>Last Name: </span>
+                <input
+                  type='text'
+                  value={selectedUser.lastName}
+                  id='lname'
+                ></input>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Nickname: </span>
+                <input
+                  type='text'
+                  value={selectedUser.nickname}
+                  id='nickname'
+                ></input>
+              </td>
+              <td>
+                <span>Email: </span>
+                <input
+                  type='text'
+                  value={selectedUser.email}
+                  id='email'
+                ></input>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Phone Number: </span>
+                <input
+                  type='text'
+                  value={selectedUser.phoneNumber}
+                  id='phone'
+                ></input>
+              </td>
+              <td>
+                <span>Cell Number: </span>
+                <input
+                  type='text'
+                  value={selectedUser.cellNumber}
+                  id='cell'
+                ></input>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Company: </span>
+                <input
+                  type='text'
+                  value={selectedUser.company}
+                  id='company'
+                ></input>
+              </td>
+              <td>
+                <span>Technology Number: </span>
+                <input
+                  type='text'
+                  value={selectedUser.technologyNumber}
+                  id='technologyNumber'
+                ></input>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Country: </span>
+                <input
+                  type='text'
+                  value={selectedUser.country}
+                  id='country'
+                ></input>
+              </td>
+              <td>
+                <span>City: </span>
+                <input type='text' value={selectedUser.city} id='city'></input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <span>Comments:</span>
+        <br />
+        <textarea rows='4' cols='50' id='comments' style={{ resize: 'none' }}>
+          {selectedUser.comments}
+        </textarea>
+        <br />
+        <span>Date Created: {selectedUser.dateCreated}</span>
+        <br />
+        <span>Date Last Modified: {selectedUser.lastModified}</span>
+        <br />
+        <span>Last Modified By: {selectedUser.modifiedBy}</span>
+        <br />
+        <button
+          id='link-button'
+          style={{
+            width: '250px',
+            display: 'inline-block',
+            boxSizing: 'border-box',
+            fontSize: '1em',
+            margin: '0.5em 0'
+          }}
+        >
+          Update Attendee Fields
+        </button>
+      </div>
+    ) : null;
 
     return (
       <div className='container'>
@@ -198,6 +369,13 @@ class DatabasePage extends React.Component {
         </div>
 
         <Footer />
+        <Modal
+          show={this.state.showModal}
+          onClose={this.toggleModal}
+          style={{ width: '600px' }}
+        >
+          {editModalInner}
+        </Modal>
       </div>
     );
   }

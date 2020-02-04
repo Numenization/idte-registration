@@ -6,6 +6,7 @@ import Footer from '../footer.jsx';
 import { Table, TableRow } from '../general/table.jsx';
 import '../../css/styles.css';
 import Modal from '../general/modal.jsx';
+import Attendee from '../../data/attendee.js';
 
 class DatabasePage extends React.Component {
   constructor(props) {
@@ -21,115 +22,50 @@ class DatabasePage extends React.Component {
     this.getAttendees = this.getAttendees.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.rowClick = this.rowClick.bind(this);
+    this.setError = this.setError.bind(this);
+    this.setLoading = this.setLoading.bind(this);
+    this.setData = this.setData.bind(this);
+    this.setSelected = this.setSelected.bind(this);
   }
 
-  getAttendees() {
-    // because suppliers and evaluators cannot be determined from a normal get without some
-    // parsing and checking, we're just going to get them separately and append their type to them here
-
+  setError(err) {
     this.setState({
-      // no error, lets set up the data
+      attendees: this.state.attendees,
+      error: err,
+      selectedUser: this.state.selectedUser,
+      loading: this.state.loading,
+      showModal: this.state.showModal
+    });
+  }
+
+  setLoading(val) {
+    this.setState({
       attendees: this.state.attendees,
       error: this.state.error,
       selectedUser: this.state.selectedUser,
-      loading: true,
+      loading: val,
       showModal: this.state.showModal
     });
+  }
 
-    fetch('/idte/suppliers', {
-      // send request to server
-      method: 'get',
-      headers: { 'Content-Type': 'application/json' }
-    })
-      .then(res => {
-        // check to see if we got a good response
-        if (res.ok) return res.json();
-        else return Promise.reject(Error(res.status));
-      })
-      .then(body => {
-        // check for an error message in the response
-        if (body.message) {
-          // theres an error
-          return Promise.reject(Error(body.message));
-        }
-        body.forEach(supplier => {
-          supplier.type = 'Supplier';
-          var newAttendees = this.state.attendees;
-          newAttendees.push(supplier);
-          this.setState({
-            // no error, lets set up the data
-            attendees: newAttendees,
-            error: this.state.error,
-            selectedUser: this.state.selectedUser,
-            loading: this.state.loading,
-            showModal: this.state.showModal
-          });
-        });
-      })
-      .catch(err => {
-        // error handling
-        this.setState({
-          // put it in the state
-          attendees: this.state.attendees,
-          error: err,
-          selectedUser: this.state.selectedUser,
-          loading: this.state.loading,
-          showModal: this.state.showModal
-        });
-      })
-      .finally(() => {
-        fetch('/idte/evaluators', {
-          // send request to server
-          method: 'get',
-          headers: { 'Content-Type': 'application/json' }
-        })
-          .then(res => {
-            // check to see if we got a good response
-            if (res.ok) return res.json();
-            else return Promise.reject(Error(res.status));
-          })
-          .then(body => {
-            // check for an error message in the response
-            if (body.message) {
-              // theres an error
-              return Promise.reject(Error(body.message));
-            }
-            body.forEach(evaluator => {
-              evaluator.type = 'Evaluator';
-              var newAttendees = this.state.attendees;
-              newAttendees.push(evaluator);
-              this.setState({
-                // no error, lets set up the data
-                attendees: newAttendees,
-                error: this.state.error,
-                selectedUser: this.state.selectedUser,
-                loading: this.state.loading,
-                showModal: this.state.showModal
-              });
-            });
-          })
-          .catch(err => {
-            // error handling
-            this.setState({
-              // put it in the state
-              attendees: this.state.attendees,
-              error: err,
-              selectedUser: this.state.selectedUser,
-              loading: this.state.loading,
-              showModal: this.state.showModal
-            });
-          })
-          .finally(() => {
-            this.setState({
-              // no error, lets set up the data
-              attendees: this.state.attendees,
-              error: this.state.error,
-              selectedUser: this.state.selectedUser,
-              loading: false,
-              showModal: this.state.showModal
-            });
-          });
-      });
+  setData(val) {
+    this.setState({
+      attendees: val,
+      error: this.state.error,
+      selectedUser: this.state.selectedUser,
+      loading: this.state.loading,
+      showModal: this.state.showModal
+    });
+  }
+
+  setSelected(val) {
+    this.setState({
+      attendees: this.state.attendees,
+      error: this.state.error,
+      selectedUser: val,
+      loading: this.state.loading,
+      showModal: this.state.showModal
+    });
   }
 
   toggleModal() {
@@ -142,11 +78,40 @@ class DatabasePage extends React.Component {
     });
   }
 
+  async getAttendees() {
+    // because suppliers and evaluators cannot be determined from a normal get without some
+    // parsing and checking, we're just going to get them separately and append their type to them here
+
+    // set ourselves to loading and start
+    this.setLoading(true);
+
+    // call the backend for attendee data
+    let suppliers = await Attendee.getAllSuppliers();
+    let evaluators = await Attendee.getAllEvaluators();
+
+    if (suppliers.statusText) {
+      this.setError(suppliers.statusText);
+      this.setLoading(false);
+      return;
+    }
+
+    if (evaluators.statusText) {
+      this.setError(evaluators.statusText);
+      this.setLoading(false);
+      return;
+    }
+
+    Array.prototype.push.apply(suppliers, evaluators);
+
+    this.setData(suppliers);
+    this.setLoading(false);
+  }
+
   rowClick(e) {
     const columnData = JSON.parse(
       e.target.parentElement.getAttribute('data-columns')
     );
-    console.log(columnData);
+
     this.setState(
       {
         attendees: this.state.attendees,
@@ -161,7 +126,7 @@ class DatabasePage extends React.Component {
     );
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.getAttendees();
   }
 

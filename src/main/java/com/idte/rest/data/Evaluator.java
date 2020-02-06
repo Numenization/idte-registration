@@ -16,6 +16,7 @@ public class Evaluator extends Attendee {
         newEvaluator.cellNumber = evaluator.cellNumber;
         newEvaluator.country = evaluator.country;
         newEvaluator.city = evaluator.city;
+        newEvaluator.comments = evaluator.comments;
 
         return newEvaluator;
     }

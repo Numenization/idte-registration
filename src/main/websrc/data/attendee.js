@@ -22,21 +22,57 @@ class Attendee {
     return attendee;
   }
   static async postSupplier(opts = null) {
-    if (!opts) return;
-    let res = await Attendee.req('POST', '/idte/suppliers', opts);
-    return res;
+    try {
+      if (!opts) return;
+      let res = await Attendee.req('POST', '/idte/suppliers', opts);
+      return res;
+    } catch (e) {
+      console.log(e.request);
+      alert(
+        'Error: ' +
+          e.status +
+          '\n' +
+          e.statusText +
+          '\n' +
+          'Make sure all required fields are filled with valid values'
+      );
+    }
   }
 
   static async postEvaluator(opts = null) {
-    if (!opts) return;
-    let res = await Attendee.req('POST', '/idte/evaluators', opts);
-    return res;
+    try {
+      if (!opts) return;
+      let res = await Attendee.req('POST', '/idte/evaluators', opts);
+      return res;
+    } catch (e) {
+      console.log(e.request);
+      alert(
+        'Error: ' +
+          e.status +
+          '\n' +
+          e.statusText +
+          '\n' +
+          'Make sure all required fields are filled with valid values'
+      );
+    }
   }
 
   static async updateAttendee(opts = null) {
-    if (!opts) return;
-    let res = await Attendee.req('PUT', '/idte/attendees', opts);
-    return res;
+    try {
+      if (!opts) return;
+      let res = await Attendee.req('PUT', '/idte/attendees', opts);
+      return res;
+    } catch (e) {
+      console.log(e.request);
+      alert(
+        'Error: ' +
+          e.status +
+          '\n' +
+          e.statusText +
+          '\n' +
+          'Make sure all required fields are filled with valid values'
+      );
+    }
   }
 
   static async getAllSuppliers(opts = null) {
@@ -84,6 +120,8 @@ class Attendee {
       };
       if (opts) console.log(opts);
       xhr.send(JSON.stringify(opts));
+    }).catch(err => {
+      throw err;
     });
   }
 }

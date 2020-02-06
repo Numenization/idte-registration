@@ -16,16 +16,45 @@ class DatabasePage extends React.Component {
       error: null,
       selectedUser: null,
       loading: false,
-      showModal: false
+      showEditModal: false,
+      showAddModal: false
     };
 
     this.getAttendees = this.getAttendees.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
+    this.toggleEditModal = this.toggleEditModal.bind(this);
+    this.toggleAddModal = this.toggleAddModal.bind(this);
     this.rowClick = this.rowClick.bind(this);
     this.setError = this.setError.bind(this);
     this.setLoading = this.setLoading.bind(this);
     this.setData = this.setData.bind(this);
     this.setSelected = this.setSelected.bind(this);
+    this.updateField = this.updateField.bind(this);
+    this.clearUserValues = this.clearUserValues.bind(this);
+    this.postNewUser = this.postNewUser.bind(this);
+  }
+
+  clearUserValues() {
+    var values = [
+      'firstName',
+      'lastName',
+      'email',
+      'phoneNumber',
+      'cellNumber',
+      'city',
+      'country',
+      'technologyNumber',
+      'nickname',
+      'company',
+      'comments',
+      'id',
+      'lastModified',
+      'dateCreated',
+      'modifiedBy',
+      'type'
+    ];
+    for (let property of values) {
+      this.setState({ [property]: undefined });
+    }
   }
 
   setError(err) {
@@ -34,7 +63,8 @@ class DatabasePage extends React.Component {
       error: err,
       selectedUser: this.state.selectedUser,
       loading: this.state.loading,
-      showModal: this.state.showModal
+      showEditModal: this.state.showEditModal,
+      showAddModal: this.state.showAddModal
     });
   }
 
@@ -44,7 +74,8 @@ class DatabasePage extends React.Component {
       error: this.state.error,
       selectedUser: this.state.selectedUser,
       loading: val,
-      showModal: this.state.showModal
+      showEditModal: this.state.showEditModal,
+      showAddModal: this.state.showAddModal
     });
   }
 
@@ -54,27 +85,50 @@ class DatabasePage extends React.Component {
       error: this.state.error,
       selectedUser: this.state.selectedUser,
       loading: this.state.loading,
-      showModal: this.state.showModal
+      showEditModal: this.state.showEditModal,
+      showAddModal: this.state.showAddModal
     });
   }
 
-  setSelected(val) {
-    this.setState({
-      attendees: this.state.attendees,
-      error: this.state.error,
-      selectedUser: val,
-      loading: this.state.loading,
-      showModal: this.state.showModal
-    });
+  setSelected(value, cb) {
+    for (let [key, val] of Object.entries(value)) {
+      if (val === null) value[key] = undefined;
+      this.setState({ [key]: val });
+    }
+    this.setState(
+      {
+        attendees: this.state.attendees,
+        error: this.state.error,
+        selectedUser: value,
+        loading: this.state.loading,
+        showEditModal: this.state.showEditModal,
+        showAddModal: this.state.showAddModal
+      },
+      cb
+    );
   }
 
-  toggleModal() {
+  toggleEditModal() {
+    if (this.state.showEditModal) this.clearUserValues();
     this.setState({
       attendees: this.state.attendees,
       error: this.state.error,
       selectedUser: this.state.selectedUser,
       loading: this.state.loading,
-      showModal: !this.state.showModal
+      showEditModal: !this.state.showEditModal,
+      showAddModal: this.state.showAddModal
+    });
+  }
+
+  toggleAddModal() {
+    if (this.state.showAddModal) this.clearUserValues();
+    this.setState({
+      attendees: this.state.attendees,
+      error: this.state.error,
+      selectedUser: this.state.selectedUser,
+      loading: this.state.loading,
+      showEditModal: this.state.showEditModal,
+      showAddModal: !this.state.showAddModal
     });
   }
 
@@ -112,18 +166,22 @@ class DatabasePage extends React.Component {
       e.target.parentElement.getAttribute('data-columns')
     );
 
-    this.setState(
-      {
-        attendees: this.state.attendees,
-        error: this.state.error,
-        selectedUser: columnData,
-        loading: this.state.loading,
-        showModal: this.state.showModal
-      },
-      () => {
-        this.toggleModal();
-      }
+    this.setSelected(columnData, () => {
+      this.toggleEditModal();
+    });
+  }
+
+  updateField(e) {
+    this.setState({ [e.target.name]: e.target.value });
+  }
+
+  async postNewUser() {
+    // TODO: check if supplier or evaluator
+    await Attendee.postSupplier(
+      Attendee.createAttendeeObjectFromState(this.state)
     );
+    this.getAttendees();
+    this.toggleAddModal();
   }
 
   async componentDidMount() {
@@ -176,6 +234,131 @@ class DatabasePage extends React.Component {
       boxSizing: 'border-box'
     };
 
+    const addModalInner = (
+      <div>
+        <h2>Create New Attendee</h2>
+        <span>Attendee Type: [CHANGE THIS TO DROPDOWN SELECTION]</span>
+        <br />
+        <table className='modal-two-col-table'>
+          <tbody>
+            <tr>
+              <td>
+                <span>First Name: </span>
+                <input
+                  type='text'
+                  name='firstName'
+                  onChange={this.updateField}
+                ></input>
+              </td>
+              <td>
+                <span>Last Name: </span>
+                <input
+                  type='text'
+                  name='lastName'
+                  onChange={this.updateField}
+                ></input>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Nickname: </span>
+                <input
+                  type='text'
+                  name='nickname'
+                  onChange={this.updateField}
+                ></input>
+              </td>
+              <td>
+                <span>Email: </span>
+                <input
+                  type='text'
+                  name='email'
+                  onChange={this.updateField}
+                ></input>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Phone Number: </span>
+                <input
+                  type='text'
+                  name='phoneNumber'
+                  onChange={this.updateField}
+                ></input>
+              </td>
+              <td>
+                <span>Cell Number: </span>
+                <input
+                  type='text'
+                  name='cellNumber'
+                  onChange={this.updateField}
+                ></input>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Company: </span>
+                <input
+                  type='text'
+                  name='company'
+                  onChange={this.updateField}
+                ></input>
+              </td>
+              <td>
+                <span>Technology Number: </span>
+                <input
+                  type='text'
+                  name='technologyNumber'
+                  onChange={this.updateField}
+                ></input>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Country: </span>
+                <input
+                  type='text'
+                  name='country'
+                  onChange={this.updateField}
+                ></input>
+              </td>
+              <td>
+                <span>City: </span>
+                <input
+                  type='text'
+                  name='city'
+                  onChange={this.updateField}
+                ></input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <span>Comments:</span>
+        <br />
+        <textarea
+          rows='4'
+          cols='50'
+          name='comments'
+          style={{ resize: 'none' }}
+          onChange={this.updateField}
+        ></textarea>
+        <br />
+        <button
+          id='link-button'
+          style={{
+            width: '250px',
+            display: 'inline-block',
+            boxSizing: 'border-box',
+            fontSize: '1em',
+            margin: '0.5em 0'
+          }}
+          onClick={this.postNewUser}
+        >
+          Post New Attendee
+        </button>
+      </div>
+    );
+
     const selectedUser = this.state.selectedUser;
     const editModalInner = selectedUser ? (
       <div>
@@ -192,7 +375,8 @@ class DatabasePage extends React.Component {
                 <input
                   type='text'
                   value={selectedUser.firstName}
-                  id='fname'
+                  name='firstName'
+                  onChange={this.updateField}
                 ></input>
               </td>
               <td>
@@ -200,7 +384,8 @@ class DatabasePage extends React.Component {
                 <input
                   type='text'
                   value={selectedUser.lastName}
-                  id='lname'
+                  name='lastName'
+                  onChange={this.updateField}
                 ></input>
               </td>
             </tr>
@@ -210,7 +395,8 @@ class DatabasePage extends React.Component {
                 <input
                   type='text'
                   value={selectedUser.nickname}
-                  id='nickname'
+                  name='nickname'
+                  onChange={this.updateField}
                 ></input>
               </td>
               <td>
@@ -218,7 +404,8 @@ class DatabasePage extends React.Component {
                 <input
                   type='text'
                   value={selectedUser.email}
-                  id='email'
+                  name='email'
+                  onChange={this.updateField}
                 ></input>
               </td>
             </tr>
@@ -228,7 +415,8 @@ class DatabasePage extends React.Component {
                 <input
                   type='text'
                   value={selectedUser.phoneNumber}
-                  id='phone'
+                  name='phoneNumber'
+                  onChange={this.updateField}
                 ></input>
               </td>
               <td>
@@ -236,7 +424,8 @@ class DatabasePage extends React.Component {
                 <input
                   type='text'
                   value={selectedUser.cellNumber}
-                  id='cell'
+                  name='cellNumber'
+                  onChange={this.updateField}
                 ></input>
               </td>
             </tr>
@@ -246,7 +435,8 @@ class DatabasePage extends React.Component {
                 <input
                   type='text'
                   value={selectedUser.company}
-                  id='company'
+                  name='company'
+                  onChange={this.updateField}
                 ></input>
               </td>
               <td>
@@ -254,7 +444,8 @@ class DatabasePage extends React.Component {
                 <input
                   type='text'
                   value={selectedUser.technologyNumber}
-                  id='technologyNumber'
+                  name='technologyNumber'
+                  onChange={this.updateField}
                 ></input>
               </td>
             </tr>
@@ -264,19 +455,25 @@ class DatabasePage extends React.Component {
                 <input
                   type='text'
                   value={selectedUser.country}
-                  id='country'
+                  name='country'
+                  onChange={this.updateField}
                 ></input>
               </td>
               <td>
                 <span>City: </span>
-                <input type='text' value={selectedUser.city} id='city'></input>
+                <input
+                  type='text'
+                  value={selectedUser.city}
+                  onChange={this.updateField}
+                  name='city'
+                ></input>
               </td>
             </tr>
           </tbody>
         </table>
         <span>Comments:</span>
         <br />
-        <textarea rows='4' cols='50' id='comments' style={{ resize: 'none' }}>
+        <textarea rows='4' cols='50' name='comments' style={{ resize: 'none' }}>
           {selectedUser.comments}
         </textarea>
         <br />
@@ -297,6 +494,21 @@ class DatabasePage extends React.Component {
           }}
         >
           Update Attendee Fields
+        </button>
+        <button
+          id='link-button'
+          onClick={() => {
+            console.log(Attendee.createAttendeeObjectFromState(this.state));
+          }}
+          style={{
+            width: '250px',
+            display: 'inline-block',
+            boxSizing: 'border-box',
+            fontSize: '1em',
+            margin: '0.5em 0'
+          }}
+        >
+          Print selected user values
         </button>
       </div>
     ) : null;
@@ -324,7 +536,11 @@ class DatabasePage extends React.Component {
             {tbody}
           </Table>
 
-          <button id='link-button' style={buttonWidth}>
+          <button
+            id='link-button'
+            style={buttonWidth}
+            onClick={this.toggleAddModal}
+          >
             Add entry to Attendees
           </button>
           <br />
@@ -335,11 +551,18 @@ class DatabasePage extends React.Component {
 
         <Footer />
         <Modal
-          show={this.state.showModal}
-          onClose={this.toggleModal}
+          show={this.state.showEditModal}
+          onClose={this.toggleEditModal}
           style={{ width: '600px' }}
         >
           {editModalInner}
+        </Modal>
+        <Modal
+          show={this.state.showAddModal}
+          onClose={this.toggleAddModal}
+          style={{ width: '600px' }}
+        >
+          {addModalInner}
         </Modal>
       </div>
     );

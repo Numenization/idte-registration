@@ -31,6 +31,8 @@ class DatabasePage extends React.Component {
     this.updateField = this.updateField.bind(this);
     this.clearUserValues = this.clearUserValues.bind(this);
     this.postNewUser = this.postNewUser.bind(this);
+    this.updateExistingUser = this.updateExistingUser.bind(this);
+    this.deleteUser = this.deleteUser.bind(this);
   }
 
   clearUserValues() {
@@ -182,6 +184,22 @@ class DatabasePage extends React.Component {
     );
     this.getAttendees();
     this.toggleAddModal();
+  }
+
+  async updateExistingUser() {
+    await Attendee.updateAttendee(
+      Attendee.createAttendeeObjectFromState(this.state)
+    );
+    this.getAttendees();
+    this.toggleEditModal();
+  }
+
+  async deleteUser() {
+    var response = window.confirm('Are you sure you want to delete this user?');
+    if (!response) return;
+    await Attendee.deleteAttendee({ email: this.state.email });
+    this.getAttendees();
+    this.toggleEditModal();
   }
 
   async componentDidMount() {
@@ -374,7 +392,7 @@ class DatabasePage extends React.Component {
                 <span>First Name: </span>
                 <input
                   type='text'
-                  value={selectedUser.firstName}
+                  defaultValue={selectedUser.firstName}
                   name='firstName'
                   onChange={this.updateField}
                 ></input>
@@ -383,7 +401,7 @@ class DatabasePage extends React.Component {
                 <span>Last Name: </span>
                 <input
                   type='text'
-                  value={selectedUser.lastName}
+                  defaultValue={selectedUser.lastName}
                   name='lastName'
                   onChange={this.updateField}
                 ></input>
@@ -394,7 +412,7 @@ class DatabasePage extends React.Component {
                 <span>Nickname: </span>
                 <input
                   type='text'
-                  value={selectedUser.nickname}
+                  defaultValue={selectedUser.nickname}
                   name='nickname'
                   onChange={this.updateField}
                 ></input>
@@ -403,7 +421,7 @@ class DatabasePage extends React.Component {
                 <span>Email: </span>
                 <input
                   type='text'
-                  value={selectedUser.email}
+                  defaultValue={selectedUser.email}
                   name='email'
                   onChange={this.updateField}
                 ></input>
@@ -414,7 +432,7 @@ class DatabasePage extends React.Component {
                 <span>Phone Number: </span>
                 <input
                   type='text'
-                  value={selectedUser.phoneNumber}
+                  defaultValue={selectedUser.phoneNumber}
                   name='phoneNumber'
                   onChange={this.updateField}
                 ></input>
@@ -423,7 +441,7 @@ class DatabasePage extends React.Component {
                 <span>Cell Number: </span>
                 <input
                   type='text'
-                  value={selectedUser.cellNumber}
+                  defaultValue={selectedUser.cellNumber}
                   name='cellNumber'
                   onChange={this.updateField}
                 ></input>
@@ -434,7 +452,7 @@ class DatabasePage extends React.Component {
                 <span>Company: </span>
                 <input
                   type='text'
-                  value={selectedUser.company}
+                  defaultValue={selectedUser.company}
                   name='company'
                   onChange={this.updateField}
                 ></input>
@@ -443,7 +461,7 @@ class DatabasePage extends React.Component {
                 <span>Technology Number: </span>
                 <input
                   type='text'
-                  value={selectedUser.technologyNumber}
+                  defaultValue={selectedUser.technologyNumber}
                   name='technologyNumber'
                   onChange={this.updateField}
                 ></input>
@@ -454,7 +472,7 @@ class DatabasePage extends React.Component {
                 <span>Country: </span>
                 <input
                   type='text'
-                  value={selectedUser.country}
+                  defaultValue={selectedUser.country}
                   name='country'
                   onChange={this.updateField}
                 ></input>
@@ -463,7 +481,7 @@ class DatabasePage extends React.Component {
                 <span>City: </span>
                 <input
                   type='text'
-                  value={selectedUser.city}
+                  defaultValue={selectedUser.city}
                   onChange={this.updateField}
                   name='city'
                 ></input>
@@ -473,9 +491,14 @@ class DatabasePage extends React.Component {
         </table>
         <span>Comments:</span>
         <br />
-        <textarea rows='4' cols='50' name='comments' style={{ resize: 'none' }}>
-          {selectedUser.comments}
-        </textarea>
+        <textarea
+          rows='4'
+          cols='50'
+          name='comments'
+          onChange={this.updateField}
+          style={{ resize: 'none', width: '100%' }}
+          defaultValue={selectedUser.comments}
+        ></textarea>
         <br />
         <span>Date Created: {selectedUser.dateCreated}</span>
         <br />
@@ -485,6 +508,7 @@ class DatabasePage extends React.Component {
         <br />
         <button
           id='link-button'
+          onClick={this.updateExistingUser}
           style={{
             width: '250px',
             display: 'inline-block',
@@ -497,18 +521,17 @@ class DatabasePage extends React.Component {
         </button>
         <button
           id='link-button'
-          onClick={() => {
-            console.log(Attendee.createAttendeeObjectFromState(this.state));
-          }}
+          onClick={this.deleteUser}
           style={{
             width: '250px',
             display: 'inline-block',
             boxSizing: 'border-box',
             fontSize: '1em',
-            margin: '0.5em 0'
+            margin: '0.5em 0',
+            float: 'right'
           }}
         >
-          Print selected user values
+          Delete Attendee
         </button>
       </div>
     ) : null;

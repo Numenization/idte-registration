@@ -75,6 +75,24 @@ class Attendee {
     }
   }
 
+  static async deleteAttendee(opts = null) {
+    try {
+      if (!opts) return;
+      let res = await Attendee.req('DELETE', '/idte/attendees', opts);
+      return res;
+    } catch (e) {
+      console.log(e.request);
+      alert(
+        'Error: ' +
+          e.status +
+          '\n' +
+          e.statusText +
+          '\n' +
+          'Make sure all required fields are filled with valid values'
+      );
+    }
+  }
+
   static async getAllSuppliers(opts = null) {
     let res = await Attendee.req('GET', '/idte/suppliers', opts);
     if (res.statusText) {
@@ -104,7 +122,7 @@ class Attendee {
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onload = function() {
         if (this.status >= 200 && this.status < 300) {
-          resolve(JSON.parse(xhr.response));
+          resolve(JSON.parse(xhr.response ? xhr.response : null));
         } else {
           reject({
             status: this.status,
@@ -118,7 +136,7 @@ class Attendee {
           statusText: xhr.statusText
         });
       };
-      if (opts) console.log(opts);
+
       xhr.send(JSON.stringify(opts));
     }).catch(err => {
       throw err;

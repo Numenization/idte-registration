@@ -8,6 +8,10 @@ import '../../css/styles.css';
 import Modal from '../general/modal.jsx';
 import Attendee from '../../data/attendee.js';
 
+// TODO: Dropdown type selector for adding attendee
+// TODO: Dropdown selector for number of results per page
+// TODO: Sort by column when click on the column header
+// TODO: Search for people by giving email, name, company, etc..
 class DatabasePage extends React.Component {
   constructor(props) {
     super(props);
@@ -17,7 +21,11 @@ class DatabasePage extends React.Component {
       selectedUser: null,
       loading: false,
       showEditModal: false,
-      showAddModal: false
+      showAddModal: false,
+      rowsPerPage: 50,
+      numPages: 0,
+      page: 0,
+      attendeesOnPage: []
     };
 
     this.getAttendees = this.getAttendees.bind(this);
@@ -27,12 +35,20 @@ class DatabasePage extends React.Component {
     this.setError = this.setError.bind(this);
     this.setLoading = this.setLoading.bind(this);
     this.setData = this.setData.bind(this);
+    this.setNumPages = this.setNumPages.bind(this);
+    this.setPage = this.setPage.bind(this);
+    this.setRowsPerPage = this.setRowsPerPage.bind(this);
+    this.setAttendeesOnPage = this.setAttendeesOnPage.bind(this);
     this.setSelected = this.setSelected.bind(this);
     this.updateField = this.updateField.bind(this);
     this.clearUserValues = this.clearUserValues.bind(this);
     this.postNewUser = this.postNewUser.bind(this);
+    this.pageButtonClick = this.pageButtonClick.bind(this);
     this.updateExistingUser = this.updateExistingUser.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
+    this.getRows = this.getRows.bind(this);
+    this.nextPage = this.nextPage.bind(this);
+    this.prevPage = this.prevPage.bind(this);
   }
 
   clearUserValues() {
@@ -110,6 +126,41 @@ class DatabasePage extends React.Component {
     );
   }
 
+  setNumPages(val) {
+    this.setState({ numPages: val });
+  }
+
+  setPage(val) {
+    if (val < 0 || val > this.state.numPages - 1) return;
+    var n = val * this.state.rowsPerPage;
+    var m = n + this.state.rowsPerPage;
+    var attendeesToPutOnPage = [];
+    for (var i = n; i < m; i++) {
+      var attendee = this.state.attendees[i];
+      if (attendee) attendeesToPutOnPage.push(attendee);
+    }
+    this.setState({
+      page: val
+    });
+    this.setAttendeesOnPage(attendeesToPutOnPage);
+  }
+
+  nextPage() {
+    this.setPage(this.state.page + 1);
+  }
+
+  prevPage() {
+    this.setPage(this.state.page - 1);
+  }
+
+  setRowsPerPage(val) {
+    this.setState({ rowsPerPage: val });
+  }
+
+  setAttendeesOnPage(val) {
+    this.setState({ attendeesOnPage: val });
+  }
+
   toggleEditModal() {
     if (this.state.showEditModal) this.clearUserValues();
     this.setState({
@@ -142,8 +193,8 @@ class DatabasePage extends React.Component {
     this.setLoading(true);
 
     // call the backend for attendee data
-    let suppliers = await Attendee.getAllSuppliers();
-    let evaluators = await Attendee.getAllEvaluators();
+    var suppliers = await Attendee.getAllSuppliers();
+    var evaluators = await Attendee.getAllEvaluators();
 
     if (suppliers.statusText) {
       this.setError(suppliers.statusText);
@@ -159,8 +210,20 @@ class DatabasePage extends React.Component {
 
     Array.prototype.push.apply(suppliers, evaluators);
 
+    var numPages = 0;
+
+    if (suppliers.length > this.state.rowsPerPage) {
+      numPages = Math.ceil(suppliers.length / this.state.rowsPerPage);
+    }
+
+    this.setNumPages(numPages);
     this.setData(suppliers);
+    this.setPage(0);
     this.setLoading(false);
+  }
+
+  pageButtonClick(e) {
+    this.setPage(parseInt(e.target.id));
   }
 
   rowClick(e) {
@@ -206,6 +269,20 @@ class DatabasePage extends React.Component {
     this.getAttendees();
   }
 
+  getRows(dataColumns) {
+    if (!this.state.attendeesOnPage) return null;
+    return this.state.attendeesOnPage.map((user, key) => {
+      return (
+        <TableRow
+          key={key + this.state.page * this.state.rowsPerPage}
+          data={user}
+          columns={dataColumns}
+          onClick={this.rowClick}
+        />
+      );
+    });
+  }
+
   render() {
     if (this.state.error) {
       console.log(this.state.error);
@@ -232,19 +309,6 @@ class DatabasePage extends React.Component {
       'lastModified',
       'modifiedBy'
     ];
-
-    const tbody = this.state.attendees
-      ? this.state.attendees.map((user, key) => {
-          return (
-            <TableRow
-              key={key}
-              data={user}
-              columns={dataColumns}
-              onClick={this.rowClick}
-            />
-          );
-        })
-      : null;
 
     const buttonWidth = {
       width: '30%',
@@ -536,11 +600,38 @@ class DatabasePage extends React.Component {
       </div>
     ) : null;
 
+    const paginatedButtons =
+      this.state.numPages > 0 ? (
+        <div className='pagination-buttons'>
+          <button className='back-button' onClick={this.prevPage}>
+            &larr;
+          </button>
+          {Array.from({ length: this.state.numPages }, (item, index) => {
+            var cName = '';
+            if (this.state.page == index) {
+              cName = 'selected';
+            }
+            return (
+              <button
+                className='page-button'
+                key={index}
+                onClick={this.pageButtonClick}
+                id={index}
+                className={cName}
+              >
+                {index + 1}
+              </button>
+            );
+          })}
+          <button className='forward-button' onClick={this.nextPage}>
+            &rarr;
+          </button>
+        </div>
+      ) : null;
+    //          <img src={require('../../images/main.jpg')}></img>
     return (
       <div className='container'>
-        <div className='background'>
-          <img src={require('../../images/main.jpg')}></img>
-        </div>
+        <div className='background'></div>
 
         <div className='top'>
           <Header />
@@ -556,8 +647,9 @@ class DatabasePage extends React.Component {
             loading={this.state.loading}
             columns={tableColumns}
           >
-            {tbody}
+            {this.getRows(dataColumns)}
           </Table>
+          {paginatedButtons}
 
           <button
             id='link-button'

@@ -4,6 +4,9 @@ body {
   padding: 0;
   font-family: Arial, Helvetica, sans-serif;
   background-color: #24489f;
+  background-image: url('../images/main.jpg');
+  background-repeat: repeat-y;
+  background-size: 100% auto;
 }
 
 button:hover {
@@ -268,6 +271,49 @@ button:hover {
 .admin-database-table tbody tr td {
   padding: 0.2em;
   border-right: 1px solid black;
+}
+
+.pagination-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  flex-flow: row wrap;
+}
+
+.pagination-buttons button {
+  display: inline-block;
+  margin: 0.1em;
+  height: 50px;
+  width: 50px;
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid rgb(73, 73, 73);
+  border-radius: 5px;
+  background-color: #f1f5ff;
+  color: black;
+  cursor: pointer;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+}
+
+.pagination-buttons button::-moz-focus-inner {
+  border: 0;
+}
+
+.pagination-buttons button:hover {
+  background-color: #caeeff;
+  border: 1px solid #112dc9;
+}
+
+.pagination-buttons button.selected {
+  background-color: #caeeff;
+  border: 1px solid #112dc9;
+}
+
+.pagination-buttons button:focus {
+  border: 1px solid #001277;
 }
 
 /* Home Page CSS */

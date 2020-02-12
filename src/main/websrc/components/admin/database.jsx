@@ -12,6 +12,7 @@ import Attendee from '../../data/attendee.js';
 // TODO: Dropdown selector for number of results per page
 // TODO: Sort by column when click on the column header
 // TODO: Search for people by giving email, name, company, etc..
+// TODO: Paginated buttons should go something like [First | <-- | CurrentPage - 1 | Current Page | Current Page + 1 | --> Last]
 class DatabasePage extends React.Component {
   constructor(props) {
     super(props);
@@ -22,7 +23,7 @@ class DatabasePage extends React.Component {
       loading: false,
       showEditModal: false,
       showAddModal: false,
-      rowsPerPage: 50,
+      rowsPerPage: 10,
       numPages: 0,
       page: 0,
       attendeesOnPage: []
@@ -49,6 +50,8 @@ class DatabasePage extends React.Component {
     this.getRows = this.getRows.bind(this);
     this.nextPage = this.nextPage.bind(this);
     this.prevPage = this.prevPage.bind(this);
+    this.generatePaginationButtons = this.generatePaginationButtons.bind(this);
+    this.runChild = this.runChild.bind(this);
   }
 
   clearUserValues() {
@@ -154,7 +157,16 @@ class DatabasePage extends React.Component {
   }
 
   setRowsPerPage(val) {
-    this.setState({ rowsPerPage: val });
+    this.setState({ rowsPerPage: val }, () => {
+      var numPages = 0;
+      if (this.state.attendees.length > this.state.rowsPerPage) {
+        numPages = Math.ceil(
+          this.state.attendees.length / this.state.rowsPerPage
+        );
+      }
+      this.setNumPages(numPages);
+      this.setPage(0);
+    });
   }
 
   setAttendeesOnPage(val) {
@@ -281,6 +293,145 @@ class DatabasePage extends React.Component {
         />
       );
     });
+  }
+
+  runChild(fun) {
+    return fun();
+  }
+
+  generatePaginationButtons(numPages) {
+    if (numPages <= 0) return null;
+    if (numPages <= 10) {
+      return (
+        <div className='pagination-buttons'>
+          <button className='back-button' onClick={this.prevPage}>
+            &larr;
+          </button>
+          {Array.from({ length: this.state.numPages }, (item, index) => {
+            var cName = '';
+            if (this.state.page == index) {
+              cName = 'selected';
+            }
+            return (
+              <button
+                className='page-button'
+                key={index}
+                onClick={this.pageButtonClick}
+                id={index}
+                className={cName}
+              >
+                {index + 1}
+              </button>
+            );
+          })}
+          <button className='forward-button' onClick={this.nextPage}>
+            &rarr;
+          </button>
+        </div>
+      );
+    } else {
+      const currentPage = this.state.page;
+      return (
+        <div className='pagination-buttons'>
+          {this.runChild(() => {
+            if (currentPage >= 2)
+              return (
+                <div>
+                  <button
+                    className='first-button'
+                    id='0'
+                    onClick={this.pageButtonClick}
+                  >
+                    First
+                  </button>
+                  <button className='back-button' onClick={this.prevPage}>
+                    &larr;
+                  </button>
+                  <span> </span>
+                  <button
+                    key={currentPage - 2}
+                    id={currentPage - 2}
+                    onClick={this.pageButtonClick}
+                  >
+                    {currentPage - 1}
+                  </button>
+                  <button
+                    key={currentPage - 1}
+                    id={currentPage - 1}
+                    onClick={this.pageButtonClick}
+                  >
+                    {currentPage}
+                  </button>
+                </div>
+              );
+          })}
+          {this.runChild(() => {
+            if (currentPage == 1)
+              return (
+                <button
+                  key={currentPage - 1}
+                  id={currentPage - 1}
+                  onClick={this.pageButtonClick}
+                >
+                  {currentPage}
+                </button>
+              );
+          })}
+          <button
+            className='selected'
+            key={currentPage}
+            id={currentPage}
+            onClick={this.pageButtonClick}
+          >
+            {currentPage + 1}
+          </button>
+          {this.runChild(() => {
+            if (currentPage == numPages - 2)
+              return (
+                <button
+                  key={currentPage + 1}
+                  id={currentPage + 1}
+                  onClick={this.pageButtonClick}
+                >
+                  {currentPage + 2}
+                </button>
+              );
+          })}
+          {this.runChild(() => {
+            if (currentPage < numPages - 2)
+              return (
+                <div>
+                  <button
+                    key={currentPage + 1}
+                    id={currentPage + 1}
+                    onClick={this.pageButtonClick}
+                  >
+                    {currentPage + 2}
+                  </button>
+                  <button
+                    key={currentPage + 2}
+                    id={currentPage + 2}
+                    onClick={this.pageButtonClick}
+                  >
+                    {currentPage + 3}
+                  </button>
+                  <span> </span>
+                  <button className='forward-button' onClick={this.nextPage}>
+                    &rarr;
+                  </button>
+                  <button
+                    className='last-button'
+                    id={numPages - 1}
+                    onClick={this.pageButtonClick}
+                  >
+                    Last
+                  </button>
+                </div>
+              );
+          })}
+        </div>
+      );
+    }
   }
 
   render() {
@@ -600,34 +751,9 @@ class DatabasePage extends React.Component {
       </div>
     ) : null;
 
-    const paginatedButtons =
-      this.state.numPages > 0 ? (
-        <div className='pagination-buttons'>
-          <button className='back-button' onClick={this.prevPage}>
-            &larr;
-          </button>
-          {Array.from({ length: this.state.numPages }, (item, index) => {
-            var cName = '';
-            if (this.state.page == index) {
-              cName = 'selected';
-            }
-            return (
-              <button
-                className='page-button'
-                key={index}
-                onClick={this.pageButtonClick}
-                id={index}
-                className={cName}
-              >
-                {index + 1}
-              </button>
-            );
-          })}
-          <button className='forward-button' onClick={this.nextPage}>
-            &rarr;
-          </button>
-        </div>
-      ) : null;
+    const paginatedButtons = this.generatePaginationButtons(
+      this.state.numPages
+    );
     //          <img src={require('../../images/main.jpg')}></img>
     return (
       <div className='container'>
@@ -640,7 +766,19 @@ class DatabasePage extends React.Component {
 
         <div className='content'>
           <h1>Database Administration Interface</h1>
-
+          <label htmlFor='rows-per-page-select'>Entries per page: </label>
+          <select
+            id='rows-per-page-select'
+            onChange={e => {
+              this.setRowsPerPage(parseInt(e.target.value));
+            }}
+          >
+            <option value='10'>10</option>
+            <option value='25'>25</option>
+            <option value='50'>50</option>
+            <option value='75'>75</option>
+            <option value='100'>100</option>
+          </select>
           <Table
             className='admin-database-table'
             columns={tableColumns}

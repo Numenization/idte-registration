@@ -10,18 +10,16 @@ class EventLayout extends React.Component {
   render() {
     return (
       <div className='container'>
-        <div className='background'>
-          <img src={require('../../images/main.jpg')}></img>
-        </div>
+        <div className='background'></div>
 
         <div className='top'>
-            <Header />
-            <NavBar />
+          <Header />
+          <NavBar />
         </div>
 
         <div className='content'>
-            <h1>Event Layout Map</h1>
-            <p>Display a map?</p>
+          <h1>Event Layout Map</h1>
+          <p>Display a map?</p>
         </div>
 
         <Footer />

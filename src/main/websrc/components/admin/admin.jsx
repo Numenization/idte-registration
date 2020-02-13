@@ -10,9 +10,7 @@ class AdminPage extends React.Component {
   render() {
     return (
       <div className='container'>
-        <div className='background'>
-          <img src={require('../../images/main.jpg')}></img>
-        </div>
+        <div className='background'></div>
 
         <div className='top'>
           <Header />

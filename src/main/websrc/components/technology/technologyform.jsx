@@ -10,13 +10,11 @@ class TestPage extends React.Component {
   render() {
     return (
       <div className='container'>
-        <div className='background'>
-          <img src={require('../../images/main.jpg')}></img>
-        </div>
+        <div className='background'></div>
 
         <div className='top'>
-            <Header />
-            <NavBar />
+          <Header />
+          <NavBar />
         </div>
 
         <div className='content'>
@@ -35,7 +33,7 @@ class TestPage extends React.Component {
 
               <label>*Concept Type:</label>
               <input type='text'></input>
-              
+
               <label>*Shipping City:</label>
               <input type='text'></input>
 
@@ -56,9 +54,7 @@ class TestPage extends React.Component {
 
               <label>*Supplier Company:</label>
               <input type='text'></input>
-
-              
-              </form>
+            </form>
             <button>Submit Registration</button>
           </div>
         </div>

@@ -10,33 +10,32 @@ class TechWaiver extends React.Component {
   render() {
     return (
       <div className='container'>
-        <div className='background'>
-          <img src={require('../../images/main.jpg')}></img>
-        </div>
+        <div className='background'></div>
 
         <div className='top'>
-            <Header />
-            <NavBar />
+          <Header />
+          <NavBar />
         </div>
 
         <div className='content'>
-            <h1>Technology Submission Digital Waiver</h1>
-            <p>
-                Sample Text Sample Text Sample Text Sample Text Sample Text
-                Sample Text Sample Text Sample Text Sample Text Sample Text
-                Sample Text Sample Text Sample Text Sample Text Sample Text
-                Sample Text Sample Text Sample Text Sample Text Sample Text
-                Sample Text Sample Text Sample Text Sample Text Sample Text
-                Sample Text Sample Text Sample Text Sample Text Sample Text
-                Sample Text Sample Text Sample Text Sample Text Sample Text
-                Sample Text Sample Text Sample Text Sample Text Sample Text
-                Sample Text Sample Text{' '}
-            </p>
-            <div className="registration-form">
-              <button>
-              < a href='technologyform.html'><font color='white'>Sign</font></a>  
-              </button>
-            </div>
+          <h1>Technology Submission Digital Waiver</h1>
+          <p>
+            Sample Text Sample Text Sample Text Sample Text Sample Text Sample
+            Text Sample Text Sample Text Sample Text Sample Text Sample Text
+            Sample Text Sample Text Sample Text Sample Text Sample Text Sample
+            Text Sample Text Sample Text Sample Text Sample Text Sample Text
+            Sample Text Sample Text Sample Text Sample Text Sample Text Sample
+            Text Sample Text Sample Text Sample Text Sample Text Sample Text
+            Sample Text Sample Text Sample Text Sample Text Sample Text Sample
+            Text Sample Text Sample Text Sample Text{' '}
+          </p>
+          <div className='registration-form'>
+            <button>
+              <a href='technologyform.html'>
+                <font color='white'>Sign</font>
+              </a>
+            </button>
+          </div>
         </div>
 
         <Footer />

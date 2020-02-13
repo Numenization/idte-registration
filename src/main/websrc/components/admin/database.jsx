@@ -12,7 +12,7 @@ import Attendee from '../../data/attendee.js';
 // TODO: Dropdown selector for number of results per page
 // TODO: Sort by column when click on the column header
 // TODO: Search for people by giving email, name, company, etc..
-// TODO: Paginated buttons should go something like [First | <-- | CurrentPage - 1 | Current Page | Current Page + 1 | --> Last]
+
 class DatabasePage extends React.Component {
   constructor(props) {
     super(props);

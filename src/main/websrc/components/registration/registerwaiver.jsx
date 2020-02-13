@@ -10,26 +10,26 @@ class WaiverPage extends React.Component {
   render() {
     return (
       <div className='container'>
-        <div className='background'>
-          <img src={require('../../images/main.jpg')}></img>
-        </div>
+        <div className='background'></div>
 
         <div className='top'>
-          <Header/>
-          <NavBar/>
+          <Header />
+          <NavBar />
         </div>
 
         <div className='content'>
           <h1>Registration Digital Waiver</h1>
-            <p>
-                Hello, you are about to sign this form are you sure you want to do this
-                {' '}
-            </p>
-            <div className="registration-form">
-              <button>
-              < a href='registerform.html'><font color='white'>Sign</font></a>  
-              </button>
-            </div>
+          <p>
+            Hello, you are about to sign this form are you sure you want to do
+            this{' '}
+          </p>
+          <div className='registration-form'>
+            <button>
+              <a href='registerform.html'>
+                <font color='white'>Sign</font>
+              </a>
+            </button>
+          </div>
         </div>
 
         <Footer />

@@ -10,33 +10,30 @@ class FaqPage extends React.Component {
   render() {
     return (
       <div className='container'>
-        <div className='background'>
-          <img src={require('../../images/main.jpg')}></img>
-        </div>
+        <div className='background'></div>
 
         <div className='top'>
-            <Header />
-            <NavBar />
+          <Header />
+          <NavBar />
         </div>
 
         <div className='content'>
-            <h1>Event information</h1>
-            <p>
-                Sample TextSample TextSample TextSample TextSample TextSample
-                TextSample TextSample TextSample TextSample TextSample
-                TextSample TextSample TextSample TextSample TextSample
-                TextSample TextSample TextSample TextSample TextSample
-                TextSample TextSample TextSample TextSample TextSample
-                TextSample TextSample TextSample TextSample TextSample
-                TextSample TextSample TextSample TextSample TextSample
-                TextSample Text
-            </p>
-            <ul>
-                <li>Sample Text</li>
-                <li>Sample Text</li>
-                <li>Sample Text</li>
-                <li>Sample Text</li>
-            </ul>
+          <h1>Event information</h1>
+          <p>
+            Sample TextSample TextSample TextSample TextSample TextSample
+            TextSample TextSample TextSample TextSample TextSample TextSample
+            TextSample TextSample TextSample TextSample TextSample TextSample
+            TextSample TextSample TextSample TextSample TextSample TextSample
+            TextSample TextSample TextSample TextSample TextSample TextSample
+            TextSample TextSample TextSample TextSample TextSample TextSample
+            TextSample Text
+          </p>
+          <ul>
+            <li>Sample Text</li>
+            <li>Sample Text</li>
+            <li>Sample Text</li>
+            <li>Sample Text</li>
+          </ul>
         </div>
 
         <Footer />

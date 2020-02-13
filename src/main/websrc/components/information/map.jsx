@@ -10,18 +10,16 @@ class MapPage extends React.Component {
   render() {
     return (
       <div className='container'>
-        <div className='background'>
-          <img src={require('../../images/main.jpg')}></img>
-        </div>
+        <div className='background'></div>
 
         <div className='top'>
-            <Header />
-            <NavBar />
+          <Header />
+          <NavBar />
         </div>
 
         <div className='content'>
-            <h1>Event Map</h1>
-            <img id='map' src={require('../../images/map.png')}></img>
+          <h1>Event Map</h1>
+          <img id='map' src={require('../../images/map.png')}></img>
         </div>
 
         <Footer />

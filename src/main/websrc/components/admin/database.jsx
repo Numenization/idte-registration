@@ -26,7 +26,9 @@ class DatabasePage extends React.Component {
       rowsPerPage: 10,
       numPages: 0,
       page: 0,
-      attendeesOnPage: []
+      attendeesOnPage: [],
+      sortBy: null,
+      search: ''
     };
 
     this.getAttendees = this.getAttendees.bind(this);
@@ -52,6 +54,7 @@ class DatabasePage extends React.Component {
     this.prevPage = this.prevPage.bind(this);
     this.generatePaginationButtons = this.generatePaginationButtons.bind(this);
     this.runChild = this.runChild.bind(this);
+    this.sortAttendees = this.sortAttendees.bind(this);
   }
 
   clearUserValues() {
@@ -134,18 +137,18 @@ class DatabasePage extends React.Component {
   }
 
   setPage(val) {
-    if (val < 0 || val > this.state.numPages - 1) return;
-    var n = val * this.state.rowsPerPage;
-    var m = n + this.state.rowsPerPage;
-    var attendeesToPutOnPage = [];
-    for (var i = n; i < m; i++) {
-      var attendee = this.state.attendees[i];
-      if (attendee) attendeesToPutOnPage.push(attendee);
-    }
+    // if (val < 0 || val > this.state.numPages - 1) return;
+    // var n = val * this.state.rowsPerPage;
+    // var m = n + this.state.rowsPerPage;
+    // var attendeesToPutOnPage = [];
+    // for (var i = n; i < m; i++) {
+    //   var attendee = this.state.attendees[i];
+    //   if (attendee) attendeesToPutOnPage.push(attendee);
+    // }
     this.setState({
       page: val
     });
-    this.setAttendeesOnPage(attendeesToPutOnPage);
+    //this.setAttendeesOnPage(attendeesToPutOnPage);
   }
 
   nextPage() {
@@ -284,11 +287,29 @@ class DatabasePage extends React.Component {
   }
 
   getRows(dataColumns) {
-    if (!this.state.attendeesOnPage) return null;
-    return this.state.attendeesOnPage.map((user, key) => {
+    console.log('Render Rows');
+    if (!this.state.attendees) return null;
+
+    var sortedAttendees = this.sortAttendees(this.state.sortBy);
+    var val = this.state.page;
+
+    if (val < 0 || val > this.state.numPages - 1) return;
+    var n = val * this.state.rowsPerPage;
+    var m = n + this.state.rowsPerPage;
+    var attendeesToPutOnPage = [];
+    for (var i = n; i < m; i++) {
+      var attendee = sortedAttendees[i];
+      if (attendee) attendeesToPutOnPage.push(attendee);
+    }
+
+    return attendeesToPutOnPage.map((user, key) => {
       return (
         <TableRow
-          key={key + this.state.page * this.state.rowsPerPage}
+          key={
+            key +
+            this.state.page * this.state.rowsPerPage +
+            this.state.sortBy * 1000
+          }
           data={user}
           columns={dataColumns}
           onClick={this.rowClick}
@@ -436,12 +457,29 @@ class DatabasePage extends React.Component {
     }
   }
 
+  sortAttendees(sortBy) {
+    const dict = {
+      0: 'lastName',
+      1: 'firstName',
+      2: 'email',
+      3: 'type',
+      4: 'dateCreated',
+      5: 'lastModified',
+      6: 'modifiedBy',
+      7: 'company',
+      8: 'country',
+      9: 'city'
+    };
+    var listToSort = this.state.attendees;
+
+    listToSort.sort((a, b) => (a[dict[sortBy]] > b[dict[sortBy]] ? 1 : -1));
+    return listToSort;
+  }
+
   render() {
     if (this.state.error) {
       console.log(this.state.error);
     }
-
-    //console.log(this.state.attendees);
 
     const tableColumns = [
       'Type',
@@ -768,6 +806,7 @@ class DatabasePage extends React.Component {
 
         <div className='content'>
           <h1>Database Administration Interface</h1>
+
           <label htmlFor='rows-per-page-select'>Entries per page: </label>
           <select
             id='rows-per-page-select'
@@ -781,13 +820,36 @@ class DatabasePage extends React.Component {
             <option value='75'>75</option>
             <option value='100'>100</option>
           </select>
+          <br />
+          <label htmlFor='sort-by-select'>Sort Table By:</label>
+          <select
+            id='sort-by-select'
+            onChange={e => {
+              var sortBy = e.target.value;
+              this.setState({ sortBy: sortBy });
+            }}
+          >
+            <option disabled selected value>
+              -- select an option --
+            </option>
+            <option value={0}>Last Name</option>
+            <option value={1}>First Name</option>
+            <option value={2}>Email</option>
+            <option value={3}>Type</option>
+            <option value={4}>Date Created</option>
+            <option value={5}>Date Last Modified</option>
+            <option value={6}>Last Modified By</option>
+            <option value={7}>Company</option>
+            <option value={8}>Country</option>
+            <option value={9}>City</option>
+          </select>
           <Table
             className='admin-database-table'
             columns={tableColumns}
             loading={this.state.loading}
             columns={tableColumns}
           >
-            {this.getRows(dataColumns)}
+            {this.getRows(dataColumns, this.state.attendeesOnPage)}
           </Table>
           {paginatedButtons}
 

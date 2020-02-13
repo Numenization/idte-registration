@@ -9,8 +9,6 @@ import Modal from '../general/modal.jsx';
 import Attendee from '../../data/attendee.js';
 
 // TODO: Dropdown type selector for adding attendee
-// TODO: Dropdown selector for number of results per page
-// TODO: Sort by column when click on the column header
 // TODO: Search for people by giving email, name, company, etc..
 
 class DatabasePage extends React.Component {
@@ -258,7 +256,6 @@ class DatabasePage extends React.Component {
   }
 
   async postNewUser() {
-    // TODO: check if supplier or evaluator
     await Attendee.postSupplier(
       Attendee.createAttendeeObjectFromState(this.state)
     );

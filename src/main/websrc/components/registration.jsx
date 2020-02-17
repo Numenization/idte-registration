@@ -22,10 +22,10 @@ class RegistrationPage extends React.Component {
             <h1>Registration</h1>
             <p>Sample Text</p>
             <a href='registerwaiver.html'>
-              <font color='white'>Register as Supplier (Ford)</font>
+              <font color='white'>Register as Supplier</font>
             </a>
             <a href='registerwaiver.html'>
-              <font color='white'>Register as Supplier (Other)</font>
+              <font color='white'>Register as Presenter</font>
             </a>
             <a href='registerwaiver.html'>
               <font color='white'>Register as Presenter</font>

@@ -19,42 +19,78 @@ class TestPage extends React.Component {
 
         <div className='content'>
           <div className='technology-form'>
-            <h1>Technology submission page</h1>
+            <h1>Technology Submission Form</h1>
             <p>Sample Text</p>
-            <form>
-              <label>*Concept Title:</label>
-              <input type='text'></input>
-
-              <label>Concept Description:</label>
-              <input type='text'></input>
-
-              <label>*Technology Category:</label>
-              <input type='text'></input>
-
-              <label>*Concept Type:</label>
-              <input type='text'></input>
-
-              <label>*Shipping City:</label>
-              <input type='text'></input>
-
-              <label>*Shipping Country:</label>
-              <input type='text'></input>
-
-              <label>*Source:</label>
-              <input type='text'></input>
-
-              <label>*Ford Contact:</label>
-              <input type='text'></input>
-
-              <label>*Ford Presenter:</label>
-              <input type='text'></input>
-
-              <label>*Director:</label>
-              <input type='text'></input>
-
-              <label>*Supplier Company:</label>
-              <input type='text'></input>
-            </form>
+            <table>
+              <tbody>
+                <tr>
+                  <td>
+                    <span>*Concept Title:</span>
+                    <input id='title' type='text'></input>
+                  </td>
+                  <td id='col2'>
+                    <span>Concept Description:</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>*Technology Category:</span>
+                    <input id='category' type='text'></input>
+                  </td>
+                  <td id='col2' rowSpan='9'>
+                    <textarea id='description' cols='35' rows='15'></textarea>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>*Concept Type:</span>
+                    <input id='type' type='text'></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>*Shipping City:</span>
+                    <input id='city' type='text'></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>*Shipping Country:</span>
+                    <input id='country' type='text'></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>*Source:</span>
+                    <input id='source' type='text'></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>*Ford Contact:</span>
+                    <input id='contact' type='text'></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>*Ford Presenter:</span>
+                    <input id='presenter' type='text'></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>*Director:</span>
+                    <input id='director' type='text'></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>*Supplier Company:</span>
+                    <input id='company' type='text'></input>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
             <button>Submit Registration</button>
           </div>
         </div>

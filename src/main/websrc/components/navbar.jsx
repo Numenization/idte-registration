@@ -1,13 +1,21 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 class NavBar extends React.Component {
   render() {
     return (
-      <div className="navbar">
+      <div className='navbar'>
         <ul>
           <li>
             <a href='index.html'>Home</a>
+          </li>
+
+          <li>
+            <a href='technologywaiver.html'>
+              Technology
+              <br />
+              Submission
+            </a>
           </li>
 
           <li>
@@ -15,13 +23,11 @@ class NavBar extends React.Component {
           </li>
 
           <li>
-            <a href='technologywaiver.html'>Technology<br/>Submission </a>
-          </li>
+            <a id='tiered' href='info.html'>
+              Information
+            </a>
 
-          <li>
-            <a id='tiered' href='info.html'>Information</a>
-
-            <div className="navbar-second-tier">
+            <div className='navbar-second-tier'>
               <ul>
                 <li>
                   <a href='faq.html'>Event Info/FAQ</a>

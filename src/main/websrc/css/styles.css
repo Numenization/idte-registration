@@ -441,7 +441,7 @@ button:hover {
 }
 
 .technology-form {
-  width: 40%;
+  width: 70%;
   margin: 0 auto;
 }
 
@@ -465,6 +465,35 @@ button:hover {
   -webkit-transition: background-color 100ms linear;
   -moz-transition: background-color 100ms linear;
   -o-transition: background-color 100ms linear;
+}
+
+.technology-form table {
+  width: 100%;
+}
+
+.technology-form td {
+  min-width: 340px;
+}
+
+.technology-form span {
+  float: left;
+}
+
+.technology-form input {
+  float: right;
+  width: 50%;
+  min-width: 170px;
+}
+
+.technology-form#col2 {
+  width: 60%;
+}
+
+.technology-form textarea {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  resize: none;
 }
 
 .technology-form button:hover {

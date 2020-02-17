@@ -609,7 +609,7 @@ class DatabasePage extends React.Component {
           rows='4'
           cols='50'
           name='comments'
-          style={{ resize: 'none' }}
+          style={{ resize: 'none', width: '100%' }}
           onChange={this.updateField}
         ></textarea>
         <br />
@@ -818,7 +818,7 @@ class DatabasePage extends React.Component {
             <option value='100'>100</option>
           </select>
           <br />
-          <label htmlFor='sort-by-select'>Sort Table By:</label>
+          <label htmlFor='sort-by-select'>Sort Table By: </label>
           <select
             id='sort-by-select'
             onChange={e => {

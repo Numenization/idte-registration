@@ -20,22 +20,22 @@ class FormPage extends React.Component {
         <div className='content'>
           <div className='registration-form'>
             <form>
-              <label>*First Name:</label>
+              <label>*First Name/Given Name:</label>
               <input type='text'></input>
 
-              <label>*Last Name: </label>
+              <label>*Last Name/Family Name: </label>
               <input type='text'></input>
 
               <label>*Email Address:</label>
               <input type='text'></input>
 
-              <label>Nickname:</label>
+              <label>Nickname (What you prefer to be called):</label>
               <input type='text'></input>
 
               <label>*Phone Number:</label>
               <input type='text'></input>
 
-              <label>Cell Number:</label>
+              <label>Cell Number (For use to contact during event):</label>
               <input type='text'></input>
 
               <label>*Company:</label>

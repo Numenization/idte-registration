@@ -9,7 +9,6 @@ import Modal from '../general/modal.jsx';
 import Attendee from '../../data/attendee.js';
 
 // TODO: Dropdown type selector for adding attendee
-// TODO: Search for people by giving email, name, company, etc..
 
 class DatabasePage extends React.Component {
   constructor(props) {

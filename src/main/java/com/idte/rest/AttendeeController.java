@@ -2,7 +2,9 @@ package com.idte.rest;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import com.idte.rest.data.AttendeeRepository;
@@ -15,6 +17,7 @@ import com.idte.rest.data.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,19 +52,31 @@ public class AttendeeController {
         return evaluators.findAll();
     }
     
-    // get from email or id in json
-    @GetMapping(path="/attendees")
-    public Object findAttendee(@RequestBody Map<String, String> json) {
-        Attendee find = new Attendee();
-        if(json.get("email") != null) {
-            find.setEmail(json.get("email"));
+    // get from email, id, first name, last name, nickname, phone number, cell number, city, company, or country
+    @GetMapping(path="/suppliers/search")
+    public Object findSuppliers(@RequestBody Map<String, String> json) {
+
+        String search = json.get("search");
+        List<String> attributes = Arrays.asList("email","id","firstName","lastName","nickname","phoneNumber","cellNumber","city","company","country");
+
+        List<Supplier> attendee = suppliers.findAll(Specification.where(SupplierRepository.containsTextInAttributes(search, attributes)));
+        if(!attendee.isEmpty()) {
+            return new ResponseEntity<>(attendee, HttpStatus.OK);
         }
-        if(json.get("id") != null) {
-            find.setId(json.get("id"));
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Example<Attendee> example = Example.of(find);
-        Attendee attendee = attendees.findOne(example).orElse(null);
-        if(attendee != null) {
+    }
+
+    // get from email, id, first name, last name, nickname, phone number, cell number, city, or country
+    @GetMapping(path="/evaluators/search")
+    public Object findEvaluators(@RequestBody Map<String, String> json) {
+
+        String search = json.get("search");
+        List<String> attributes = Arrays.asList("email","id","firstName","lastName","nickname","phoneNumber","cellNumber","city","country");
+
+        List<Evaluator> attendee = evaluators.findAll(Specification.where(EvaluatorRepository.containsTextInAttributes(search, attributes)));
+        if(!attendee.isEmpty()) {
             return new ResponseEntity<>(attendee, HttpStatus.OK);
         }
         else {

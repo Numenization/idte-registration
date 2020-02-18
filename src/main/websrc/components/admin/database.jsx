@@ -1,12 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Header from '../header.jsx';
-import NavBar from '../navbar.jsx';
-import Footer from '../footer.jsx';
-import { Table, TableRow } from '../general/table.jsx';
-import '../../css/styles.css';
-import Modal from '../general/modal.jsx';
-import Attendee from '../../data/attendee.js';
+import React from "react";
+import ReactDOM from "react-dom";
+import Header from "../header.jsx";
+import NavBar from "../navbar.jsx";
+import Footer from "../footer.jsx";
+import { Table, TableRow } from "../general/table.jsx";
+import "../../css/styles.css";
+import Modal from "../general/modal.jsx";
+import Attendee from "../../data/attendee.js";
 
 // TODO: Dropdown type selector for adding attendee
 // TODO: Search for people by giving email, name, company, etc..
@@ -26,7 +26,7 @@ class DatabasePage extends React.Component {
       page: 0,
       attendeesOnPage: [],
       sortBy: null,
-      search: ''
+      search: ""
     };
 
     this.getAttendees = this.getAttendees.bind(this);
@@ -57,22 +57,22 @@ class DatabasePage extends React.Component {
 
   clearUserValues() {
     var values = [
-      'firstName',
-      'lastName',
-      'email',
-      'phoneNumber',
-      'cellNumber',
-      'city',
-      'country',
-      'technologyNumber',
-      'nickname',
-      'company',
-      'comments',
-      'id',
-      'lastModified',
-      'dateCreated',
-      'modifiedBy',
-      'type'
+      "firstName",
+      "lastName",
+      "email",
+      "phoneNumber",
+      "cellNumber",
+      "city",
+      "country",
+      "technologyNumber",
+      "nickname",
+      "company",
+      "comments",
+      "id",
+      "lastModified",
+      "dateCreated",
+      "modifiedBy",
+      "type"
     ];
     for (let property of values) {
       this.setState({ [property]: undefined });
@@ -237,13 +237,49 @@ class DatabasePage extends React.Component {
     this.setLoading(false);
   }
 
+  async searchAttendees() {
+    if (this.state.search.length == 0) return;
+
+    this.setLoading(true);
+
+    var suppliers = await Attendee.getAllSuppliers();
+    var evaluators = await Attendee.getAllEvaluators();
+
+    if (suppliers.statusText) {
+      this.setError(suppliers.statusText);
+      this.setLoading(false);
+      return;
+    }
+
+    if (evaluators.statusText) {
+      this.setError(evaluators.statusText);
+      this.setLoading(false);
+      return;
+    }
+
+    Array.prototype.push.apply(suppliers, evaluators);
+
+    var numPages = 0;
+
+    if (suppliers.length > this.state.rowsPerPage) {
+      numPages = Math.ceil(suppliers.length / this.state.rowsPerPage);
+    } else {
+      numPages = 1;
+    }
+
+    this.setNumPages(numPages);
+    this.setData(suppliers);
+    this.setPage(0);
+    this.setLoading(false);
+  }
+
   pageButtonClick(e) {
     this.setPage(parseInt(e.target.id));
   }
 
   rowClick(e) {
     const columnData = JSON.parse(
-      e.target.parentElement.getAttribute('data-columns')
+      e.target.parentElement.getAttribute("data-columns")
     );
 
     this.setSelected(columnData, () => {
@@ -272,7 +308,7 @@ class DatabasePage extends React.Component {
   }
 
   async deleteUser() {
-    var response = window.confirm('Are you sure you want to delete this user?');
+    var response = window.confirm("Are you sure you want to delete this user?");
     if (!response) return;
     await Attendee.deleteAttendee({ email: this.state.email });
     this.getAttendees();
@@ -284,7 +320,7 @@ class DatabasePage extends React.Component {
   }
 
   getRows(dataColumns) {
-    console.log('Render Rows');
+    console.log("Render Rows");
     if (!this.state.attendees) return null;
 
     var sortedAttendees = this.sortAttendees(this.state.sortBy);
@@ -323,18 +359,18 @@ class DatabasePage extends React.Component {
     if (numPages <= 0) return null;
     if (numPages <= 10) {
       return (
-        <div className='pagination-buttons'>
-          <button className='back-button' onClick={this.prevPage}>
+        <div className="pagination-buttons">
+          <button className="back-button" onClick={this.prevPage}>
             &larr;
           </button>
           {Array.from({ length: this.state.numPages }, (item, index) => {
-            var cName = '';
+            var cName = "";
             if (this.state.page == index) {
-              cName = 'selected';
+              cName = "selected";
             }
             return (
               <button
-                className='page-button'
+                className="page-button"
                 key={index}
                 onClick={this.pageButtonClick}
                 id={index}
@@ -344,7 +380,7 @@ class DatabasePage extends React.Component {
               </button>
             );
           })}
-          <button className='forward-button' onClick={this.nextPage}>
+          <button className="forward-button" onClick={this.nextPage}>
             &rarr;
           </button>
         </div>
@@ -352,19 +388,19 @@ class DatabasePage extends React.Component {
     } else {
       const currentPage = this.state.page;
       return (
-        <div className='pagination-buttons'>
+        <div className="pagination-buttons">
           {this.runChild(() => {
             if (currentPage >= 2)
               return (
                 <div>
                   <button
-                    className='first-button'
-                    id='0'
+                    className="first-button"
+                    id="0"
                     onClick={this.pageButtonClick}
                   >
                     First
                   </button>
-                  <button className='back-button' onClick={this.prevPage}>
+                  <button className="back-button" onClick={this.prevPage}>
                     &larr;
                   </button>
                   <span> </span>
@@ -398,7 +434,7 @@ class DatabasePage extends React.Component {
               );
           })}
           <button
-            className='selected'
+            className="selected"
             key={currentPage}
             id={currentPage}
             onClick={this.pageButtonClick}
@@ -436,11 +472,11 @@ class DatabasePage extends React.Component {
                     {currentPage + 3}
                   </button>
                   <span> </span>
-                  <button className='forward-button' onClick={this.nextPage}>
+                  <button className="forward-button" onClick={this.nextPage}>
                     &rarr;
                   </button>
                   <button
-                    className='last-button'
+                    className="last-button"
                     id={numPages - 1}
                     onClick={this.pageButtonClick}
                   >
@@ -456,16 +492,16 @@ class DatabasePage extends React.Component {
 
   sortAttendees(sortBy) {
     const dict = {
-      0: 'lastName',
-      1: 'firstName',
-      2: 'email',
-      3: 'type',
-      4: 'dateCreated',
-      5: 'lastModified',
-      6: 'modifiedBy',
-      7: 'company',
-      8: 'country',
-      9: 'city'
+      0: "lastName",
+      1: "firstName",
+      2: "email",
+      3: "type",
+      4: "dateCreated",
+      5: "lastModified",
+      6: "modifiedBy",
+      7: "company",
+      8: "country",
+      9: "city"
     };
     var listToSort = this.state.attendees;
 
@@ -479,29 +515,29 @@ class DatabasePage extends React.Component {
     }
 
     const tableColumns = [
-      'Type',
-      'First Name',
-      'Last Name',
-      'Email',
-      'Date Created',
-      'Last Modified',
-      'Modified By'
+      "Type",
+      "First Name",
+      "Last Name",
+      "Email",
+      "Date Created",
+      "Last Modified",
+      "Modified By"
     ];
 
     const dataColumns = [
-      'type',
-      'firstName',
-      'lastName',
-      'email',
-      'dateCreated',
-      'lastModified',
-      'modifiedBy'
+      "type",
+      "firstName",
+      "lastName",
+      "email",
+      "dateCreated",
+      "lastModified",
+      "modifiedBy"
     ];
 
     const buttonWidth = {
-      width: '30%',
-      display: 'inline-block',
-      boxSizing: 'border-box'
+      width: "30%",
+      display: "inline-block",
+      boxSizing: "border-box"
     };
 
     const addModalInner = (
@@ -509,22 +545,22 @@ class DatabasePage extends React.Component {
         <h2>Create New Attendee</h2>
         <span>Attendee Type: [CHANGE THIS TO DROPDOWN SELECTION]</span>
         <br />
-        <table className='modal-two-col-table'>
+        <table className="modal-two-col-table">
           <tbody>
             <tr>
               <td>
                 <span>First Name: </span>
                 <input
-                  type='text'
-                  name='firstName'
+                  type="text"
+                  name="firstName"
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
                 <span>Last Name: </span>
                 <input
-                  type='text'
-                  name='lastName'
+                  type="text"
+                  name="lastName"
                   onChange={this.updateField}
                 ></input>
               </td>
@@ -533,16 +569,16 @@ class DatabasePage extends React.Component {
               <td>
                 <span>Nickname: </span>
                 <input
-                  type='text'
-                  name='nickname'
+                  type="text"
+                  name="nickname"
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
                 <span>Email: </span>
                 <input
-                  type='text'
-                  name='email'
+                  type="text"
+                  name="email"
                   onChange={this.updateField}
                 ></input>
               </td>
@@ -551,16 +587,16 @@ class DatabasePage extends React.Component {
               <td>
                 <span>Phone Number: </span>
                 <input
-                  type='text'
-                  name='phoneNumber'
+                  type="text"
+                  name="phoneNumber"
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
                 <span>Cell Number: </span>
                 <input
-                  type='text'
-                  name='cellNumber'
+                  type="text"
+                  name="cellNumber"
                   onChange={this.updateField}
                 ></input>
               </td>
@@ -569,16 +605,16 @@ class DatabasePage extends React.Component {
               <td>
                 <span>Company: </span>
                 <input
-                  type='text'
-                  name='company'
+                  type="text"
+                  name="company"
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
                 <span>Technology Number: </span>
                 <input
-                  type='text'
-                  name='technologyNumber'
+                  type="text"
+                  name="technologyNumber"
                   onChange={this.updateField}
                 ></input>
               </td>
@@ -587,16 +623,16 @@ class DatabasePage extends React.Component {
               <td>
                 <span>Country: </span>
                 <input
-                  type='text'
-                  name='country'
+                  type="text"
+                  name="country"
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
                 <span>City: </span>
                 <input
-                  type='text'
-                  name='city'
+                  type="text"
+                  name="city"
                   onChange={this.updateField}
                 ></input>
               </td>
@@ -606,21 +642,21 @@ class DatabasePage extends React.Component {
         <span>Comments:</span>
         <br />
         <textarea
-          rows='4'
-          cols='50'
-          name='comments'
-          style={{ resize: 'none', width: '100%' }}
+          rows="4"
+          cols="50"
+          name="comments"
+          style={{ resize: "none", width: "100%" }}
           onChange={this.updateField}
         ></textarea>
         <br />
         <button
-          id='link-button'
+          id="link-button"
           style={{
-            width: '250px',
-            display: 'inline-block',
-            boxSizing: 'border-box',
-            fontSize: '1em',
-            margin: '0.5em 0'
+            width: "250px",
+            display: "inline-block",
+            boxSizing: "border-box",
+            fontSize: "1em",
+            margin: "0.5em 0"
           }}
           onClick={this.postNewUser}
         >
@@ -637,24 +673,24 @@ class DatabasePage extends React.Component {
         <br />
         <span>Attendee Type: {selectedUser.type}</span>
         <br />
-        <table className='modal-two-col-table'>
+        <table className="modal-two-col-table">
           <tbody>
             <tr>
               <td>
                 <span>First Name: </span>
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={selectedUser.firstName}
-                  name='firstName'
+                  name="firstName"
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
                 <span>Last Name: </span>
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={selectedUser.lastName}
-                  name='lastName'
+                  name="lastName"
                   onChange={this.updateField}
                 ></input>
               </td>
@@ -663,18 +699,18 @@ class DatabasePage extends React.Component {
               <td>
                 <span>Nickname: </span>
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={selectedUser.nickname}
-                  name='nickname'
+                  name="nickname"
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
                 <span>Email: </span>
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={selectedUser.email}
-                  name='email'
+                  name="email"
                   onChange={this.updateField}
                 ></input>
               </td>
@@ -683,18 +719,18 @@ class DatabasePage extends React.Component {
               <td>
                 <span>Phone Number: </span>
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={selectedUser.phoneNumber}
-                  name='phoneNumber'
+                  name="phoneNumber"
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
                 <span>Cell Number: </span>
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={selectedUser.cellNumber}
-                  name='cellNumber'
+                  name="cellNumber"
                   onChange={this.updateField}
                 ></input>
               </td>
@@ -703,18 +739,18 @@ class DatabasePage extends React.Component {
               <td>
                 <span>Company: </span>
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={selectedUser.company}
-                  name='company'
+                  name="company"
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
                 <span>Technology Number: </span>
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={selectedUser.technologyNumber}
-                  name='technologyNumber'
+                  name="technologyNumber"
                   onChange={this.updateField}
                 ></input>
               </td>
@@ -723,19 +759,19 @@ class DatabasePage extends React.Component {
               <td>
                 <span>Country: </span>
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={selectedUser.country}
-                  name='country'
+                  name="country"
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
                 <span>City: </span>
                 <input
-                  type='text'
+                  type="text"
                   defaultValue={selectedUser.city}
                   onChange={this.updateField}
-                  name='city'
+                  name="city"
                 ></input>
               </td>
             </tr>
@@ -744,11 +780,11 @@ class DatabasePage extends React.Component {
         <span>Comments:</span>
         <br />
         <textarea
-          rows='4'
-          cols='50'
-          name='comments'
+          rows="4"
+          cols="50"
+          name="comments"
           onChange={this.updateField}
-          style={{ resize: 'none', width: '100%' }}
+          style={{ resize: "none", width: "100%" }}
           defaultValue={selectedUser.comments}
         ></textarea>
         <br />
@@ -759,28 +795,28 @@ class DatabasePage extends React.Component {
         <span>Last Modified By: {selectedUser.modifiedBy}</span>
         <br />
         <button
-          id='link-button'
+          id="link-button"
           onClick={this.updateExistingUser}
           style={{
-            width: '250px',
-            display: 'inline-block',
-            boxSizing: 'border-box',
-            fontSize: '1em',
-            margin: '0.5em 0'
+            width: "250px",
+            display: "inline-block",
+            boxSizing: "border-box",
+            fontSize: "1em",
+            margin: "0.5em 0"
           }}
         >
           Update Attendee Fields
         </button>
         <button
-          id='link-button'
+          id="link-button"
           onClick={this.deleteUser}
           style={{
-            width: '250px',
-            display: 'inline-block',
-            boxSizing: 'border-box',
-            fontSize: '1em',
-            margin: '0.5em 0',
-            float: 'right'
+            width: "250px",
+            display: "inline-block",
+            boxSizing: "border-box",
+            fontSize: "1em",
+            margin: "0.5em 0",
+            float: "right"
           }}
         >
           Delete Attendee
@@ -793,34 +829,34 @@ class DatabasePage extends React.Component {
     );
     //          <img src={require('../../images/main.jpg')}></img>
     return (
-      <div className='container'>
-        <div className='background'></div>
+      <div className="container">
+        <div className="background"></div>
 
-        <div className='top'>
+        <div className="top">
           <Header />
           <NavBar />
         </div>
 
-        <div className='content'>
+        <div className="content">
           <h1>Database Administration Interface</h1>
 
-          <label htmlFor='rows-per-page-select'>Entries per page: </label>
+          <label htmlFor="rows-per-page-select">Entries per page: </label>
           <select
-            id='rows-per-page-select'
+            id="rows-per-page-select"
             onChange={e => {
               this.setRowsPerPage(parseInt(e.target.value));
             }}
           >
-            <option value='10'>10</option>
-            <option value='25'>25</option>
-            <option value='50'>50</option>
-            <option value='75'>75</option>
-            <option value='100'>100</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="75">75</option>
+            <option value="100">100</option>
           </select>
           <br />
-          <label htmlFor='sort-by-select'>Sort Table By: </label>
+          <label htmlFor="sort-by-select">Sort Table By: </label>
           <select
-            id='sort-by-select'
+            id="sort-by-select"
             onChange={e => {
               var sortBy = e.target.value;
               this.setState({ sortBy: sortBy });
@@ -841,7 +877,7 @@ class DatabasePage extends React.Component {
             <option value={9}>City</option>
           </select>
           <Table
-            className='admin-database-table'
+            className="admin-database-table"
             columns={tableColumns}
             loading={this.state.loading}
             columns={tableColumns}
@@ -851,14 +887,14 @@ class DatabasePage extends React.Component {
           {paginatedButtons}
 
           <button
-            id='link-button'
+            id="link-button"
             style={buttonWidth}
             onClick={this.toggleAddModal}
           >
             Add entry to Attendees
           </button>
           <br />
-          <a id='link-button' href='admin.html' style={buttonWidth}>
+          <a id="link-button" href="admin.html" style={buttonWidth}>
             Back to Admin Page
           </a>
         </div>
@@ -867,14 +903,14 @@ class DatabasePage extends React.Component {
         <Modal
           show={this.state.showEditModal}
           onClose={this.toggleEditModal}
-          style={{ width: '600px' }}
+          style={{ width: "600px" }}
         >
           {editModalInner}
         </Modal>
         <Modal
           show={this.state.showAddModal}
           onClose={this.toggleAddModal}
-          style={{ width: '600px' }}
+          style={{ width: "600px" }}
         >
           {addModalInner}
         </Modal>
@@ -883,4 +919,4 @@ class DatabasePage extends React.Component {
   }
 }
 
-ReactDOM.render(<DatabasePage />, document.getElementById('app'));
+ReactDOM.render(<DatabasePage />, document.getElementById("app"));

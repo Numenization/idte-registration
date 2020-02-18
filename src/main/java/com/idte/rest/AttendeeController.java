@@ -53,35 +53,39 @@ public class AttendeeController {
     }
     
     // get from email, id, first name, last name, nickname, phone number, cell number, city, company, or country
-    @GetMapping(path="/suppliers/search")
+    // due to incorrect implementation of javascripts XHRHttpRequest, this has to be a POST mapping, otherwise we cant have a body
+    @PostMapping(path="/suppliers/search")
     public Object findSuppliers(@RequestBody Map<String, String> json) {
 
         String search = json.get("search");
         List<String> attributes = Arrays.asList("email","id","firstName","lastName","nickname","phoneNumber","cellNumber","city","company","country");
 
         List<Supplier> attendee = suppliers.findAll(Specification.where(SupplierRepository.containsTextInAttributes(search, attributes)));
-        if(!attendee.isEmpty()) {
-            return new ResponseEntity<>(attendee, HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        // if(!attendee.isEmpty()) {
+        //     return new ResponseEntity<>(attendee, HttpStatus.OK);
+        // }
+        // else {
+        //     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        // }
+        return new ResponseEntity<>(attendee, HttpStatus.OK);
     }
 
     // get from email, id, first name, last name, nickname, phone number, cell number, city, or country
-    @GetMapping(path="/evaluators/search")
+    // due to incorrect implementation of javascripts XHRHttpRequest, this has to be a POST mapping, otherwise we cant have a body
+    @PostMapping(path="/evaluators/search")
     public Object findEvaluators(@RequestBody Map<String, String> json) {
 
         String search = json.get("search");
         List<String> attributes = Arrays.asList("email","id","firstName","lastName","nickname","phoneNumber","cellNumber","city","country");
 
         List<Evaluator> attendee = evaluators.findAll(Specification.where(EvaluatorRepository.containsTextInAttributes(search, attributes)));
-        if(!attendee.isEmpty()) {
-            return new ResponseEntity<>(attendee, HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        // if(!attendee.isEmpty()) {
+        //     return new ResponseEntity<>(attendee, HttpStatus.OK);
+        // }
+        // else {
+        //     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        // }
+        return new ResponseEntity<>(attendee, HttpStatus.OK);
     }
 
     // create a new supplier

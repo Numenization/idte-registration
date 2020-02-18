@@ -24,17 +24,17 @@ class Attendee {
   static async postSupplier(opts = null) {
     try {
       if (!opts) return;
-      let res = await Attendee.req("POST", "/idte/suppliers", opts);
+      let res = await Attendee.req('POST', '/idte/suppliers', opts);
       return res;
     } catch (e) {
       console.log(e.request);
       alert(
-        "Error: " +
+        'Error: ' +
           e.status +
-          "\n" +
+          '\n' +
           e.statusText +
-          "\n" +
-          "Make sure all required fields are filled with valid values"
+          '\n' +
+          'Make sure all required fields are filled with valid values'
       );
     }
   }
@@ -42,17 +42,17 @@ class Attendee {
   static async postEvaluator(opts = null) {
     try {
       if (!opts) return;
-      let res = await Attendee.req("POST", "/idte/evaluators", opts);
+      let res = await Attendee.req('POST', '/idte/evaluators', opts);
       return res;
     } catch (e) {
       console.log(e.request);
       alert(
-        "Error: " +
+        'Error: ' +
           e.status +
-          "\n" +
+          '\n' +
           e.statusText +
-          "\n" +
-          "Make sure all required fields are filled with valid values"
+          '\n' +
+          'Make sure all required fields are filled with valid values'
       );
     }
   }
@@ -60,17 +60,17 @@ class Attendee {
   static async updateAttendee(opts = null) {
     try {
       if (!opts) return;
-      let res = await Attendee.req("PUT", "/idte/attendees", opts);
+      let res = await Attendee.req('PUT', '/idte/attendees', opts);
       return res;
     } catch (e) {
       console.log(e.request);
       alert(
-        "Error: " +
+        'Error: ' +
           e.status +
-          "\n" +
+          '\n' +
           e.statusText +
-          "\n" +
-          "Make sure all required fields are filled with valid values"
+          '\n' +
+          'Make sure all required fields are filled with valid values'
       );
     }
   }
@@ -78,39 +78,43 @@ class Attendee {
   static async deleteAttendee(opts = null) {
     try {
       if (!opts) return;
-      let res = await Attendee.req("DELETE", "/idte/attendees", opts);
+      let res = await Attendee.req('DELETE', '/idte/attendees', opts);
       return res;
     } catch (e) {
       console.log(e.request);
       alert(
-        "Error: " +
+        'Error: ' +
           e.status +
-          "\n" +
+          '\n' +
           e.statusText +
-          "\n" +
-          "Make sure all required fields are filled with valid values"
+          '\n' +
+          'Make sure all required fields are filled with valid values'
       );
     }
   }
 
   static async getAllSuppliers(opts = null) {
-    let res = await Attendee.req("GET", "/idte/suppliers", opts);
+    let url = opts ? '/idte/suppliers/search' : '/idte/suppliers';
+    let method = opts ? 'POST' : 'GET';
+    let res = await Attendee.req(method, url, opts);
     if (res.statusText) {
       return res;
     }
     res.forEach(attendee => {
-      attendee.type = "Supplier";
+      attendee.type = 'Supplier';
     });
     return res;
   }
 
   static async getAllEvaluators(opts = null) {
-    let res = await Attendee.req("GET", "/idte/evaluators", opts);
+    let url = opts ? '/idte/evaluators/search' : '/idte/evaluators';
+    let method = opts ? 'POST' : 'GET';
+    let res = await Attendee.req(method, url, opts);
     if (res.statusText) {
       return res;
     }
     res.forEach(attendee => {
-      attendee.type = "Evaluator";
+      attendee.type = 'Evaluator';
     });
     return res;
   }
@@ -119,7 +123,7 @@ class Attendee {
     return new Promise(function(resolve, reject) {
       let xhr = new XMLHttpRequest();
       xhr.open(method, url);
-      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onload = function() {
         if (this.status >= 200 && this.status < 300) {
           resolve(JSON.parse(xhr.response ? xhr.response : null));
@@ -136,7 +140,6 @@ class Attendee {
           statusText: xhr.statusText
         });
       };
-
       xhr.send(JSON.stringify(opts));
     }).catch(err => {
       throw err;

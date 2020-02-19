@@ -137,7 +137,7 @@ class Attendee {
     return res;
   }
 
-  static async getAllEvaluators(opts = null) {
+  static async getAllPresenters(opts = null) {
     let url = opts ? '/idte/presenters/search' : '/idte/presenters';
     let method = opts ? 'POST' : 'GET';
     let res = await Attendee.req(method, url, opts);

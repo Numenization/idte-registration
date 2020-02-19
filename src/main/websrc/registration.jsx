@@ -11,7 +11,9 @@ class Registration extends React.Component {
     return (
       <Router>
         <div className='container'>
-          <div className='background'></div>
+          <div className='background'>
+            <img src={require('images/main.jpg')}></img>
+          </div>
 
           <div className='top'>
             <Header />

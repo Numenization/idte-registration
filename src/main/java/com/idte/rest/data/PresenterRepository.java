@@ -27,6 +27,6 @@ public interface PresenterRepository extends JpaRepository<Presenter, String> {
             builder.like(root.get("cellNumber"), finalText),
             builder.like(root.get("city"), finalText),
             builder.like(root.get("country"), finalText)
-            );
+    );
   }
 }

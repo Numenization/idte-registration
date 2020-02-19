@@ -209,6 +209,7 @@ class DatabasePage extends React.Component {
     // call the backend for attendee data
     var suppliers = await Attendee.getAllSuppliers(opts);
     var evaluators = await Attendee.getAllEvaluators(opts);
+    var presenters = await Attendee.getAllPresenters(opts);
 
     if (suppliers.statusText) {
       this.setError(suppliers.statusText);
@@ -222,6 +223,7 @@ class DatabasePage extends React.Component {
       return;
     }
 
+    Array.prototype.push.apply(evaluators, presenters);
     Array.prototype.push.apply(suppliers, evaluators);
 
     var numPages = 0;
@@ -245,6 +247,7 @@ class DatabasePage extends React.Component {
 
     var suppliers = await Attendee.getAllSuppliers();
     var evaluators = await Attendee.getAllEvaluators();
+    var presenters = await Attendee.getAllPresenters();
 
     if (suppliers.statusText) {
       this.setError(suppliers.statusText);
@@ -258,6 +261,7 @@ class DatabasePage extends React.Component {
       return;
     }
 
+    Array.prototype.push.apply(evaluators, presenters);
     Array.prototype.push.apply(suppliers, evaluators);
 
     var numPages = 0;
@@ -858,7 +862,9 @@ class DatabasePage extends React.Component {
     //          <img src={require('../../images/main.jpg')}></img>
     return (
       <div className='container'>
-        <div className='background'></div>
+        <div className='background'>
+          <img src={require('../../images/main.jpg')}></img>
+        </div>
 
         <div className='top'>
           <Header />

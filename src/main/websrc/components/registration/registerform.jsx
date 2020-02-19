@@ -20,10 +20,10 @@ class FormPage extends React.Component {
         <div className='content'>
           <div className='registration-form'>
             <form>
-              <label>*First Name/Given Name:</label>
+              <label>*First/Given Name:</label>
               <input type='text'></input>
 
-              <label>*Last Name/Family Name: </label>
+              <label>*Last/Family Name: </label>
               <input type='text'></input>
 
               <label>*Email Address:</label>

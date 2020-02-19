@@ -28,7 +28,7 @@ class RegistrationPage extends React.Component {
               <font color='white'>Register as Presenter</font>
             </a>
             <a href='registerwaiver.html'>
-              <font color='white'>Register as Presenter</font>
+              <font color='white'>Register as Evaluator</font>
             </a>
           </div>
         </div>

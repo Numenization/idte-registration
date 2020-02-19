@@ -57,6 +57,24 @@ class Attendee {
     }
   }
 
+  static async postPresenter(opts = null) {
+    try {
+      if (!opts) return;
+      let res = await Attendee.req('POST', '/idte/presenters', opts);
+      return res;
+    } catch (e) {
+      console.log(e.request);
+      alert(
+        'Error: ' +
+          e.status +
+          '\n' +
+          e.statusText +
+          '\n' +
+          'Make sure all required fields are filled with valid values'
+      );
+    }
+  }
+
   static async updateAttendee(opts = null) {
     try {
       if (!opts) return;
@@ -115,6 +133,19 @@ class Attendee {
     }
     res.forEach(attendee => {
       attendee.type = 'Evaluator';
+    });
+    return res;
+  }
+
+  static async getAllEvaluators(opts = null) {
+    let url = opts ? '/idte/presenters/search' : '/idte/presenters';
+    let method = opts ? 'POST' : 'GET';
+    let res = await Attendee.req(method, url, opts);
+    if (res.statusText) {
+      return res;
+    }
+    res.forEach(attendee => {
+      attendee.type = 'Presenter';
     });
     return res;
   }

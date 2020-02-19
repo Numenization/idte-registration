@@ -9,6 +9,8 @@ import java.util.Map;
 
 import com.idte.rest.data.AttendeeRepository;
 import com.idte.rest.data.EvaluatorRepository;
+import com.idte.rest.data.Presenter;
+import com.idte.rest.data.PresenterRepository;
 import com.idte.rest.data.SupplierRepository;
 import com.idte.rest.data.Attendee;
 import com.idte.rest.data.Error;
@@ -37,6 +39,8 @@ public class AttendeeController {
     private SupplierRepository suppliers;
     @Autowired
     private EvaluatorRepository evaluators;
+    @Autowired
+    private PresenterRepository presenters;
 
     // get all of either attendees, suppliers, or evaluators
     @GetMapping(path="/attendees/all")
@@ -51,6 +55,10 @@ public class AttendeeController {
     public Iterable<Evaluator> findAllEvaluators() {
         return evaluators.findAll();
     }
+    @GetMapping(path="/presenters")
+    public Iterable<Presenter> findAllPresenters() {
+        return presenters.findAll();
+    }
     
     // get from email, id, first name, last name, nickname, phone number, cell number, city, company, or country
     // due to incorrect implementation of javascripts XHRHttpRequest, this has to be a POST mapping, otherwise we cant have a body
@@ -61,12 +69,6 @@ public class AttendeeController {
         List<String> attributes = Arrays.asList("email","id","firstName","lastName","nickname","phoneNumber","cellNumber","city","company","country");
 
         List<Supplier> attendee = suppliers.findAll(Specification.where(SupplierRepository.containsTextInAttributes(search, attributes)));
-        // if(!attendee.isEmpty()) {
-        //     return new ResponseEntity<>(attendee, HttpStatus.OK);
-        // }
-        // else {
-        //     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        // }
         return new ResponseEntity<>(attendee, HttpStatus.OK);
     }
 
@@ -79,12 +81,18 @@ public class AttendeeController {
         List<String> attributes = Arrays.asList("email","id","firstName","lastName","nickname","phoneNumber","cellNumber","city","country");
 
         List<Evaluator> attendee = evaluators.findAll(Specification.where(EvaluatorRepository.containsTextInAttributes(search, attributes)));
-        // if(!attendee.isEmpty()) {
-        //     return new ResponseEntity<>(attendee, HttpStatus.OK);
-        // }
-        // else {
-        //     return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        // }
+        return new ResponseEntity<>(attendee, HttpStatus.OK);
+    }
+    
+    // get from email, id, first name, last name, nickname, phone number, cell number, city, or country
+    // due to incorrect implementation of javascripts XHRHttpRequest, this has to be a POST mapping, otherwise we cant have a body
+    @PostMapping(path="/presenters/search")
+    public Object findPresenters(@RequestBody Map<String, String> json) {
+
+        String search = json.get("search");
+        List<String> attributes = Arrays.asList("email","id","firstName","lastName","nickname","phoneNumber","cellNumber","city","country");
+
+        List<Presenter> attendee = presenters.findAll(Specification.where(EvaluatorRepository.containsTextInAttributes(search, attributes)));
         return new ResponseEntity<>(attendee, HttpStatus.OK);
     }
 
@@ -149,6 +157,37 @@ public class AttendeeController {
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+        // create a new presenter
+        @PostMapping(path = "/presenters", consumes = "application/json", produces = "application/json")
+        public Object createPresenter(@RequestBody Presenter attendee) {
+            // extract request info into new supplier object
+            Presenter newAttendee = Presenter.from(attendee);
+    
+            // make sure we have a unique email
+            Presenter uniqueTest = new Presenter();
+            uniqueTest.setEmail(newAttendee.getEmail());
+            Example<Presenter> example = Example.of(uniqueTest);
+            if(presenters.findOne(example).orElse(null) != null) {
+                return new ResponseEntity<>(new Error("Entity with email " + uniqueTest.getEmail() + " already exists."), HttpStatus.CONFLICT);
+            }
+    
+            // get time stamp
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            Date date = new Date();
+            String currentDateTime = dateFormat.format(date);
+            newAttendee.setDateCreated(currentDateTime);
+            newAttendee.setLastModified(currentDateTime);
+    
+            // try to save to database
+            try {
+                newAttendee.createId();
+                return new ResponseEntity<>(presenters.save(newAttendee), HttpStatus.CREATED);
+            }
+            catch(Exception e) {
+                return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
 
     // update an attendees fields in the database
     @PutMapping(path = "/attendees")

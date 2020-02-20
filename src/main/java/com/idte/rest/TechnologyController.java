@@ -7,14 +7,18 @@ import java.util.Map;
 
 import com.idte.rest.data.Error;
 import com.idte.rest.data.Technology;
+import com.idte.rest.data.TechnologyCategory;
+import com.idte.rest.data.TechnologyCategoryRepository;
 import com.idte.rest.data.TechnologyRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,17 +28,29 @@ import org.springframework.web.bind.annotation.RestController;
 public class TechnologyController {
   @Autowired
   private TechnologyRepository technologies;
+  @Autowired
+  private TechnologyCategoryRepository categories;
 
   @GetMapping(path="/technologies/all", produces = "application/json")
   public Iterable<Technology> findAllTechnologies() {
     return technologies.findAll();
   }
 
+  @GetMapping(path="/technologyCategories/all", produces = "application/json")
+  public Iterable<TechnologyCategory> findAllTechnologyCategories() {
+    return categories.findAll();
+  }
+
   @GetMapping(path="/technologies", consumes = "application/json", produces = "application/json")
   public Object findTechnology(@RequestBody Map<String, String> json) {
     Technology find = new Technology();
     if(json.get("id") != null) {
-      find.setId(json.get("id"));
+      try {
+        find.setId(Integer.parseInt(json.get("id")));
+      }
+      catch(Exception e) {
+        return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
     if(json.get("title") != null) {
       find.setTitle(json.get("title"));
@@ -67,7 +83,6 @@ public class TechnologyController {
     newTechnology.setLastModified(currentDateTime);
 
     try {
-      newTechnology.createId();
       return new ResponseEntity<>(technologies.save(newTechnology), HttpStatus.OK);
     }
     catch(Exception e) {
@@ -75,7 +90,176 @@ public class TechnologyController {
     }
   }
 
-  // TODO: Implement update for technologies
+  @PutMapping(path = "/technologies", consumes = "application/json", produces = "application/json")
+  public Object updateTechnology(@RequestBody Map<String, String> json) {
+    int testId = -1;
+    try {
+      testId = Integer.parseInt(json.get("id"));
+    }
+    catch(Exception e) {
+      return new ResponseEntity<>(new Error("Invalid ID in PUT request"), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    if(testId == -1) {
+      return new ResponseEntity<>(new Error("Invalid ID in PUT request"), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
-  // TODO: Implement delete for technologies
+    Technology testTech = new Technology();
+    testTech.setId(testId);
+    Example<Technology> example = Example.of(testTech);
+    Technology technology = technologies.findOne(example).orElse(null);
+    if(technology == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    boolean changes = false;
+
+    String title = json.get("title");
+    String description = json.get("description");
+    String type = json.get("type");
+    String shippingCity = json.get("shippingCity");
+    String shippingCountry = json.get("shippingCountry");
+    String source = json.get("source");
+    String fordContact = json.get("fordContact");
+    String fordPresenter = json.get("fordPresenter");
+    String director = json.get("director");
+    String supplierCompany = json.get("supplierCompany");
+    String comments = json.get("comments");
+
+    if(title != null && !title.equals(technology.getTitle())) {
+      technology.setTitle(title);
+      changes = true;
+    }
+    if(description != null && !description.equals(technology.getDescription())) {
+      technology.setDescription(description);
+      changes = true;
+    }
+    if(type != null && !type.equals(technology.getType())) {
+      technology.setType(type);
+      changes = true;
+    }
+    if(shippingCity != null && !shippingCity.equals(technology.getShippingCity())) {
+      technology.setShippingCity(shippingCity);
+      changes = true;
+    }
+    if(shippingCountry != null && !shippingCountry.equals(technology.getShippingCountry())) {
+      technology.setShippingCountry(shippingCountry);
+      changes = true;
+    }
+    if(source != null && !source.equals(technology.getSource())) {
+      technology.setSource(source);
+      changes = true;
+    }
+    if(fordContact != null && !fordContact.equals(technology.getFordContact())) {
+      technology.setFordContact(fordContact);
+      changes = true;
+    }
+    if(fordPresenter != null && !fordPresenter.equals(technology.getFordPresenter())) {
+      technology.setFordPresenter(fordPresenter);
+      changes = true;
+    }
+    if(director != null && !director.equals(technology.getDirector())) {
+      technology.setDirector(director);
+      changes = true;
+    }
+    if(supplierCompany != null && !supplierCompany.equals(technology.getSupplierCompany())) {
+      technology.setSupplierCompany(supplierCompany);
+      changes = true;
+    }
+    if(comments != null && !comments.equals(technology.getComments())) {
+      technology.setComments(comments);
+      changes = true;
+    }
+
+    if(changes) {
+      DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+      Date date = new Date();
+      String currentDateTime = dateFormat.format(date);
+      technology.setLastModified(currentDateTime);
+
+      technologies.save(technology);
+      return new ResponseEntity<>(HttpStatus.OK);
+    }
+    else {
+        return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
+  }
+
+  @DeleteMapping(path = "/technologies")
+  public Object deleteTechnology(@RequestBody Map<String, String> json) {
+    Technology find = new Technology();
+    if(json.get("id") != null) {
+      try {
+        find.setId(Integer.parseInt(json.get("id")));
+      }
+      catch(Exception e) {
+        return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
+    Example<Technology> example = Example.of(find);
+    Technology technology = technologies.findOne(example).orElse(null);
+
+    if(technology == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    technologies.delete(technology);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @PostMapping(path = "/technologyCategories", consumes = "application/json", produces = "application/json")
+  public Object createTechnologyCategory(@RequestBody String category) {
+    TechnologyCategory newCategory = new TechnologyCategory(category);
+
+    try {
+      return new ResponseEntity<>(categories.save(newCategory), HttpStatus.OK);
+    }
+    catch(Exception e) {
+      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @DeleteMapping(path = "/technologyCategories", consumes = "application/json", produces = "application/json")
+  public Object deleteTechnologyCategory(@RequestBody Map<String, String> json) {
+    TechnologyCategory find = new TechnologyCategory();
+    if(json.get("id") != null) {
+      try {
+        find.setId(Integer.parseInt(json.get("id")));
+      }
+      catch(Exception e) {
+        return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
+
+    Example<TechnologyCategory> example = Example.of(find);
+    TechnologyCategory category = categories.findOne(example).orElse(null);
+
+    if(category == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    categories.delete(category);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @GetMapping(path = "/technologyCategories", consumes = "application/json", produces = "application/json")
+  public Object getTechnologyCategory(@RequestBody Map<String, String> json) {
+    TechnologyCategory find = new TechnologyCategory();
+    if(json.get("id") != null) {
+      try {
+        find.setId(Integer.parseInt(json.get("id")));
+      }
+      catch(Exception e) {
+        return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
+
+    Example<TechnologyCategory> example = Example.of(find);
+    TechnologyCategory category = categories.findOne(example).orElse(null);
+
+    if(category == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    return new ResponseEntity<>(category, HttpStatus.OK);
+  }
 }

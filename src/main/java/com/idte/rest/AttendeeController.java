@@ -158,36 +158,36 @@ public class AttendeeController {
         }
     }
 
-        // create a new presenter
-        @PostMapping(path = "/presenters", consumes = "application/json", produces = "application/json")
-        public Object createPresenter(@RequestBody Presenter attendee) {
-            // extract request info into new supplier object
-            Presenter newAttendee = Presenter.from(attendee);
+    // create a new presenter
+    @PostMapping(path = "/presenters", consumes = "application/json", produces = "application/json")
+    public Object createPresenter(@RequestBody Presenter attendee) {
+        // extract request info into new supplier object
+        Presenter newAttendee = Presenter.from(attendee);
     
-            // make sure we have a unique email
-            Presenter uniqueTest = new Presenter();
-            uniqueTest.setEmail(newAttendee.getEmail());
-            Example<Presenter> example = Example.of(uniqueTest);
-            if(presenters.findOne(example).orElse(null) != null) {
-                return new ResponseEntity<>(new Error("Entity with email " + uniqueTest.getEmail() + " already exists."), HttpStatus.CONFLICT);
-            }
-    
-            // get time stamp
-            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-            Date date = new Date();
-            String currentDateTime = dateFormat.format(date);
-            newAttendee.setDateCreated(currentDateTime);
-            newAttendee.setLastModified(currentDateTime);
-    
-            // try to save to database
-            try {
-                newAttendee.createId();
-                return new ResponseEntity<>(presenters.save(newAttendee), HttpStatus.CREATED);
-            }
-            catch(Exception e) {
-                return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        // make sure we have a unique email
+        Presenter uniqueTest = new Presenter();
+        uniqueTest.setEmail(newAttendee.getEmail());
+        Example<Presenter> example = Example.of(uniqueTest);
+        if(presenters.findOne(example).orElse(null) != null) {
+            return new ResponseEntity<>(new Error("Entity with email " + uniqueTest.getEmail() + " already exists."), HttpStatus.CONFLICT);
         }
+    
+        // get time stamp
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        Date date = new Date();
+        String currentDateTime = dateFormat.format(date);
+        newAttendee.setDateCreated(currentDateTime);
+        newAttendee.setLastModified(currentDateTime);
+    
+        // try to save to database
+        try {
+            newAttendee.createId();
+            return new ResponseEntity<>(presenters.save(newAttendee), HttpStatus.CREATED);
+        }
+        catch(Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     // update an attendees fields in the database
     @PutMapping(path = "/attendees")

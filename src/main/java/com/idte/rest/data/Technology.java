@@ -1,20 +1,20 @@
 package com.idte.rest.data;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.UUID;
-
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Technology {
   @Id
-  protected String id;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  protected int id;
   protected String title;
   protected String description;
-  protected String category;
+  @ManyToOne
+  protected TechnologyCategory category;
   protected String type;
   protected String shippingCity;
   protected String shippingCountry;
@@ -47,19 +47,7 @@ public class Technology {
     return newTechnology;
   }
 
-  public void createId() throws UnsupportedEncodingException, NoSuchAlgorithmException {
-    try {
-        byte[] bytes = title.getBytes("UTF-8");
-        MessageDigest md5 = MessageDigest.getInstance("MD5");
-        byte[] hashedEmail = md5.digest(bytes);
-        id = UUID.nameUUIDFromBytes(hashedEmail).toString();
-    }
-    catch (Exception e) {
-        throw e;
-    }
-  }
-
-  public void setId(String id) {
+  public void setId(int id) {
     this.id = id;
   }
 
@@ -71,7 +59,7 @@ public class Technology {
     this.description = description;
   }
 
-  public void setCategory(String category) {
+  public void setCategory(TechnologyCategory category) {
     this.category = category;
   }
 
@@ -123,7 +111,7 @@ public class Technology {
     this.comments = comments;
   }
 
-  public String getId() {
+  public int getId() {
     return id;
   }
 
@@ -135,7 +123,7 @@ public class Technology {
     return description;
   }
 
-  public String getCategory() {
+  public TechnologyCategory getCategory() {
     return category;
   }
 

@@ -30,6 +30,7 @@ class AdminPage extends React.Component {
             <a href='attendeecheckin.html'>Attendee Checkin</a>
             <a href='editattendees.html'>Edit Attendees</a>
             <a href='database.html'>Database Administration</a>
+            <a href='sendemail.html'>Send Email</a>
           </div>
         </div>
 

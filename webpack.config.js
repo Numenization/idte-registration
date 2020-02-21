@@ -60,6 +60,10 @@ module.exports = {
     contact: [
       'babel-polyfill',
       './src/main/websrc/components/information/contact.jsx'
+    ],
+    sendemail: [
+      'babel-polyfill',
+      './src/main/websrc/components/admin/sendEmail.jsx'
     ]
   },
   output: {
@@ -183,6 +187,11 @@ module.exports = {
       chunks: ['database'],
       template: './src/main/websrc/template.html',
       filename: 'database.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['sendemail'],
+      template: './src/main/websrc/template.html',
+      filename: 'sendemail.html'
     })
   ],
   devServer: {

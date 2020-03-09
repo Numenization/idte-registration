@@ -20,18 +20,25 @@ class ChangeRegistration extends React.Component {
         </div>
 
         <div className='content'>
-          <h1>Change Registration</h1>
+          <h1>Event Administration</h1>
 
-          <div className='on-off-registration'>
-            <select>
-              <option>Enable Registration</option>
-              <option>Disable Registration</option>
-            </select>
-            <div className='submit'>
-              <a href='admin.html'>Submit</a>
+        
+            <label>Registration Status:<label>Status </label></label>
+                  
+            <button>
+              <a href='changeregistration.html'>Enable/Disable</a>
+            </button>
+            
+            <label><br></br>Technology Submission Status: <label>Status </label></label> 
+        
+            <button>
+              <a href= 'changeregistration.html'>Enable/Disable<br></br></a>
+            </button>
+            <div className = 'submit'>
+              <a href='events.html'> Create Event </a>
             </div>
+            
           </div>
-        </div>
 
         <Footer />
       </div>

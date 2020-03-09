@@ -26,7 +26,7 @@ class AdminPage extends React.Component {
           <div className='admin-buttons'>
             <a href='edittechnologies.html'> Edit Technologies</a>
             <a>Edit Event Dates</a>
-            <a href='changeregistration.html'>Open/Close Registration</a>
+            <a href='changeregistration.html'>Event Administration</a>
             <a href='attendeecheckin.html'>Attendee Checkin</a>
             <a href='editattendees.html'>Edit Attendees</a>
             <a href='database.html'>Database Administration</a>

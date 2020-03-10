@@ -10,8 +10,11 @@
 
 # How to open up the development preview server
 
-1. To view your work as you are working, simply run this command:
-   `npm run build-server`
+1. To view your work as you are working, run the integrated Tomcat server for spring with:
+   `./mvnw spring-boot:run`
+1. When you make changes to the backend, Spring will automatically reload
+1. When you make changes to the frontend, you will need to rebuild it with:
+   `npm run build`
 
 # How to create a new webpage
 
@@ -24,8 +27,8 @@
 
 ```javascript
 new HtmlWebpackPlugin({
-  chunks: ['{ENTRY NAME}'],
-  template: './src/main/websrc/template.html',
-  filename: '{RESULTING FILE NAME}.html'
+  chunks: ["{ENTRY NAME}"],
+  template: "./src/main/websrc/template.html",
+  filename: "{RESULTING FILE NAME}.html"
 });
 ```

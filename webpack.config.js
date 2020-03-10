@@ -68,7 +68,8 @@ module.exports = {
     sendemail: [
       "babel-polyfill",
       "./src/main/websrc/components/admin/sendEmail.jsx"
-    ]
+    ],
+    events: ["babel-polyfill", "./src/main/websrc/components/admin/events.jsx"]
   },
   output: {
     path: path.resolve(__dirname, "./src/main/webapp"),
@@ -201,6 +202,11 @@ module.exports = {
       chunks: ["sendemail"],
       template: "./src/main/websrc/template.html",
       filename: "sendemail.html"
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ["events"],
+      template: "./src/main/websrc/template.html",
+      filename: "events.html"
     })
   ],
   devServer: {

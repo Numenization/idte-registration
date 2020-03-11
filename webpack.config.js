@@ -68,6 +68,10 @@ module.exports = {
     events: [
       'babel-polyfill',
       './src/main/websrc/components/admin/events.jsx'
+    ],
+	eventdb: [
+      'babel-polyfill',
+      './src/main/websrc/components/admin/eventdb.jsx'
     ]
 },
   output: {
@@ -201,6 +205,11 @@ module.exports = {
       chunks: ['events'],
       template: './src/main/websrc/template.html',
       filename: 'events.html'
+    }),
+ new HtmlWebpackPlugin({
+      chunks: ['eventdb'],
+      template: './src/main/websrc/template.html',
+      filename: 'eventdb.html'
     }),
   ],
   devServer: {

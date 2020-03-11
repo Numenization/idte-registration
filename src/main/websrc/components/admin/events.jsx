@@ -13,10 +13,13 @@ class Events extends React.Component {
 constructor(props){
   super(props);
   this.state = {
-      registrationStart: "09/09/09",
-      registrationEnd: "09/09/09",
-      techSubStart: "09/09/09",
-      techSubEnd: "09/09/09",
+      registrationStart: "",
+      registrationEnd: "",
+      techSubStart: "",
+      techSubEnd: "",
+      regStatus: false,
+      techStatus: false,
+      currentEvent: true
   };
   this.postAnEvent = this.postAnEvent.bind(this);
   this.handleChange = this.handleChange.bind(this);
@@ -27,6 +30,8 @@ constructor(props){
     );
   }
 
+
+  
   handleChange() {
     const target = event.target;
     const value = target.value;
@@ -50,6 +55,7 @@ constructor(props){
     
             <div className='content'>
               <h1>Event Details</h1>
+              <p>Creating an event will replace the last active event. </p>
    <div>
     <table align="center">
   <tbody>
@@ -69,11 +75,6 @@ constructor(props){
       <td>Tech. Submission End Date(mm/dd/yyyy)</td>
       <td><input name='techSubEnd' type='text' value={this.techSubEnd} onChange={this.handleChange}></input></td>
     </tr>
-    <tr>
-      <td>Event ID:</td>
-    </tr>
-      <td>Current Event:</td>
-      <td>Yes</td>
     
   </tbody>
 </table>

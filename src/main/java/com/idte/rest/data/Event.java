@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import java.util.Calendar;
 import java.time.*;
@@ -19,12 +20,13 @@ import java.time.*;
 @Table(name="Events")
 public class Event{
     // Tecnology and registration are off by default
+  
     protected boolean registrationStatus = false;
     protected boolean technologyStatus = false;
+    protected boolean currentEvent = true;
 
     @Id
     protected String eventID;
-    // May not need variables for start and end dates, since list exists
     protected String registrationStartDate;
     protected String registrationEndDate;
     protected String technologyStartDate;
@@ -41,6 +43,10 @@ public class Event{
     public boolean getTechnologyStatus(){
         return technologyStatus;
     }
+    public boolean getCurrentEvent(){
+     return currentEvent;
+    }
+  
     public void setEventID(String generatedID){
       eventID = generatedID;
     }
@@ -59,6 +65,7 @@ public class Event{
     public String getTechnologyEnd(){
       return technologyEndDate;
     }
+   
 
     // Set functions take in strings for now- previous code still commented out when parameters were of type Date. 
     // Need to work out why parse function gives error, after functions will return to using variables of type Date, and not String.
@@ -120,17 +127,11 @@ public class Event{
     public String GenerateKey(){
       
       String generatedKey;
-      // Pool of characters that are chosen
       String nums = "0123456789";
       String upperLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       String lowerLetters = "abcdefghijklmnopqrstuvwxyz";
       String symbols = "!@#$%^&*()_+-=";
   
-      
-      
-  
-      // Run through and generate string of N length, can change as necessary
-      // Functionality to check for duplicates doesn't seem necessary.
       Random rand = new Random();
    
         generatedKey = "";

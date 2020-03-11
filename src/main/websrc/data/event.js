@@ -1,3 +1,4 @@
+import Attendee from './attendee';
 class Event {
     static createEventObjectFromState(state = null) {
       if (!state) return;
@@ -6,6 +7,9 @@ class Event {
         registrationEnd: state.registrationEnd,
         techSubStart: state.techSubStart,
         techSubEnd: state.techSubEnd,
+        regStatus: state.regStatus,
+        techStatus: state.techStatus,
+        currentEvent: state.currentEvent
       };
   
       for (let [key, val] of Object.entries(event)) {
@@ -14,12 +18,31 @@ class Event {
   
       return event;
     }
+
+static async updateStatus(opts=null){
+  try {
+    if (!opts) return;
+    let res = await Attendee.req('PUT', '/idte/events', opts);
+    return res;
+  } catch (e) {
+    console.log(e.request);
+    alert(
+      'Error: ' +
+        e.status +
+        '\n' +
+        e.statusText +
+        '\n' +
+        'Make sure all required fields are filled with valid values'
+    );
+  }
+}
+
     static async postEvent(opts = null) {
 
        try {
-          console.log(alert('TEST opts:' + opts.registrationEnd + registrationStart + techSubEnd + techSubStart) )
           if (!opts) return;
-          let res = await Event.req('POST', '/idte/events', opts);          
+          let res = await Attendee.req('POST', '/idte/events', opts); 
+          console.log(alert(regStatus))         
           return res;
         } catch (e) {
           console.log(e.request);
@@ -30,6 +53,7 @@ class Event {
               e.statusText +
               '\n' +
               'Make sure all required fields are filled with valid values'
+              
           );
         }
       

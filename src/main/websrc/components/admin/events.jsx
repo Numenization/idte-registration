@@ -16,10 +16,7 @@ constructor(props){
       registrationStart: "",
       registrationEnd: "",
       techSubStart: "",
-      techSubEnd: "",
-      regStatus: false,
-      techStatus: false,
-      currentEvent: true
+      techSubEnd: ""
   };
   this.postAnEvent = this.postAnEvent.bind(this);
   this.handleChange = this.handleChange.bind(this);

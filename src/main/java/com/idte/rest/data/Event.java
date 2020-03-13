@@ -23,7 +23,7 @@ public class Event{
   
     protected boolean registrationStatus = false;
     protected boolean technologyStatus = false;
-    protected boolean currentEvent = true;
+    protected boolean currentEvent;
 
     @Id
     protected String eventID;
@@ -34,21 +34,14 @@ public class Event{
 
     
    // protected List<String> eventDates = new ArrayList<String>();
-
-    //protected List<String> usedKeys = new ArrayList<String>();
-     
-    public boolean getRegistrationStatus() {
-         return registrationStatus;
-    }
-    public boolean getTechnologyStatus(){
-        return technologyStatus;
-    }
-    public boolean getCurrentEvent(){
-     return currentEvent;
-    }
-  
+   
     public void setEventID(String generatedID){
       eventID = generatedID;
+    }
+    public void setCurrentEvent(String choice){
+      if (choice.equals("true"))
+        currentEvent = true;
+      
     }
     public String getEventID(){
       return eventID;
@@ -65,7 +58,19 @@ public class Event{
     public String getTechnologyEnd(){
       return technologyEndDate;
     }
-   
+    public boolean getRegistrationStatus() {
+      return registrationStatus;
+ }
+   public boolean getTechnologyStatus(){
+     return technologyStatus;
+  }
+  public boolean getCurrentEvent(){
+    return currentEvent;
+  }
+  public void changeEventStatus(){
+    currentEvent = !currentEvent;
+  }
+  
 
     // Set functions take in strings for now- previous code still commented out when parameters were of type Date. 
     // Need to work out why parse function gives error, after functions will return to using variables of type Date, and not String.

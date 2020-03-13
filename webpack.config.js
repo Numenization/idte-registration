@@ -69,6 +69,15 @@ module.exports = {
       "babel-polyfill",
       "./src/main/websrc/components/admin/sendEmail.jsx"
     ],
+	eventdb: [
+      "babel-polyfill",
+      "./src/main/websrc/components/admin/eventdb.jsx"
+    ],
+	events: [
+      "babel-polyfill",
+      "./src/main/websrc/components/admin/events.jsx"
+    ]
+},
   output: {
     path: path.resolve(__dirname, "./src/main/webapp"),
     filename: "[name]-bundle.js",
@@ -200,8 +209,16 @@ module.exports = {
       chunks: ["sendemail"],
       template: "./src/main/websrc/template.html",
       filename: "sendemail.html"
+    }), new HtmlWebpackPlugin({
+      chunks: ['eventdb'],
+      template: './src/main/websrc/template.html',
+      filename: 'eventdb.html'
     }),
-
+    new HtmlWebpackPlugin({
+      chunks: ["events"],
+      template: "./src/main/websrc/template.html",
+      filename: "events.html"
+    })
   ],
   devServer: {
     contentBase: path.join(__dirname, "./dist"),

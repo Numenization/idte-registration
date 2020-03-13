@@ -6,10 +6,7 @@ class Event {
         registrationStart: state.registrationStart,
         registrationEnd: state.registrationEnd,
         techSubStart: state.techSubStart,
-        techSubEnd: state.techSubEnd,
-        regStatus: state.regStatus,
-        techStatus: state.techStatus,
-        currentEvent: state.currentEvent
+        techSubEnd: state.techSubEnd
       };
   
       for (let [key, val] of Object.entries(event)) {
@@ -19,23 +16,6 @@ class Event {
       return event;
     }
 
-static async updateStatus(opts=null){
-  try {
-    if (!opts) return;
-    let res = await Attendee.req('PUT', '/idte/events', opts);
-    return res;
-  } catch (e) {
-    console.log(e.request);
-    alert(
-      'Error: ' +
-        e.status +
-        '\n' +
-        e.statusText +
-        '\n' +
-        'Make sure all required fields are filled with valid values'
-    );
-  }
-}
 
     static async postEvent(opts = null) {
 

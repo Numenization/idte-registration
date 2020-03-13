@@ -23,7 +23,7 @@ class AdminPage extends React.Component {
           <p>Administration abilities listed below:</p>
 
           <div className="admin-buttons">
-            <a href="changeregistration.html">Open/Close Registration</a>
+            <a href="changeregistration.html">Event Administration</a>
             <a href="attendeecheckin.html">Attendee Checkin</a>
             <a href="database.html">Attendee Database</a>
             <a href="technologyCategories.html">Edit Technology Categories</a>

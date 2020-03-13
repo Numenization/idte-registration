@@ -58,7 +58,7 @@ public boolean updateCurrentEvent(boolean currentEvent){
   return !currentEvent;
 }
 
-@GetMapping (path="/events",consumes = "application.json", produces = "application.json")
+@GetMapping (path="/events",consumes = "application/json", produces = "application/json")
 public Object findCurrentEvent(@RequestBody Map<String, String> json){
     Event find = new Event();
     find.setCurrentEvent("true");

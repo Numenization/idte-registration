@@ -10,6 +10,7 @@ import Event from '../../data/event.js';
 
 
 class Events extends React.Component {
+  
 constructor(props){
   super(props);
   this.state = {
@@ -90,6 +91,7 @@ constructor(props){
 
 
         }
+        
 }
 
 ReactDOM.render(<Events />, document.getElementById('app'));

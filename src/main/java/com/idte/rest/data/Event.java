@@ -21,9 +21,7 @@ import java.time.*;
 public class Event{
     // Tecnology and registration are off by default
   
-    protected boolean registrationStatus = false;
-    protected boolean technologyStatus = false;
-    protected boolean currentEvent;
+    
 
     @Id
     protected String eventID;
@@ -31,7 +29,9 @@ public class Event{
     protected String registrationEndDate;
     protected String technologyStartDate;
     protected String technologyEndDate;
-
+    protected boolean registrationStatus;
+    protected boolean technologyStatus;
+    protected boolean currentEvent = true;
     
    // protected List<String> eventDates = new ArrayList<String>();
    
@@ -67,10 +67,22 @@ public class Event{
   public boolean getCurrentEvent(){
     return currentEvent;
   }
+  public void setRegStatus(boolean status){
+    registrationStatus = status;
+  }
+  public void setTechStatus(boolean status){
+    registrationStatus = status;
+  }
+
   public void changeEventStatus(){
     currentEvent = !currentEvent;
   }
-  
+  public void changeRegStatus(){
+    registrationStatus = !registrationStatus;
+  }
+  public void changeTechStatus(){
+    technologyStatus = !technologyStatus;
+  }
 
     // Set functions take in strings for now- previous code still commented out when parameters were of type Date. 
     // Need to work out why parse function gives error, after functions will return to using variables of type Date, and not String.

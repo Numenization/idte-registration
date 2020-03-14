@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, Helvetica, sans-serif;
-  /*background-color: #24489f;
+  /*background-color: #1d4999;
   background-image: url('../images/main.jpg');
   background-repeat: repeat-y;
   background-size: 100% auto;*/
@@ -14,6 +14,11 @@ button:hover {
   -webkit-transition: background-color 100ms linear;
   -moz-transition: background-color 100ms linear;
   -o-transition: background-color 100ms linear;
+}
+
+input {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
 
 .background {
@@ -73,14 +78,16 @@ button:hover {
 }
 
 .navbar {
-  background-color: #24489f;
+  background-color: #1d4999;
   color: white;
-  margin: 1em auto;
+  /*margin: 1em auto;*/
+  margin: 0 auto;
   padding: 0;
   text-align: center;
   width: calc(60% + 2em);
-  border-radius: 15px;
-  border: 1px solid black;
+  /*border-radius: 15px;
+  border: 1px solid black;*/
+  box-shadow: 5px 5px #20293f66;
 }
 
 .navbar ul {
@@ -105,7 +112,7 @@ button:hover {
   height: 100%;
   width: 100%;
   display: flex;
-  background-color: #24489f;
+  background-color: #1d4999;
   color: white;
   justify-content: center;
   align-items: center;
@@ -161,7 +168,7 @@ button:hover {
 
 .navbar-second-tier li a {
   width: 100%;
-  background-color: #24489f;
+  background-color: #1d4999;
   border-bottom: 1px solid black;
 }
 
@@ -184,14 +191,16 @@ button:hover {
 
 .footer {
   color: white;
-  background-color: #24489f;
+  background-color: #1d4999;
   width: 100%;
-  margin: 1em auto;
   padding: 0;
   text-align: center;
   width: calc(60% + 2em);
+  margin: 0 auto;
+  box-shadow: 5px 5px #20293f66;
+  /*margin: 1em auto;
   border-radius: 15px;
-  border: 1px solid black;
+  border: 1px solid black;*/
 }
 
 .footer p {
@@ -209,11 +218,12 @@ button:hover {
   max-height: calc(100vh - 275px);
   overflow-y: auto;
   margin: 0 auto;
-  margin-top: 1em;
+  /*margin-top: 1em;*/
   background-color: white;
-  border-radius: 15px;
-  border: 1px solid black;
+  /*border-radius: 15px;
+  border: 1px solid black;*/
   /*height: calc(100vh - (72px + 10em));*/
+  box-shadow: 5px 5px #2e2e2e66;
 }
 
 #link-button {
@@ -221,20 +231,28 @@ button:hover {
   padding: 0.2em 0.2em;
   text-decoration: none;
   text-align: center;
-  border: 1px solid black;
   font-size: 115%;
-  border-radius: 5px;
-  background-color: #24489f;
+  /*   border-radius: 5px;
+  border: 1px solid black; */
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  background-color: #1d4999;
   color: white;
   transition: background-color 100ms linear;
   -webkit-transition: background-color 100ms linear;
   -moz-transition: background-color 100ms linear;
   -o-transition: background-color 100ms linear;
+  position: relative;
 }
 
 #link-button:hover {
   background-color: #24789f;
   cursor: pointer;
+}
+
+#link-button:active {
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .admin-database-table {
@@ -368,22 +386,31 @@ button:hover {
 
 .home-container-cell a {
   margin: 0.5em;
-  padding: 0.2em 0;
+  padding: 0.2em 0.2em;
   text-decoration: none;
   text-align: center;
-  border: 1px solid black;
   font-size: 115%;
-  border-radius: 5px;
-  background-color: #24489f;
+  /*   border-radius: 5px;
+  border: 1px solid black; */
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  background-color: #1d4999;
   color: white;
   transition: background-color 100ms linear;
   -webkit-transition: background-color 100ms linear;
   -moz-transition: background-color 100ms linear;
   -o-transition: background-color 100ms linear;
+  position: relative;
 }
 
 .home-container-cell a:hover {
   background-color: #24789f;
+  cursor: pointer;
+}
+
+.home-container-cell a:active {
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .home-container-cell button:focus {
@@ -401,22 +428,31 @@ button:hover {
 
 .registration-buttons a {
   margin: 0.5em;
-  padding: 0.2em 0;
+  padding: 0.2em 0.2em;
   text-decoration: none;
   text-align: center;
-  border: 1px solid black;
   font-size: 115%;
-  border-radius: 5px;
-  background-color: #24489f;
+  /*   border-radius: 5px;
+  border: 1px solid black; */
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  background-color: #1d4999;
   color: white;
   transition: background-color 100ms linear;
   -webkit-transition: background-color 100ms linear;
   -moz-transition: background-color 100ms linear;
   -o-transition: background-color 100ms linear;
+  position: relative;
 }
 
 .registration-buttons a:hover {
   background-color: #24789f;
+  cursor: pointer;
+}
+
+.registration-buttons a:active {
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .registration-form {
@@ -435,19 +471,28 @@ button:hover {
   width: 100%;
   text-decoration: none;
   text-align: center;
-  border: 1px solid black;
+  /*   border-radius: 5px;
+  border: 1px solid black; */
+  border: none;
+  box-shadow: 3px 3px #20293f66;
   font-size: 115%;
-  border-radius: 5px;
-  background-color: #24489f;
+  background-color: #1d4999;
   color: white;
   transition: background-color 100ms linear;
   -webkit-transition: background-color 100ms linear;
   -moz-transition: background-color 100ms linear;
   -o-transition: background-color 100ms linear;
+  position: relative;
 }
 
 .registration-form button:hover {
   background-color: #24789f;
+  cursor: pointer;
+}
+
+.registration-form button:active {
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .technology-form {
@@ -466,15 +511,28 @@ button:hover {
   width: 100%;
   text-decoration: none;
   text-align: center;
-  border: 1px solid black;
+  /*   border-radius: 5px;
+  border: 1px solid black; */
+  border: none;
+  box-shadow: 3px 3px #20293f66;
   font-size: 115%;
-  border-radius: 5px;
-  background-color: #24489f;
+  background-color: #1d4999;
   color: white;
   transition: background-color 100ms linear;
   -webkit-transition: background-color 100ms linear;
   -moz-transition: background-color 100ms linear;
   -o-transition: background-color 100ms linear;
+  position: relative;
+}
+
+.technology-form button:hover {
+  background-color: #24789f;
+  cursor: pointer;
+}
+
+.technology-form button:active {
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .technology-form table {
@@ -506,10 +564,6 @@ button:hover {
   resize: none;
 }
 
-.technology-form button:hover {
-  background-color: #24789f;
-}
-
 #map {
   border: 1px solid black;
   border-radius: 15px;
@@ -531,18 +585,31 @@ a {
 }
 .admin-buttons a {
   margin: 0.5em;
-  padding: 0.2em 0;
+  padding: 0.2em 0.2em;
   text-decoration: none;
   text-align: center;
-  border: 1px solid black;
   font-size: 115%;
-  border-radius: 5px;
-  background-color: #24489f;
+  /*   border-radius: 5px;
+  border: 1px solid black; */
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  background-color: #1d4999;
   color: white;
   transition: background-color 100ms linear;
   -webkit-transition: background-color 100ms linear;
   -moz-transition: background-color 100ms linear;
   -o-transition: background-color 100ms linear;
+  position: relative;
+}
+
+.admin-buttons a:hover {
+  background-color: #24789f;
+  cursor: pointer;
+}
+
+.admin-buttons a:active {
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .on-off-registration {
@@ -554,19 +621,33 @@ a {
 }
 .on-off-registration a {
   margin: 0.5em;
-  padding: 0.2em 0;
+  padding: 0.2em 0.2em;
   text-decoration: none;
   text-align: center;
-  border: 1px solid black;
   font-size: 115%;
-  border-radius: 5px;
-  background-color: #24489f;
+  /*   border-radius: 5px;
+  border: 1px solid black; */
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  background-color: #1d4999;
   color: white;
   transition: background-color 100ms linear;
   -webkit-transition: background-color 100ms linear;
   -moz-transition: background-color 100ms linear;
   -o-transition: background-color 100ms linear;
+  position: relative;
 }
+
+.on-off-registration a:hover {
+  background-color: #24789f;
+  cursor: pointer;
+}
+
+.on-off-registration a:active {
+  box-shadow: none;
+  bottom: -3px;
+}
+
 .submit {
   display: flex;
   flex-direction: column;
@@ -576,18 +657,31 @@ a {
 }
 .submit a {
   margin: 0.5em;
-  padding: 0.2em 0;
+  padding: 0.2em 0.2em;
   text-decoration: none;
   text-align: center;
-  border: 1px solid black;
   font-size: 115%;
-  border-radius: 5px;
-  background-color: #24489f;
+  /*   border-radius: 5px;
+  border: 1px solid black; */
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  background-color: #1d4999;
   color: white;
   transition: background-color 100ms linear;
   -webkit-transition: background-color 100ms linear;
   -moz-transition: background-color 100ms linear;
   -o-transition: background-color 100ms linear;
+  position: relative;
+}
+
+.submit a:hover {
+  background-color: #24789f;
+  cursor: pointer;
+}
+
+.submit a:active {
+  box-shadow: none;
+  bottom: -3px;
 }
 
 /* Email page style*/

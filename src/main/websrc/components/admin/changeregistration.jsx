@@ -5,33 +5,58 @@ import Header from '../header.jsx';
 import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import '../../css/styles.css';
-
+import Event from '../../data/event.js';
 class ChangeRegistration extends React.Component {
+  //constructor(props){
+  //  super(props);
+  //  this.state = {
+  //    categories: [],
+  //    loading: false,
+  //    error: null
+  //  };
+  //  this.getEvents = this.getEvents.bind(this);
+ // }
+// Will have to morph technology function to fetch a single category, currentEvent
+// from the database. Still have to add in currentEvent column somehow
+
+
+
+
   render() {
     return (
+      
       <div className='container'>
         <div className='background'>
           <img src={require('../../images/main.jpg')}></img>
         </div>
-
         <div className='top'>
           <Header />
           <NavBar />
         </div>
 
         <div className='content'>
-          <h1>Change Registration</h1>
+          <h1>Event Administration</h1>
 
-          <div className='on-off-registration'>
-            <select>
-              <option>Enable Registration</option>
-              <option>Disable Registration</option>
-            </select>
-            <div className='submit'>
-              <a href='admin.html'>Submit</a>
+            <label>Registration Status:</label>
+                  
+            <button>
+              <a href='changeregistration.html' >Enable/Disable</a>
+            </button>
+            
+            <label><br></br>Technology Submission Status: </label> 
+        
+            <button >
+              <a href= 'changeregistration.html' >Enable/Disable<br></br></a>
+            </button>
+            <div className = 'submit'>
+              <a href='events.html'> Create Event </a>
             </div>
+            <div className = 'submit'>
+              <a href='eventdb.html'> View Events </a>
+            </div>
+            
           </div>
-        </div>
+          
 
         <Footer />
       </div>

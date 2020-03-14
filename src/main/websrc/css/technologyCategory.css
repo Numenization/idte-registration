@@ -1,0 +1,22 @@
+.technology-category-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+}
+
+.create-category {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-list {
+}
+
+.category-row {
+  width: 100%;
+  padding: 0.25em;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+}

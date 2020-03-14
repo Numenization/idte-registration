@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path="/idte")
+@RequestMapping
 public class TechnologyController {
   @Autowired
   private TechnologyRepository technologies;
@@ -208,7 +208,8 @@ public class TechnologyController {
 
   @PostMapping(path = "/technologyCategories", consumes = "application/json", produces = "application/json")
   public Object createTechnologyCategory(@RequestBody String category) {
-    TechnologyCategory newCategory = new TechnologyCategory(category);
+    String categoryString = category.replaceAll("^\"|\"$", "");
+    TechnologyCategory newCategory = new TechnologyCategory(categoryString);
 
     try {
       return new ResponseEntity<>(categories.save(newCategory), HttpStatus.OK);

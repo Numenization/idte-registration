@@ -10,13 +10,17 @@ class ChangeRegistration extends React.Component {
   constructor(props){
     super(props);
    this.changeRegStatus= this.changeRegStatus.bind(this);
-    
+   this.changeTechStatus = this.changeTechStatus.bind(this);
   }
   
     async changeRegStatus(){
       const opts = null;
      await Event.changeCurrentReg(opts);
       
+    }
+    async changeTechStatus(){
+      const opts = null;
+      await Event.changeCurrentTech(opts);    
     }
   
   
@@ -45,7 +49,7 @@ class ChangeRegistration extends React.Component {
             <label><br></br>Technology Submission Status: <label id="techStatus"></label></label> 
         
             <button >
-              <a href= 'changeregistration.html' >Enable/Disable<br></br></a>
+              <a onClick={this.changeTechStatus}>Enable/Disable<br></br></a>
             </button>
             <div className = 'submit'>
               <a href='events.html'> Create Event </a>

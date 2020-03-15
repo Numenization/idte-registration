@@ -71,7 +71,7 @@ public class Event{
     registrationStatus = status;
   }
   public void setTechStatus(boolean status){
-    registrationStatus = status;
+    technologyStatus = status;
   }
 
   public void changeEventStatus(){

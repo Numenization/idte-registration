@@ -101,7 +101,8 @@ class SendEmail extends React.Component {
           return
         }
         else {
-          await Email.uploadWithJSON(this.state, testFile)
+          
+          var x = await Email.uploadWithJSON(this.state, testFile)
           console.log('done with function')
         }
         

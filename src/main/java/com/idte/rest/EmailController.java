@@ -2,8 +2,6 @@ package com.idte.rest;
 
 import java.util.Map;
 
-import org.aspectj.weaver.bcel.AtAjAttributes;
-import org.hibernate.annotations.SourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,10 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.core.io.ClassPathResource;
 import javax.mail.internet.MimeMessage;
 import javax.mail.MessagingException;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.util.Base64Utils;
 import java.io.File;
 import java.io.IOException;

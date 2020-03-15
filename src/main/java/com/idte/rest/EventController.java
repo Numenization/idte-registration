@@ -4,6 +4,7 @@ import java.util.Map;
 import com.idte.rest.data.Event;
 import com.idte.rest.data.EventRepository;
 
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,37 +32,28 @@ public class EventController{
     String registrationEnd = json.get("registrationEnd");
     String techSubStart = json.get("techSubStart");
     String techSubEnd = json.get("techSubEnd");
-  //  String currentEvent = json.get("currentEvent");
     
     Event event = new Event();
     event.setEventID(event.GenerateKey());
     event.setRegistrationDates(registrationStart, registrationEnd);
     event.setTechnologyDates(techSubStart, techSubEnd);
-   
+    event.setRegStatus(false);
+    event.setTechStatus(false);    
     try {
         return new ResponseEntity<>(events.save(event), HttpStatus.CREATED);
     }
     catch(Exception e) {
         return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    
 }
 
-
-public boolean updateRegistrationStatus(boolean registrationStatus){
-    return !registrationStatus;
-}
-
-public boolean updateTechnologyStatus(boolean technologyStatus){
-    return !technologyStatus;
-}
-public boolean updateCurrentEvent(boolean currentEvent){
-  return !currentEvent;
-}
-
-@GetMapping (path="/events",consumes = "application/json", produces = "application/json")
-public Object findCurrentEvent(@RequestBody Map<String, String> json){
+// Creates a new event that has currentEvent as "true", and returns event from DB that has the same value
+@GetMapping (path="/findCurrent")
+public Object findCurrentEvent(){
+    System.out.print("Success");
     Event find = new Event();
-    find.setCurrentEvent("true");
+    
     Example <Event> example = Example.of(find);
     Event event = events.findOne(example).orElse(null);
     if(event != null && event.getCurrentEvent() == true){
@@ -69,14 +61,70 @@ public Object findCurrentEvent(@RequestBody Map<String, String> json){
     }
     else{
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    }    
 }
 
-@PutMapping(path = "/events", consumes = "application/json", produces = "application/json")
-public Object updateCurrentEvent(@RequestBody Map<String, String> json){
+// Inverts an events regStatus value
+@PutMapping(path = "/currentRegStatus")
+public Object updateCurrentRegStatus(){
+    
+    Event testEvent = new Event();
+    System.out.println(testEvent.getRegistrationStatus());
+    System.out.println(testEvent.getTechnologyStatus());
+
+   // ExampleMatcher ignoringExampleMatcher = ExampleMatcher.matchingAny().withMatcher("currentEvent", ExampleMatcher.GenericPropertyMatchers.startsWith().ignoreCase()).withIgnorePaths("eventID", "registrationEndDate", "registrationStartDate","technologyEndDate","technologyStartDate", "technologyStatus","registrationStatus");
+    Example<Event> example = Example.of(testEvent);//, ignoringExampleMatcher);
+    
+    System.out.println("test");
+    Event event = events.findOne(example).orElse(null);
+    System.out.println("test2");
+  if (event == null){
+    System.out.println("fail");
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  }
+  boolean changes = false;
+ 
+  event.changeRegStatus();
+  changes = true;
+  if (changes){
+      events.save(event);
+      System.out.println("ok");
+      return new ResponseEntity<>(HttpStatus.OK);
+  }
+  else {
+    System.out.println("not modified");
+      return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+  }
+}
+
+// Inverts an events techSubStatus value
+@PutMapping(path = "/techStatus", consumes = "application/json", produces = "application/json")
+public Object updateTechStatus(){
+
+    Event testEvent = new Event();
+    Example<Event> example = Example.of(testEvent);
+    Event event = events.findOne(example).orElse(null);
+  if (event == null){
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  }
+  boolean changes = false;
+  
+  event.changeTechStatus();
+  changes = true;
+  if (changes){
+      events.save(event);
+      return new ResponseEntity<>(HttpStatus.OK);
+  }
+  else {
+      return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+  }
+}
+
+//Inverts an events currentEvent value
+@PutMapping(path = "/eventStatus", consumes = "application/json", produces = "application/json")
+public Object updateCurrentEventStatus(){
 
   Event testEvent = new Event();
-  testEvent.changeEventStatus();
   Example<Event> example = Example.of(testEvent);
   Event event = events.findOne(example).orElse(null);
 if (event == null){
@@ -85,11 +133,8 @@ if (event == null){
 
 boolean changes = false;
 
-
 event.changeEventStatus();
 changes = true;
-
-
 if (changes){
     events.save(event);
     return new ResponseEntity<>(HttpStatus.OK);
@@ -97,9 +142,6 @@ if (changes){
 else {
     return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 }
-
-
-
 }
 
 }

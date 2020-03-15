@@ -5,24 +5,23 @@ import Header from '../header.jsx';
 import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import '../../css/styles.css';
-import Event from '../../data/event.js';
+import Event from "../../data/changeregistration.js";
 class ChangeRegistration extends React.Component {
-  //constructor(props){
-  //  super(props);
-  //  this.state = {
-  //    categories: [],
-  //    loading: false,
-  //    error: null
-  //  };
-  //  this.getEvents = this.getEvents.bind(this);
- // }
-// Will have to morph technology function to fetch a single category, currentEvent
-// from the database. Still have to add in currentEvent column somehow
-
-
-
-
+  constructor(props){
+    super(props);
+   this.changeRegStatus= this.changeRegStatus.bind(this);
+    
+  }
+  
+    async changeRegStatus(){
+      const opts = null;
+     await Event.changeCurrentReg(opts);
+      
+    }
+  
+  
   render() {
+  
     return (
       
       <div className='container'>
@@ -37,13 +36,13 @@ class ChangeRegistration extends React.Component {
         <div className='content'>
           <h1>Event Administration</h1>
 
-            <label>Registration Status:</label>
+            <label>Registration Status: <label id="regStatus"></label></label>
                   
             <button>
-              <a href='changeregistration.html' >Enable/Disable</a>
+              <a onClick={this.changeRegStatus}
+              >Enable/Disable</a>
             </button>
-            
-            <label><br></br>Technology Submission Status: </label> 
+            <label><br></br>Technology Submission Status: <label id="techStatus"></label></label> 
         
             <button >
               <a href= 'changeregistration.html' >Enable/Disable<br></br></a>

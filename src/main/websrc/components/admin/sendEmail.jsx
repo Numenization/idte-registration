@@ -6,7 +6,7 @@ import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import '../../css/styles.css';
 import Email from '../../data/email.js'
-import Files from "react-butterfiles";
+//import Files from "react-butterfiles";
 
 class SendEmail extends React.Component {
 

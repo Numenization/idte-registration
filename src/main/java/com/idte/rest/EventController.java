@@ -67,21 +67,36 @@ public Object findCurrentEvent(){
 // Inverts an events regStatus value
 @PutMapping(path = "/currentRegStatus")
 public Object updateCurrentRegStatus(){
-    
-    Event testEvent = new Event();
-    System.out.println(testEvent.getRegistrationStatus());
-    System.out.println(testEvent.getTechnologyStatus());
 
-   // ExampleMatcher ignoringExampleMatcher = ExampleMatcher.matchingAny().withMatcher("currentEvent", ExampleMatcher.GenericPropertyMatchers.startsWith().ignoreCase()).withIgnorePaths("eventID", "registrationEndDate", "registrationStartDate","technologyEndDate","technologyStartDate", "technologyStatus","registrationStatus");
-    Example<Event> example = Example.of(testEvent);//, ignoringExampleMatcher);
+    Event testEvent = new Event(); 
+    Example<Event> example = Example.of(testEvent);
+    Event event = events.findOne(example).orElse(null); 
     
-    System.out.println("test");
-    Event event = events.findOne(example).orElse(null);
-    System.out.println("test2");
   if (event == null){
-    System.out.println("fail");
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      System.out.println("1st null");
+      testEvent.setRegStatus(true);
+      example = Example.of(testEvent);
+      event = events.findOne(example).orElse(null);
+      if (event == null){
+        System.out.println("2nd null");
+        testEvent.setRegStatus(false);
+        testEvent.setTechStatus(true);
+        example = Example.of(testEvent);
+        event = events.findOne(example).orElse(null);
+        if (event == null){
+            System.out.println("3rd null");
+            testEvent.setRegStatus(true);
+            testEvent.setTechStatus(true);
+            example = Example.of(testEvent);
+            event = events.findOne(example).orElse(null);
+            if (event == null){
+                System.out.println("Fuck");
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+      }   
   }
+  
   boolean changes = false;
  
   event.changeRegStatus();
@@ -98,24 +113,49 @@ public Object updateCurrentRegStatus(){
 }
 
 // Inverts an events techSubStatus value
-@PutMapping(path = "/techStatus", consumes = "application/json", produces = "application/json")
+@PutMapping(path = "/currentTechStatus")
 public Object updateTechStatus(){
 
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
     Event event = events.findOne(example).orElse(null);
-  if (event == null){
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-  }
+
+    if (event == null){
+        System.out.println("1st tech");
+        testEvent.setTechStatus(true);
+        example = Example.of(testEvent);
+        event = events.findOne(example).orElse(null);
+        if (event == null){
+            System.out.println("2nd tech");
+          testEvent.setRegStatus(true);
+          testEvent.setTechStatus(false);
+          example = Example.of(testEvent);
+          event = events.findOne(example).orElse(null);
+          if (event == null){
+            System.out.println("3rd tech");
+              testEvent.setRegStatus(true);
+              testEvent.setTechStatus(true);
+              example = Example.of(testEvent);
+              event = events.findOne(example).orElse(null);
+              if (event == null){
+                System.out.println("FML");
+                  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+              }
+          }
+        }   
+    }
+    
   boolean changes = false;
   
   event.changeTechStatus();
   changes = true;
   if (changes){
       events.save(event);
+      System.out.println("sucues");
       return new ResponseEntity<>(HttpStatus.OK);
   }
   else {
+    System.out.println("mot modified");
       return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
   }
 }

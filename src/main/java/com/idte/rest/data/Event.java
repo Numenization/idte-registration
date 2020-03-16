@@ -41,6 +41,9 @@ public class Event{
     public void setCurrentEvent(String choice){
       if (choice.equals("true"))
         currentEvent = true;
+      else{
+        currentEvent = false;
+      }
       
     }
     public String getEventID(){
@@ -83,6 +86,7 @@ public class Event{
   public void changeTechStatus(){
     technologyStatus = !technologyStatus;
   }
+  
 
     // Set functions take in strings for now- previous code still commented out when parameters were of type Date. 
     // Need to work out why parse function gives error, after functions will return to using variables of type Date, and not String.

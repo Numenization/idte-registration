@@ -6,7 +6,7 @@ import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import '../../css/styles.css';
 import Event from '../../data/event.js';
-
+import change from '../../data/changeregistration.js';
 
 
 class Events extends React.Component {
@@ -23,10 +23,13 @@ constructor(props){
   this.handleChange = this.handleChange.bind(this);
 }
   async postAnEvent(){
+    const opts = null;
+    await change.replaceCurrent(opts);
     await Event.postEvent(
         Event.createEventObjectFromState(this.state)
     );
   }
+  
 
 
   
@@ -79,7 +82,7 @@ constructor(props){
     </div>
     
      <div  align= "center">
-            <button onClick={this.postAnEvent}>Create Event</button>
+            <button onClick= {this.postAnEvent} >Create Event</button>
             </div>
             
             </div>

@@ -1,5 +1,4 @@
 import Attendee from './attendee';
-import axios from 'axios';
 
 const API_BASE = 'http://localhost:8080/'
 
@@ -58,7 +57,7 @@ class Email{
           );
         }
   }
-
+/*
   static async submitForm(contentType, data, setResponse) {
     axios({
     url: `/idte/emailwattachment`,
@@ -73,7 +72,7 @@ class Email{
     setResponse("error");
     })
   }
-
+*/
   static async uploadWithJSON(opts = null, file){
     let currentComponent = this;
 
@@ -91,7 +90,7 @@ class Email{
     body: opts.body
     }
    
-    currentComponent.submitForm("application/json", data, (msg) => console.log(msg));
+    currentComponent.req("application/json", data, (msg) => console.log(msg));
   }
 
   

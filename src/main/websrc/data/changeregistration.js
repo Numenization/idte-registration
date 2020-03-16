@@ -1,4 +1,4 @@
- import axios from 'axios';
+
 class ChangeRegistration{
 static async changeCurrentReg(opts = null){
     let url = "/idte/currentRegStatus";

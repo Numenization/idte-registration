@@ -11,24 +11,41 @@ class ChangeRegistration extends React.Component {
     super(props);
    this.changeRegStatus= this.changeRegStatus.bind(this);
    this.changeTechStatus = this.changeTechStatus.bind(this);
+   this.getRegStatus = this.getRegStatus.bind(this);
+   this.getTechStatus = this.getTechStatus.bind(this);
+
   }
-  
+
     async changeRegStatus(){
       const opts = null;
      await Event.changeCurrentReg(opts);
-      
+
     }
     async changeTechStatus(){
       const opts = null;
-      await Event.changeCurrentTech(opts);    
+      await Event.changeCurrentTech(opts);  
+        
     }
-  
+    async getTechStatus(){
+      let k = await Event.getTechStatus();
+    document.getElementById("techStatus").innerText= k.status;  
+    }
+    async getRegStatus(){
+    let k = await Event.getRegStatus();
+    document.getElementById("regStatus").innerText= k.status;
+    }
+   
   
   render() {
-  
+    
+
     return (
-      
-      <div className='container'>
+     
+      <div className='container' onLoad={async e => {
+        await this.getTechStatus();
+        await this.getRegStatus();
+      }}>
+        
         <div className='background'>
           <img src={require('../../images/main.jpg')}></img>
         </div>
@@ -42,24 +59,24 @@ class ChangeRegistration extends React.Component {
 
             <label>Registration Status: <label id="regStatus"></label></label>
                   
-            <button>
-              <a onClick={this.changeRegStatus}
-              >Enable/Disable</a>
+            <button onClick={async e => {
+                        await this.changeRegStatus();
+                        await this.getRegStatus();
+                      }}>Enable/Disable
             </button>
             <label><br></br>Technology Submission Status: <label id="techStatus"></label></label> 
         
-            <button >
-              <a onClick={this.changeTechStatus}>Enable/Disable<br></br></a>
+            <button onClick={async e => {
+                        await this.changeTechStatus();
+                        await this.getTechStatus();
+                      }}>
+              Enable/Disable<br></br>
             </button>
             <div className = 'submit'>
               <a href='events.html'> Create Event </a>
             </div>
-            <div className = 'submit'>
-              <a href='eventdb.html'> View Events </a>
-            </div>
             
           </div>
-          
 
         <Footer />
       </div>

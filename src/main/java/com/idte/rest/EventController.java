@@ -242,4 +242,8 @@ public Object getRegValue(){
     map.put("status", Boolean.toString(value));
     return map;
 }
+@GetMapping(path="/events/all", produces = "application/json")
+  public Iterable<Event> findAllEvents() {
+    return events.findAll();
+  }
 }

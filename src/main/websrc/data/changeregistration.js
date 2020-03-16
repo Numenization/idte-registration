@@ -1,4 +1,4 @@
- import axios from 'axios';
+
 class ChangeRegistration{
 static async changeCurrentReg(opts = null){
     let url = "/idte/currentRegStatus";
@@ -21,10 +21,14 @@ static async changeCurrentTech(opts = null){
     return res;
 }
 static async replaceCurrent(opts = null){
-    let url = "";
+    let url = "/idte/replaceCurrent";
     let method = "PUT";
     let currentComponent = this;
-    let res = currentComponent.currentReq(method, url, opts);
+    let res = currentComponent.req(method, url, opts);
+    if (res.statusText) {
+      return res;
+    }
+    return res;
 }
 static async getTechStatus(opts = null){
     let url = "/idte/getTechValue";
@@ -45,40 +49,18 @@ static async getRegStatus(opts = null){
         return res;
       }
       return res;
-
-    
- 
 }
+static async getEvents(opts = null) {
+  let url = "/idte/events/all";
+  let method = "GET";
+  let res = await Event.req(method, url, opts);
+  if (res.statusText) {
+    return res;
+  }
+  return res;
+}
+//-----------------------------------------
 
-static async currentReq(contentType, data, setResponse) {
-        axios({
-        url: `/idte/replaceCurrent`,
-        method: 'PUT',
-        data: data,
-        headers: {
-        'Content-Type': contentType
-        }
-        }).then((response) => {
-        setResponse(response.data);
-        }).catch((error) => {
-        setResponse("error");
-        })
-      }
-
-static async techReq(contentType, data, setResponse) {
-        axios({
-        url: `/idte/currentTechStatus`,
-        method: 'PUT',
-        data: data,
-        headers: {
-        'Content-Type': contentType
-        }
-        }).then((response) => {
-        setResponse(response.data);
-        }).catch((error) => {
-        setResponse("error");
-        })
-      }
 static async req(method, url, opts = null) {
         return new Promise(function(resolve, reject) {
           let xhr = new XMLHttpRequest();

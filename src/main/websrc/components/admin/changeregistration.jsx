@@ -74,6 +74,7 @@ class ChangeRegistration extends React.Component {
             </button>
             <div className = 'submit'>
               <a href='events.html'> Create Event </a>
+              <a href='eventdb.html'> Event Database </a>
             </div>
             
           </div>

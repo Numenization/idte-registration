@@ -5,9 +5,7 @@ import java.util.Map;
 import com.idte.rest.data.Event;
 import com.idte.rest.data.EventRepository;
 
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Example;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 

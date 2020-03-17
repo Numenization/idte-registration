@@ -17,6 +17,8 @@ import java.net.*;
 import java.io.*;
 import java.nio.channels.*;
 import java.util.Properties;
+import com.google.zxing.*;
+
 
 public class MavenWrapperDownloader {
 

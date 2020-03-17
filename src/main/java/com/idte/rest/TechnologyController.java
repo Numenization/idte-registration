@@ -36,7 +36,7 @@ public class TechnologyController {
     return technologies.findAll();
   }
 
-  @GetMapping(path="/technologyCategories/all", produces = "application/json")
+  @GetMapping(path="/admin/technologyCategories/all", produces = "application/json")
   public Iterable<TechnologyCategory> findAllTechnologyCategories() {
     return categories.findAll();
   }

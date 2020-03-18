@@ -19,6 +19,7 @@ class AccountPage extends React.Component {
     this.closeError = this.closeError.bind(this);
     this.addError = this.addError.bind(this);
     this.removeError = this.removeError.bind(this);
+    this.validate = this.validate.bind(this);
   }
 
   async submit() {
@@ -26,6 +27,10 @@ class AccountPage extends React.Component {
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
     let email = document.getElementById('email').value;
+
+    if (this.validate(username, password, email)) {
+      return;
+    }
 
     let requestBody = {
       name: username,
@@ -75,6 +80,51 @@ class AccountPage extends React.Component {
     newErrors.splice(errorKey, 1);
 
     this.setState({ errors: newErrors });
+  }
+
+  validate(username, password, email) {
+    let errors = false;
+    if (username.length == 0) {
+      this.addError({ message: 'Please fill out a username' });
+      errors = true;
+    }
+    if (username.length > 50) {
+      this.addError({ message: 'Username must be less than 50 characters!' });
+      errors = true;
+    }
+    if (email.length == 0) {
+      this.addError({ message: 'Please fill out an email address' });
+      errors = true;
+    }
+    if (email.length > 100) {
+      this.addError({ message: 'Username must be less than 100 characters!' });
+      errors = true;
+    }
+    if (password.length < 6) {
+      this.addError({
+        message: 'Password must be at least 6 characters long!'
+      });
+      errors = true;
+    }
+    if (password.length > 50) {
+      this.addError({
+        message: 'Password must be less than 50 characters long!'
+      });
+      errors = true;
+    }
+    if (password.search('/d/') == -1) {
+      this.addError({ message: 'Password must have at least one number!' });
+      errors = true;
+    }
+    if (password.search('/[a-zA-Z]/') == -1) {
+      this.addError({ message: 'Password must have at least one letter!' });
+      errors = true;
+    }
+    if (password.search(/[^a-zA-Z0-9\!\@\#\$\%\^\&\*\(\)\_\+]/) != -1) {
+      this.addError({ message: 'Password contains invalid characters!' });
+      errors = true;
+    }
+    return errors;
   }
 
   render() {

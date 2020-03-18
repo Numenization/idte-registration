@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.introspect.ConcreteBeanPropertyBase;
 import com.idte.rest.data.Error;
 import com.idte.rest.data.Technology;
 import com.idte.rest.data.TechnologyCategory;
@@ -66,11 +67,36 @@ public class TechnologyController {
   }
 
   @PostMapping(path = "/technologies", consumes = "application/json", produces = "application/json")
-  public Object createTechnology(@RequestBody Technology technology) {
-    Technology newTechnology = Technology.from(technology);
+  public Object createTechnology(@RequestBody Map<String,String> json) {
+    Technology newTech = new Technology();
+    TechnologyCategory find = new TechnologyCategory();
+    if(json.get("id") != null)    {
+    try{
+      find.setId(Integer.parseInt((json.get("id"))));
+    }
+    catch(Exception e){
+      System.out.print(find.getId());
+      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    }
+    newTech.setCategory(find);
+    newTech.setTitle(json.get("title"));
+    newTech.setDescription(json.get("description"));
+    newTech.setType(json.get("type"));
+    newTech.setShippingCity(json.get("shippingCity"));
+    newTech.setSource(json.get("shippingCountry"));
+    newTech.setFordContact(json.get("fordContact"));
+    newTech.setFordPresenter(json.get("fordPresenter"));
+    newTech.setDirector(json.get("director"));
+    newTech.setSupplierCompany(json.get("supplierCompany"));
+    newTech.setComments("");
+    newTech.setModifiedBy("");
+
+
+
 
     Technology uniqueTest = new Technology();
-    uniqueTest.setTitle(newTechnology.getTitle());
+    uniqueTest.setTitle(newTech.getTitle());
     Example<Technology> example = Example.of(uniqueTest);
     if(technologies.findOne(example).orElse(null) != null) {
       return new ResponseEntity<>(new Error("Entity with title " + uniqueTest.getTitle() + " already exists!"), HttpStatus.CONFLICT);
@@ -79,13 +105,14 @@ public class TechnologyController {
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     Date date = new Date();
     String currentDateTime = dateFormat.format(date);
-    newTechnology.setDateCreated(currentDateTime);
-    newTechnology.setLastModified(currentDateTime);
-
+    newTech.setDateCreated(currentDateTime);
+    newTech.setLastModified(currentDateTime);
     try {
-      return new ResponseEntity<>(technologies.save(newTechnology), HttpStatus.OK);
+      System.out.println(newTech);
+      return new ResponseEntity<>(technologies.save(newTech), HttpStatus.OK);
     }
     catch(Exception e) {
+      System.out.println(e);
       return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

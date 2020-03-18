@@ -27,6 +27,7 @@ constructor(props){
     await change.replaceCurrent(opts);
     await Event.postEvent(
         Event.createEventObjectFromState(this.state)
+        
     );
   }
   

@@ -21,8 +21,6 @@ class EventDB extends React.Component {
         this.setState({loading: true});
 
         var events = await Event.getEvents();
-      // /./ var myObj = JSON.stringify(events);
-        console.log(events);
         if (events.statusText){
             this.setState({error: events.statusText, loading: false});
             return;

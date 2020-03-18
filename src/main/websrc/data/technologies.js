@@ -1,4 +1,48 @@
 class Technology {
+  static createTechnologyObjectFromState(state = null) {
+    if (!state) return;
+    var technology = {
+     title : state.title,
+     description : state.description,
+     type : state.type,
+     category :state.category,
+     shippingCity : state.shippingCity,
+     shippingCountry : state.shippingCountry,
+     source : state.source,
+     fordContact : state.fordContact,
+     fordPresenter : state.fordPresenter,
+     director : state.director,
+     supplierCompany : state.supplierCompany,
+    };
+
+    for (let [key, val] of Object.entries(technology)) {
+      if (val === undefined) technology[key] = null;
+    }
+
+    return technology;
+  }
+  static async postTechnology(opts) {
+    console.log(opts);
+    try {
+      if (!opts) return;
+      let res = await Technology.req(
+        "POST",
+        "/idte/technologies",
+        opts
+      );
+      return res;
+    } catch (e) {
+      console.log(e.request);
+      alert(
+        "Error: " +
+          e.status +
+          "\n" +
+          e.statusText +
+          "\n" +
+          "Make sure all required fields are filled with valid values"
+      );
+    }
+  }
   static async getCategories(opts = null) {
     let url = "/idte/technologyCategories/all";
     let method = "GET";
@@ -32,6 +76,7 @@ class Technology {
     }
   }
 
+  
   static async deleteCategory(opts = null) {
     try {
       if (!opts) return;

@@ -30,6 +30,16 @@ static async replaceCurrent(opts = null){
     }
     return res;
 }
+static async changeCurrent(opts = null){
+  let url = "/idte/changeCurrent";
+  let method = "PUT";
+  let currentComponent = this;
+  let res = currentComponent.req(method, url, opts);
+  if (res.statusText) {
+    return res;
+  }
+  return res;
+}
 static async getTechStatus(opts = null){
     let url = "/idte/getTechValue";
     let method = "GET";
@@ -53,11 +63,32 @@ static async getRegStatus(opts = null){
 static async getEvents(opts = null) {
   let url = "/idte/events/all";
   let method = "GET";
-  let res = await Event.req(method, url, opts);
+  let res = await ChangeRegistration.req(method, url, opts);
   if (res.statusText) {
     return res;
   }
   return res;
+}
+static async deleteEvent(opts = null) {
+  try {
+    if (!opts) return;
+    let res = await ChangeRegistration.req(
+      "DELETE",
+      "/idte/events",
+      opts
+    );
+    return res;
+  } catch (e) {
+    console.log(e.request);
+    alert(
+      "Error: " +
+        e.status +
+        "\n" +
+        e.statusText +
+        "\n" +
+        "Event not found"
+    );
+  }
 }
 //-----------------------------------------
 

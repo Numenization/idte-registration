@@ -9,7 +9,7 @@ import Event from "../../data/changeregistration.js";
 class ChangeRegistration extends React.Component {
   constructor(props){
     super(props);
-   this.changeRegStatus= this.changeRegStatus.bind(this);
+   this.changeRegStatus = this.changeRegStatus.bind(this);
    this.changeTechStatus = this.changeTechStatus.bind(this);
    this.getRegStatus = this.getRegStatus.bind(this);
    this.getTechStatus = this.getTechStatus.bind(this);

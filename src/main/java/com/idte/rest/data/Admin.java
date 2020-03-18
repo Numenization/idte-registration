@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Admin {
   @Id
@@ -18,13 +20,16 @@ public class Admin {
   @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
 
+  @Column(unique = true)
   protected String username;
   protected String password;
+  @Column(unique = true)
   protected String email;
 
   protected boolean enabled;
   protected boolean tokenExpired;
 
+  @JsonIgnore
   @ManyToMany
   @JoinTable(
     name = "admins_roles",

@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Privilege {
   @Id
@@ -16,6 +18,7 @@ public class Privilege {
 
   protected String name;
 
+  @JsonIgnore
   @ManyToMany(mappedBy = "privileges")
   protected Collection<Role> roles;
 

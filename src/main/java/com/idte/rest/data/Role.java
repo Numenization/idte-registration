@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Role {
   @Id
@@ -20,6 +22,7 @@ public class Role {
   @ManyToMany(mappedBy = "roles")
   protected Collection<Admin> users;
 
+  @JsonIgnore
   @ManyToMany
   @JoinTable(
     name = "roles_privileges",

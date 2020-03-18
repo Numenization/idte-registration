@@ -61,7 +61,11 @@ module.exports = {
       'babel-polyfill',
       './src/main/websrc/components/admin/eventdb.jsx'
     ],
-    events: ['babel-polyfill', './src/main/websrc/components/admin/events.jsx']
+    events: ['babel-polyfill', './src/main/websrc/components/admin/events.jsx'],
+    adminaccounts: [
+      'babel-polyfill',
+      './src/main/websrc/components/admin/accounts.jsx'
+    ]
   },
   output: {
     path: path.resolve(__dirname, './src/main/webapp'),
@@ -189,6 +193,11 @@ module.exports = {
       chunks: ['events'],
       template: './src/main/websrc/template.html',
       filename: 'events.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['adminaccounts'],
+      template: './src/main/websrc/template.html',
+      filename: 'admin/accounts.html'
     })
   ],
   devServer: {

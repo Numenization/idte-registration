@@ -1,5 +1,6 @@
 package com.idte.rest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Map;
 
 import com.idte.rest.data.Admin;
 import com.idte.rest.data.AdminRepository;
+import com.idte.rest.data.Error;
 import com.idte.rest.data.Privilege;
 import com.idte.rest.data.PrivilegeRepository;
 import com.idte.rest.data.Role;
@@ -49,25 +51,23 @@ public class AdminController {
 
     Role adminRole = roleRepository.findByName("ROLE_ADMIN");
     Admin user = new Admin();
-    user.setUsername("Test");
-    user.setPassword("test");
+    user.setUsername("admin");
+    user.setPassword(passwordEncoder.encode("password"));
     user.setEmail("test@test.com");
     user.setRoles(Arrays.asList(adminRole));
     user.setEnabled(true);
-    System.out.println("Saving new admin: " + user);
+
     userRepository.save(user);
 
-    System.out.println(userRepository.findAll());
-
-    return "Good";
+    return "Created temporary admin account";
   }
 
-  @GetMapping(value = "/admins/all")
+  @GetMapping(value = "/admin/admins/all")
   public List<Admin> getAdmins() {
     return userRepository.findAll();
   }
 
-  @GetMapping(value = "/admins")
+  @GetMapping(value = "/admin/admins")
   public Object getAdmin(@RequestBody Map<String, String> json) {
     Admin find = new Admin();
     if(json.get("id") != null) {
@@ -88,32 +88,46 @@ public class AdminController {
     return new ResponseEntity<>(admin, HttpStatus.OK);
   }
 
-  @PostMapping(value = "/admins")
+  @PostMapping(value = "/admin/admins")
   public Object postAdmin(@RequestBody Map<String, String> json) {
-    Admin newAdmin = new Admin();
-    String name = json.get("name");
-    String email = json.get("email");
-    String pass = passwordEncoder.encode(json.get("pass"));
-
-    Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-    newAdmin.setRoles(Arrays.asList(adminRole));
-
-    // TODO: SUPERADMINS?
-
-    newAdmin.setUsername(name);
-    newAdmin.setEmail(email);
-    newAdmin.setPassword(pass);
-    newAdmin.setEnabled(true);
-
     try {
-      return new ResponseEntity<>(userRepository.save(newAdmin), HttpStatus.OK);
+      Admin newAdmin = new Admin();
+      String name = json.get("name");
+      String email = json.get("email");
+      String pass = json.get("pass");
+  
+      Role adminRole = roleRepository.findByName("ROLE_ADMIN");
+      newAdmin.setRoles(Arrays.asList(adminRole));
+  
+      // TODO: SUPERADMINS?
+  
+      newAdmin.setUsername(name);
+      newAdmin.setEmail(email);
+      newAdmin.setPassword(passwordEncoder.encode(pass));
+      newAdmin.setEnabled(true);
+
+      // Validation time
+      List<Error> errors = new ArrayList<>();
+      if(userRepository.findByUsername(newAdmin.getUsername()) != null) {
+        errors.add(new Error("Username '" + newAdmin.getUsername() + "' already in use!"));
+      }
+      if(userRepository.findByEmail(newAdmin.getEmail()) != null) {
+        errors.add(new Error("Email '" + newAdmin.getEmail() + "' already in use!"));
+      }
+
+      if(errors.size() > 0) {
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+      }
+      else {
+        return new ResponseEntity<>(userRepository.save(newAdmin), HttpStatus.OK);
+      }
     }
     catch (Exception e) {
       return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @DeleteMapping(value = "/admins")
+  @DeleteMapping(value = "/admin/admins")
   public Object deleteAdmin(@RequestBody Map<String, String> json) {
     Admin find = new Admin();
     if(json.get("id") != null) {

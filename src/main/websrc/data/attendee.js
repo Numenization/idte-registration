@@ -161,7 +161,7 @@ class Attendee {
         } else {
           reject({
             status: this.status,
-            statusText: xhr.statusText
+            errors: JSON.parse(xhr.response)
           });
         }
       };

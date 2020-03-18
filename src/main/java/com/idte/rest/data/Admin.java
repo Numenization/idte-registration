@@ -18,8 +18,8 @@ public class Admin {
   @GeneratedValue(strategy = GenerationType.AUTO)
   protected Long id;
 
-  protected String name;
-  protected String pass;
+  protected String username;
+  protected String password;
   protected String email;
 
   protected boolean enabled;
@@ -50,12 +50,12 @@ public class Admin {
     this.id = id;
   }
 
-  public String getName() {
-    return name;
+  public String getUsername() {
+    return username;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setUsername(String name) {
+    this.username = name;
   }
 
   public String getEmail() {
@@ -67,11 +67,11 @@ public class Admin {
   }
 
   public String getPassword() {
-    return pass;
+    return password;
   }
 
   public void setPassword(String pass) {
-    this.pass = pass;
+    this.password = pass;
   }
 
   public Collection<Role> getRoles() {
@@ -119,7 +119,7 @@ public class Admin {
   @Override
   public String toString() {
       final StringBuilder builder = new StringBuilder();
-      builder.append("User [id=").append(id).append(", name=").append(name).append(", email=").append(email).append(", password=").append(pass).append(", enabled=").append(enabled).append(", roles=").append(roles).append("]");
+      builder.append("User [id=").append(id).append(", name=").append(username).append(", email=").append(email).append(", password=").append(password).append(", enabled=").append(enabled).append(", roles=").append(roles).append("]");
       return builder.toString();
   }
 }

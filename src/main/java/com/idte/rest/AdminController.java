@@ -46,7 +46,7 @@ public class AdminController {
 
     Role adminRole = roleRepository.findByName("ROLE_ADMIN");
     Admin user = new Admin();
-    user.setName("Test");
+    user.setUsername("Test");
     user.setPassword("test");
     user.setEmail("test@test.com");
     user.setRoles(Arrays.asList(adminRole));
@@ -93,7 +93,7 @@ public class AdminController {
     String pass = json.get("pass"); // TODO: PASSWORD SECURITY
     // TODO: SUPERADMINS?
 
-    newAdmin.setName(name);
+    newAdmin.setUsername(name);
     newAdmin.setEmail(email);
     newAdmin.setPassword(pass);
 

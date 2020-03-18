@@ -35,18 +35,6 @@ module.exports = {
       'babel-polyfill',
       './src/main/websrc/components/admin/attendeecheckin.jsx'
     ],
-    attendeesearch: [
-      'babel-polyfill',
-      './src/main/websrc/components/admin/attendeesearch.jsx'
-    ],
-    editattendees: [
-      'babel-polyfill',
-      './src/main/websrc/components/admin/editattendees.jsx'
-    ],
-    edittechnologies: [
-      'babel-polyfill',
-      './src/main/websrc/components/admin/edittechnologies.jsx'
-    ],
     technologycategories: [
       'babel-polyfill',
       './src/main/websrc/components/admin/technologyCategories.jsx'
@@ -176,21 +164,6 @@ module.exports = {
       chunks: ['attendeecheckin'],
       template: './src/main/websrc/template.html',
       filename: 'admin/attendeecheckin.html'
-    }),
-    new HtmlWebpackPlugin({
-      chunks: ['attendeesearch'],
-      template: './src/main/websrc/template.html',
-      filename: 'attendeesearch.html'
-    }),
-    new HtmlWebpackPlugin({
-      chunks: ['editattendees'],
-      template: './src/main/websrc/template.html',
-      filename: 'editattendees.html'
-    }),
-    new HtmlWebpackPlugin({
-      chunks: ['edittechnologies'],
-      template: './src/main/websrc/template.html',
-      filename: 'edittechnologies.html'
     }),
     new HtmlWebpackPlugin({
       chunks: ['technologycategories'],

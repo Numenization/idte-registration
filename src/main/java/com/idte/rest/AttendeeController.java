@@ -41,7 +41,7 @@ public class AttendeeController {
     private EvaluatorRepository evaluators;
     @Autowired
     private PresenterRepository presenters;
-
+    // TODO: PROTECT ADMIN ROUTES
     // get all of either attendees, suppliers, or evaluators
     @GetMapping(path="/attendees/all")
     public Iterable<Attendee> findAllAttendees() {

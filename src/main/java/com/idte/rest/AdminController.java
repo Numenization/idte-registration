@@ -100,6 +100,7 @@ public class AdminController {
       newAdmin.setRoles(Arrays.asList(adminRole));
   
       // TODO: SUPERADMINS?
+      // TODO: USERNAME, EMAIL, PASSWORD VERIFICATION
   
       newAdmin.setUsername(name);
       newAdmin.setEmail(email);

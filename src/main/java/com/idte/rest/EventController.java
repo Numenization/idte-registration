@@ -29,7 +29,7 @@ public class EventController{
     @Autowired
     private EventRepository events;
 
-
+    // TODO: PROTECT ADMIN ROUTES
     @PostMapping(path = "/events", consumes = "application/json", produces = "application/json")
     public Object postEvent(@RequestBody Map <String, String> json){
     String registrationStart = json.get("registrationStart");

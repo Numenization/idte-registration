@@ -37,7 +37,7 @@ public class TechnologyController {
     return technologies.findAll();
   }
 
-  @GetMapping(path="/admin/technologyCategories/all", produces = "application/json")
+  @GetMapping(path="/technologyCategories/all", produces = "application/json")
   public Iterable<TechnologyCategory> findAllTechnologyCategories() {
     return categories.findAll();
   }
@@ -66,7 +66,7 @@ public class TechnologyController {
     }
   }
 
-  @PostMapping(path = "/technologies", consumes = "application/json", produces = "application/json")
+  @PostMapping(path = "/admin/technologies", consumes = "application/json", produces = "application/json")
   public Object createTechnology(@RequestBody Map<String,String> json) {
     Technology newTech = new Technology();
     TechnologyCategory find = new TechnologyCategory();
@@ -117,7 +117,7 @@ public class TechnologyController {
     }
   }
 
-  @PutMapping(path = "/technologies", consumes = "application/json", produces = "application/json")
+  @PutMapping(path = "/admin/technologies", consumes = "application/json", produces = "application/json")
   public Object updateTechnology(@RequestBody Map<String, String> json) {
     int testId = -1;
     try {
@@ -211,7 +211,7 @@ public class TechnologyController {
     }
   }
 
-  @DeleteMapping(path = "/technologies")
+  @DeleteMapping(path = "/admin/technologies")
   public Object deleteTechnology(@RequestBody Map<String, String> json) {
     Technology find = new Technology();
     if(json.get("id") != null) {
@@ -233,7 +233,7 @@ public class TechnologyController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @PostMapping(path = "/technologyCategories", consumes = "application/json", produces = "application/json")
+  @PostMapping(path = "/admin/technologyCategories", consumes = "application/json", produces = "application/json")
   public Object createTechnologyCategory(@RequestBody String category) {
     String categoryString = category.replaceAll("^\"|\"$", "");
     TechnologyCategory newCategory = new TechnologyCategory(categoryString);
@@ -246,7 +246,7 @@ public class TechnologyController {
     }
   }
 
-  @DeleteMapping(path = "/technologyCategories", consumes = "application/json", produces = "application/json")
+  @DeleteMapping(path = "/admin/technologyCategories", consumes = "application/json", produces = "application/json")
   public Object deleteTechnologyCategory(@RequestBody Map<String, String> json) {
     TechnologyCategory find = new TechnologyCategory();
     if(json.get("id") != null) {
@@ -269,7 +269,7 @@ public class TechnologyController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @GetMapping(path = "/technologyCategories", consumes = "application/json", produces = "application/json")
+  @GetMapping(path = "/admin/technologyCategories", consumes = "application/json", produces = "application/json")
   public Object getTechnologyCategory(@RequestBody Map<String, String> json) {
     TechnologyCategory find = new TechnologyCategory();
     if(json.get("id") != null) {

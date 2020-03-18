@@ -2,17 +2,17 @@ class Technology {
   static createTechnologyObjectFromState(state = null) {
     if (!state) return;
     var technology = {
-     title : state.title,
-     description : state.description,
-     type : state.type,
-     category :state.category,
-     shippingCity : state.shippingCity,
-     shippingCountry : state.shippingCountry,
-     source : state.source,
-     fordContact : state.fordContact,
-     fordPresenter : state.fordPresenter,
-     director : state.director,
-     supplierCompany : state.supplierCompany,
+      title: state.title,
+      description: state.description,
+      type: state.type,
+      category: state.category,
+      shippingCity: state.shippingCity,
+      shippingCountry: state.shippingCountry,
+      source: state.source,
+      fordContact: state.fordContact,
+      fordPresenter: state.fordPresenter,
+      director: state.director,
+      supplierCompany: state.supplierCompany
     };
 
     for (let [key, val] of Object.entries(technology)) {
@@ -25,27 +25,23 @@ class Technology {
     console.log(opts);
     try {
       if (!opts) return;
-      let res = await Technology.req(
-        "POST",
-        "/idte/technologies",
-        opts
-      );
+      let res = await Technology.req('POST', '/idte/admin/technologies', opts);
       return res;
     } catch (e) {
       console.log(e.request);
       alert(
-        "Error: " +
+        'Error: ' +
           e.status +
-          "\n" +
+          '\n' +
           e.statusText +
-          "\n" +
-          "Make sure all required fields are filled with valid values"
+          '\n' +
+          'Make sure all required fields are filled with valid values'
       );
     }
   }
   static async getCategories(opts = null) {
-    let url = "/idte/technologyCategories/all";
-    let method = "GET";
+    let url = '/idte/technologyCategories/all';
+    let method = 'GET';
     let res = await Technology.req(method, url, opts);
     if (res.statusText) {
       return res;
@@ -58,43 +54,42 @@ class Technology {
     try {
       if (!opts) return;
       let res = await Technology.req(
-        "POST",
-        "/idte/technologyCategories",
+        'POST',
+        '/idte/admin/technologyCategories',
         opts
       );
       return res;
     } catch (e) {
       console.log(e.request);
       alert(
-        "Error: " +
+        'Error: ' +
           e.status +
-          "\n" +
+          '\n' +
           e.statusText +
-          "\n" +
-          "Make sure all required fields are filled with valid values"
+          '\n' +
+          'Make sure all required fields are filled with valid values'
       );
     }
   }
 
-  
   static async deleteCategory(opts = null) {
     try {
       if (!opts) return;
       let res = await Technology.req(
-        "DELETE",
-        "/idte/technologyCategories",
+        'DELETE',
+        '/idte/admin/technologyCategories',
         opts
       );
       return res;
     } catch (e) {
       console.log(e.request);
       alert(
-        "Error: " +
+        'Error: ' +
           e.status +
-          "\n" +
+          '\n' +
           e.statusText +
-          "\n" +
-          "Make sure all required fields are filled with valid values"
+          '\n' +
+          'Make sure all required fields are filled with valid values'
       );
     }
   }
@@ -103,7 +98,7 @@ class Technology {
     return new Promise(function(resolve, reject) {
       let xhr = new XMLHttpRequest();
       xhr.open(method, url);
-      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onload = function() {
         if (this.status >= 200 && this.status < 300) {
           resolve(JSON.parse(xhr.response ? xhr.response : null));

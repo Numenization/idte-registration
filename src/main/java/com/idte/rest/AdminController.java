@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,8 @@ public class AdminController {
   private RoleRepository roleRepository;
   @Autowired
   private PrivilegeRepository privilegeRepository;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @GetMapping(value = "/initializeAdmins")
   public Object test() {
@@ -90,12 +93,17 @@ public class AdminController {
     Admin newAdmin = new Admin();
     String name = json.get("name");
     String email = json.get("email");
-    String pass = json.get("pass"); // TODO: PASSWORD SECURITY
+    String pass = passwordEncoder.encode(json.get("pass"));
+
+    Role adminRole = roleRepository.findByName("ROLE_ADMIN");
+    newAdmin.setRoles(Arrays.asList(adminRole));
+
     // TODO: SUPERADMINS?
 
     newAdmin.setUsername(name);
     newAdmin.setEmail(email);
     newAdmin.setPassword(pass);
+    newAdmin.setEnabled(true);
 
     try {
       return new ResponseEntity<>(userRepository.save(newAdmin), HttpStatus.OK);

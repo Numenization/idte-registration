@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -322,7 +323,7 @@ public class AttendeeController {
 
     // get registration type from user for use on registration page.
     // this can be used to filter out unnecessary fields and used for posting to db
-    @GetMapping(path = "/setRegistrationStatus")
+    @PostMapping(path = "/setRegistrationStatus")
     public Object sessionTest(HttpSession session, @RequestBody Map<String, String> json) {
         String registrationType = json.get("type");
         if(registrationType == null) {
@@ -330,7 +331,29 @@ public class AttendeeController {
         }
 
         session.setAttribute("registrationType", registrationType);
+        String uid = session.getId();
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("iid", uid);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
+
+    @GetMapping(path = "/getRegistrationStatus")
+    public Object getRegStatus(HttpSession session) {
+        if(session == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        String regtype = session.getAttribute("registrationType").toString();
+        String uid = session.getId();
+
+
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("type", regtype);
+        map.put("iid", uid);
+
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+
 }

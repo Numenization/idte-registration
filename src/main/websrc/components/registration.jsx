@@ -5,8 +5,36 @@ import Header from './header.jsx';
 import NavBar from './navbar.jsx';
 import Footer from './footer.jsx';
 import '../css/styles.css';
+import RegStatus from '../data/regStatus.js';
 
 class RegistrationPage extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      type: ""
+    }
+    this.submitSupp = this.submitSupp.bind(this);
+  }
+
+  async submitSupp(regtype){
+    this.setState({type: regtype})
+    let requestbody = {
+      type: regtype
+    }
+    try {
+      let res = await RegStatus.req('POST', '/idte/setRegistrationStatus', requestbody);
+      window.location.href = "registerwaiver.html";
+    } catch (e) {
+      if (e.errors) {
+        console.log(e.errors);
+        for (const error of e.errors) {
+          console.log(error);
+          this.addError(error);
+        }
+      }
+    }
+  }
+
   render() {
     return (
       <div className='container'>
@@ -23,13 +51,13 @@ class RegistrationPage extends React.Component {
           <div className='registration-buttons'>
             <h1>Registration</h1>
             <p>Sample Text</p>
-            <a href='registerwaiver.html'>
+            <a onClick={() => this.submitSupp("supplier")}>
               <font color='white'>Register as Supplier</font>
             </a>
-            <a href='registerwaiver.html'>
+            <a onClick={() => this.submitSupp("presenter")} href="registerwaiver.html">
               <font color='white'>Register as Presenter</font>
             </a>
-            <a href='registerwaiver.html'>
+            <a onClick={() => this.submitSupp("evaluator")} href="registerwaiver.html">
               <font color='white'>Register as Evaluator</font>
             </a>
           </div>

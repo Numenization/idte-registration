@@ -5,8 +5,29 @@ import Header from '../header.jsx';
 import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import '../../css/styles.css';
+import Attendee from '../../data/attendee.js'
 
 class FormPage extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      type: "_"
+    }
+    this.getRegStatus = this.getRegStatus.bind(this);
+  }
+
+  async getRegStatus() {
+    let res = await Attendee.req("GET", "/idte/getRegistrationStatus", this.state)
+    this.setState({
+      type: res.type
+    })
+    document.getElementById("mytype").innerText = this.state.type
+  }
+
+  async componentDidMount(){
+    this.getRegStatus();
+  }
+
   render() {
     return (
       <div className='container'>
@@ -22,6 +43,9 @@ class FormPage extends React.Component {
         <div className='content'>
           <div className='registration-form'>
             <form>
+              <label>Attendee Type:</label>
+              <label id="mytype"></label>
+
               <label>*First/Given Name:</label>
               <input type='text'></input>
 

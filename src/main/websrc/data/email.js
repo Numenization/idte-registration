@@ -24,7 +24,7 @@ class Email{
         try {
             
             if(!opts) return;
-            let res = await Attendee.req('POST', '/idte/email', opts);
+            let res = await Attendee.req('POST', '/idte/admin/email', opts);
             return res;
           } catch (e) {
             console.log(e.request);
@@ -39,40 +39,6 @@ class Email{
           }
     }
 
-    static async sendAttachmentEmail(opts = null) {
-      try {
-          
-          if(!opts) return;
-          let res = await Attendee.req('POST', '/idte/emailwattachment', opts);
-          return res;
-        } catch (e) {
-          console.log(e.request);
-          alert(
-            'Error: ' +
-              e.status +
-              '\n' +
-              e.statusText +
-              '\n' +
-              'Be sure to fill in the attachment, Subject, Body and who the email is To fields!'
-          );
-        }
-  }
-/*
-  static async submitForm(contentType, data, setResponse) {
-    axios({
-    url: `/idte/emailwattachment`,
-    method: 'POST',
-    data: data,
-    headers: {
-    'Content-Type': contentType
-    }
-    }).then((response) => {
-    setResponse(response.data);
-    }).catch((error) => {
-    setResponse("error");
-    })
-  }
-*/
   static async uploadWithJSON(opts = null, file){
     let currentComponent = this;
 
@@ -89,8 +55,20 @@ class Email{
     subject: opts.subject,
     body: opts.body
     }
-   
-    currentComponent.req("application/json", data, (msg) => console.log(msg));
+
+    try {
+      await Attendee.req("POST", "/idte/admin/emailwattachment", data);
+    } catch (e) {
+      console.log(e.request);
+      alert(
+        'Error: ' +
+          e.status +
+          '\n' +
+          e.statusText +
+          '\n' +
+          'Be sure to fill in the Subject, Body, To and attach a file To fields!'
+      );
+    }
   }
 
   

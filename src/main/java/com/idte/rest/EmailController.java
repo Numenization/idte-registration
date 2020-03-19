@@ -26,21 +26,20 @@ public class EmailController {
     private JavaMailSender javaMailSender;
         // TODO: PROTECT ADMIN ROUTES
 
-    @PostMapping(path = "/email", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/admin/email", consumes = "application/json", produces = "application/json")
     public void sendEmail(@RequestBody Map<String, String> json) {
         SimpleMailMessage msg = new SimpleMailMessage();
 
         String to = json.get("to");
         String subject = json.get("subject");
         String body = json.get("body");
-        String attachment = json.get("attachment");
         msg.setTo(to);
         msg.setSubject(subject);
         msg.setText(body);
         javaMailSender.send(msg);
     }
 
-    @PostMapping(path = "/emailwattachment", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/admin/emailwattachment", consumes = "application/json", produces = "application/json")
     public void sendEmailwAttachment (@RequestBody Map<String, String> json) throws MessagingException {
 
         String to = json.get("to");

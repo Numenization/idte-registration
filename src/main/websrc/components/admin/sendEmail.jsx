@@ -28,29 +28,6 @@ class SendEmail extends React.Component {
 
     async sendAnEmail() {
 
-      //send all data as formdata
-      //HOW DO I HANDLE FORM DATA- lookup
-      // var data = new FormData();
-      // var attachment = document.querySelector('input[type="file"]').files[0]
-      // data.append("attachment", attachment)
-      // data.append( "to", "caz.polo@gmail.com")
-      // data.append("subject", "Blank")
-      // data.append("body", "This is an automated message from ford IDTE")
-
-      // fetch("/idte/email", {
-      //   mode: 'no-cors',
-      //   method: "POST",
-      //   body: data
-      // }).then(function (res) {
-      //   if (res.ok) {
-      //     alert("Perfect! ");
-      //   } else if (res.status == 401) {
-      //     alert("Oops! ");
-      //   }
-      // }, function (e) {
-      //   alert("Error submitting form!");
-      // });
-
       //check email validity
       if(this.state.body == "" || this.state.body == null) {
         document.getElementById('error_msg').innerHTML 
@@ -72,7 +49,7 @@ class SendEmail extends React.Component {
                 = '*Enter a valid email'
         return
       }
-      else if (!this.state.file.includes('.png') && !this.state.file.includes('.jpg') && 
+      else if (this.state.file != null && !this.state.file.includes('.png') && !this.state.file.includes('.jpg') && 
                !this.state.file.includes('.PNG') && !this.state.file.includes('.JPG')) {
         document.getElementById('error_msg').innerHTML 
                 = '*Please enter a .jpg or a .png file'
@@ -101,8 +78,7 @@ class SendEmail extends React.Component {
           return
         }
         else {
-          
-          var x = await Email.uploadWithJSON(this.state, testFile)
+          await Email.uploadWithJSON(this.state, testFile)
           console.log('done with function')
         }
         

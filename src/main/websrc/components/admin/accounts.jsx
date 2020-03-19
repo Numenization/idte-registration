@@ -6,13 +6,13 @@ import Footer from '../footer.jsx';
 import ErrorTag from '../general/error.jsx';
 import '../../css/styles.css';
 import '../../css/accounts.css';
-import Attendee from '../../data/attendee.js';
 
 class AccountPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      errors: []
+      errors: [],
+      admins: []
     };
 
     this.submit = this.submit.bind(this);
@@ -20,10 +20,14 @@ class AccountPage extends React.Component {
     this.addError = this.addError.bind(this);
     this.removeError = this.removeError.bind(this);
     this.validate = this.validate.bind(this);
+    this.getAdmins = this.getAdmins.bind(this);
+    this.req = this.req.bind(this);
   }
 
   async submit() {
-    this.setState({ errors: [] });
+    for (let i = 0; i < this.state.errors.length; i++) {
+      this.removeError(0);
+    }
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
     let email = document.getElementById('email').value;
@@ -39,11 +43,12 @@ class AccountPage extends React.Component {
     };
 
     try {
-      await Attendee.req('POST', '/idte/admin/admins', requestBody);
+      await this.req('POST', '/idte/admin/admins', requestBody);
 
       document.getElementById('username').value = '';
       document.getElementById('password').value = '';
       document.getElementById('email').value = '';
+      this.getAdmins();
     } catch (e) {
       if (e.errors) {
         console.log(e.errors);
@@ -112,11 +117,11 @@ class AccountPage extends React.Component {
       });
       errors = true;
     }
-    if (password.search('/d/') == -1) {
+    if (password.search(/[0-9]{1}/) == -1) {
       this.addError({ message: 'Password must have at least one number!' });
       errors = true;
     }
-    if (password.search('/[a-zA-Z]/') == -1) {
+    if (password.search(/[a-zA-Z]{1}/) == -1) {
       this.addError({ message: 'Password must have at least one letter!' });
       errors = true;
     }
@@ -127,7 +132,47 @@ class AccountPage extends React.Component {
     return errors;
   }
 
+  async getAdmins() {
+    let admins = await this.req('GET', '/idte/admin/admins/all');
+
+    this.setState({ admins: admins });
+  }
+
+  async req(method, url, opts = null) {
+    return new Promise(function(resolve, reject) {
+      let xhr = new XMLHttpRequest();
+      xhr.open(method, url);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function() {
+        if (this.status >= 200 && this.status < 300) {
+          resolve(xhr.response ? JSON.parse(xhr.response) : null);
+        } else {
+          reject({
+            status: this.status,
+            errors: xhr.response ? JSON.parse(xhr.response) : null
+          });
+        }
+      };
+      xhr.onerror = function() {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      };
+      xhr.send(JSON.stringify(opts));
+    }).catch(err => {
+      throw err;
+    });
+  }
+
+  async componentDidMount() {
+    this.getAdmins();
+  }
+
   render() {
+    const buttonStyles = {
+      width: '100%'
+    };
     return (
       <div className='container'>
         <div className='background'>
@@ -161,7 +206,54 @@ class AccountPage extends React.Component {
               Submit
             </button>
           </div>
-          <h1>Edit Administrative Accounts</h1>
+          <h1>Administrative Accounts</h1>
+          <div className='admin-account'>
+            <table>
+              <thead>
+                <tr>
+                  <td>Username</td>
+                  <td>Email</td>
+                  <td></td>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.admins.map((admin, i) => {
+                  return (
+                    <tr key={i} id={admin.id}>
+                      <td>{admin.username}</td>
+                      <td>{admin.email}</td>
+                      <td id={admin.username}>
+                        <button
+                          id='link-button'
+                          style={buttonStyles}
+                          onClick={async e => {
+                            let confirm = window.confirm(
+                              'Really delete ' + e.target.parentNode.id + '?'
+                            );
+                            if (!confirm) return;
+                            let row = e.target.parentNode.parentNode;
+                            let id = row.id;
+
+                            try {
+                              await this.req('DELETE', '/idte/admin/admins', {
+                                id: id
+                              });
+                            } catch (e) {
+                              console.log(e);
+                            }
+
+                            this.getAdmins();
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <Footer />

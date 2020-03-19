@@ -6,8 +6,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
-
 import com.idte.rest.data.Admin;
 import com.idte.rest.data.AdminRepository;
 import com.idte.rest.data.Error;
@@ -20,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -135,18 +132,17 @@ public class AdminController {
 
   @DeleteMapping(value = "/admin/admins")
   public Object deleteAdmin(@RequestBody Map<String, String> json) {
-    Admin find = new Admin();
+    Admin admin = null;
     if(json.get("id") != null) {
       try {
-        find.setId(Long.parseLong(json.get("id")));
+        admin = userRepository.findById(Long.parseLong(json.get("id"))).orElse(null);
       }
       catch(Exception e) {
         return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
 
-    Example<Admin> example = Example.of(find);
-    Admin admin = userRepository.findOne(example).orElse(null);
+
 
     if(admin == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

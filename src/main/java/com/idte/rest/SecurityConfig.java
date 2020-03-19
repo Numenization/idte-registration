@@ -39,9 +39,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
+      //httpSecurity.anonymous().authenticationFilter(new AnonymousAuthenticationFilterImpl(UUID.randomUUID().toString()));
+
       httpSecurity.authorizeRequests()
         .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-        .antMatchers("/**").permitAll()
+        .antMatchers("/**").anonymous().anyRequest().permitAll()
         .and()
         .formLogin();
 

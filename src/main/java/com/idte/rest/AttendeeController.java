@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import com.idte.rest.data.AttendeeRepository;
 import com.idte.rest.data.EvaluatorRepository;
 import com.idte.rest.data.Presenter;
@@ -315,6 +317,20 @@ public class AttendeeController {
 
         // we found it so lets delete it
         attendees.delete(attendee);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // get registration type from user for use on registration page.
+    // this can be used to filter out unnecessary fields and used for posting to db
+    @GetMapping(path = "/setRegistrationStatus")
+    public Object sessionTest(HttpSession session, @RequestBody Map<String, String> json) {
+        String registrationType = json.get("type");
+        if(registrationType == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        session.setAttribute("registrationType", registrationType);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

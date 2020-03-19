@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.introspect.ConcreteBeanPropertyBase;
 import com.idte.rest.data.Error;
 import com.idte.rest.data.Technology;
 import com.idte.rest.data.TechnologyCategory;

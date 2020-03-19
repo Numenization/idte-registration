@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import com.idte.rest.data.Admin;
 import com.idte.rest.data.AdminRepository;
 import com.idte.rest.data.Error;
@@ -18,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -149,6 +154,16 @@ public class AdminController {
 
     userRepository.delete(admin);
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @GetMapping(value = "/navbar")
+  public Object initNavbar() {
+    Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+    String role = "NONE";
+    for(int i = 0; i < authorities.size(); i++) {
+      role = authorities.toArray()[i] + "";
+    }
+    return new ResponseEntity<>(role, HttpStatus.OK);
   }
 
   @Transactional

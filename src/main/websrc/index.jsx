@@ -20,23 +20,23 @@ class App extends React.Component {
         </div>
 
         <div className='content'>
-          <div class='home-container'>
-            <div class='home-container-row'>
+          <div className='home-container'>
+            <div className='home-container-row'>
               <h1>Innovation and Drive Technology Expo</h1>
             </div>
-            <div class='home-container-row'>
+            <div className='home-container-row'>
               <p style={{ width: '40%' }}>
                 Sample Text Sample Text Sample Text Sample Text Sample Text
                 Sample Text Sample Text Sample Text Sample TextSample Text
                 Sample Text Sample Text Sample Text Sample Text Sample Text
                 Sample Text Sample Text Sample Text
               </p>
-              <div class='home-container-cell'>
+              <div className='home-container-cell'>
                 <h3>Technology Submission</h3>
                 <span>Closed!</span>
                 <a href='technologywaiver.html'>Click to Submit</a>
               </div>
-              <div class='home-container-cell'>
+              <div className='home-container-cell'>
                 <h3>IDTE Registration</h3>
                 <span>Closed!</span>
                 <a href='registration.html'>Click to Register</a>

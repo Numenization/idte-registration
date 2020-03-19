@@ -38,14 +38,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
  
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-
-      //httpSecurity.anonymous().authenticationFilter(new AnonymousAuthenticationFilterImpl(UUID.randomUUID().toString()));
-
       httpSecurity.authorizeRequests()
         .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-        .antMatchers("/**").anonymous().anyRequest().permitAll()
+        .antMatchers("/**").permitAll()
         .and()
-        .formLogin();
+        .formLogin()
+        .and()
+        .logout()
+        .logoutSuccessUrl("/")
+        .invalidateHttpSession(true)
+        .deleteCookies("JSESSIONID");;
 
       httpSecurity.csrf()
         .ignoringAntMatchers("/**");

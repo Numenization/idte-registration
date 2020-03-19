@@ -7,11 +7,11 @@ class NavBar extends React.Component {
       <div className='navbar'>
         <ul>
           <li>
-            <a href='index.html'>Home</a>
+            <a href='/idte/index.html'>Home</a>
           </li>
 
           <li>
-            <a href='technologywaiver.html'>
+            <a href='/idte/technologywaiver.html'>
               Technology
               <br />
               Submission
@@ -19,7 +19,7 @@ class NavBar extends React.Component {
           </li>
 
           <li>
-            <a href='registration.html'>Register</a>
+            <a href='/idte/registration.html'>Register</a>
           </li>
 
           <li>
@@ -30,23 +30,23 @@ class NavBar extends React.Component {
             <div className='navbar-second-tier'>
               <ul>
                 <li>
-                  <a href='faq.html'>Event Info/FAQ</a>
+                  <a href='/idte/faq.html'>Event Info/FAQ</a>
                 </li>
                 <li>
-                  <a href='map.html'>Event Map</a>
+                  <a href='/idte/map.html'>Event Map</a>
                 </li>
                 <li>
-                  <a href='eventlayout.html'>Display Layout</a>
+                  <a href='/idte/eventlayout.html'>Display Layout</a>
                 </li>
                 <li>
-                  <a href='contact.html'>Contact IDTE</a>
+                  <a href='/idte/contact.html'>Contact IDTE</a>
                 </li>
               </ul>
             </div>
           </li>
 
           <li>
-            <a href='admin.html'>Admin</a>
+            <a href='/idte/admin/admin.html'>Admin</a>
           </li>
         </ul>
       </div>

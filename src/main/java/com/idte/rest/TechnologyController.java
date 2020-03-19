@@ -65,12 +65,37 @@ public class TechnologyController {
     }
   }
 
-  @PostMapping(path = "/technologies", consumes = "application/json", produces = "application/json")
-  public Object createTechnology(@RequestBody Technology technology) {
-    Technology newTechnology = Technology.from(technology);
+  @PostMapping(path = "/admin/technologies", consumes = "application/json", produces = "application/json")
+  public Object createTechnology(@RequestBody Map<String,String> json) {
+    Technology newTech = new Technology();
+    TechnologyCategory find = new TechnologyCategory();
+    if(json.get("id") != null)    {
+    try{
+      find.setId(Integer.parseInt((json.get("id"))));
+    }
+    catch(Exception e){
+      System.out.print(find.getId());
+      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    }
+    newTech.setCategory(find);
+    newTech.setTitle(json.get("title"));
+    newTech.setDescription(json.get("description"));
+    newTech.setType(json.get("type"));
+    newTech.setShippingCity(json.get("shippingCity"));
+    newTech.setSource(json.get("shippingCountry"));
+    newTech.setFordContact(json.get("fordContact"));
+    newTech.setFordPresenter(json.get("fordPresenter"));
+    newTech.setDirector(json.get("director"));
+    newTech.setSupplierCompany(json.get("supplierCompany"));
+    newTech.setComments("");
+    newTech.setModifiedBy("");
+
+
+
 
     Technology uniqueTest = new Technology();
-    uniqueTest.setTitle(newTechnology.getTitle());
+    uniqueTest.setTitle(newTech.getTitle());
     Example<Technology> example = Example.of(uniqueTest);
     if(technologies.findOne(example).orElse(null) != null) {
       return new ResponseEntity<>(new Error("Entity with title " + uniqueTest.getTitle() + " already exists!"), HttpStatus.CONFLICT);
@@ -79,18 +104,19 @@ public class TechnologyController {
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     Date date = new Date();
     String currentDateTime = dateFormat.format(date);
-    newTechnology.setDateCreated(currentDateTime);
-    newTechnology.setLastModified(currentDateTime);
-
+    newTech.setDateCreated(currentDateTime);
+    newTech.setLastModified(currentDateTime);
     try {
-      return new ResponseEntity<>(technologies.save(newTechnology), HttpStatus.OK);
+      System.out.println(newTech);
+      return new ResponseEntity<>(technologies.save(newTech), HttpStatus.OK);
     }
     catch(Exception e) {
+      System.out.println(e);
       return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  @PutMapping(path = "/technologies", consumes = "application/json", produces = "application/json")
+  @PutMapping(path = "/admin/technologies", consumes = "application/json", produces = "application/json")
   public Object updateTechnology(@RequestBody Map<String, String> json) {
     int testId = -1;
     try {
@@ -184,7 +210,7 @@ public class TechnologyController {
     }
   }
 
-  @DeleteMapping(path = "/technologies")
+  @DeleteMapping(path = "/admin/technologies")
   public Object deleteTechnology(@RequestBody Map<String, String> json) {
     Technology find = new Technology();
     if(json.get("id") != null) {
@@ -206,7 +232,7 @@ public class TechnologyController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @PostMapping(path = "/technologyCategories", consumes = "application/json", produces = "application/json")
+  @PostMapping(path = "/admin/technologyCategories", consumes = "application/json", produces = "application/json")
   public Object createTechnologyCategory(@RequestBody String category) {
     String categoryString = category.replaceAll("^\"|\"$", "");
     TechnologyCategory newCategory = new TechnologyCategory(categoryString);
@@ -219,7 +245,7 @@ public class TechnologyController {
     }
   }
 
-  @DeleteMapping(path = "/technologyCategories", consumes = "application/json", produces = "application/json")
+  @DeleteMapping(path = "/admin/technologyCategories", consumes = "application/json", produces = "application/json")
   public Object deleteTechnologyCategory(@RequestBody Map<String, String> json) {
     TechnologyCategory find = new TechnologyCategory();
     if(json.get("id") != null) {
@@ -242,7 +268,7 @@ public class TechnologyController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
-  @GetMapping(path = "/technologyCategories", consumes = "application/json", produces = "application/json")
+  @GetMapping(path = "/admin/technologyCategories", consumes = "application/json", produces = "application/json")
   public Object getTechnologyCategory(@RequestBody Map<String, String> json) {
     TechnologyCategory find = new TechnologyCategory();
     if(json.get("id") != null) {

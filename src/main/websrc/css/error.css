@@ -1,0 +1,20 @@
+.error {
+  padding: 0.5em 1em;
+  margin: 0.3em auto;
+  width: 400px;
+  background-color: #ffcdcd;
+  box-shadow: 3px 3px #20293f66;
+}
+
+.error-close-button {
+  display: block;
+  float: right;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  background-color: #ffcdcd;
+}
+
+.error-close-button:hover {
+  font-weight: bold;
+}

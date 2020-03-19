@@ -9,9 +9,7 @@ import javax.net.ssl.HttpsURLConnection;
 import com.idte.rest.data.Event;
 import com.idte.rest.data.EventRepository;
 
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Example;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
@@ -31,7 +29,7 @@ public class EventController{
     @Autowired
     private EventRepository events;
 
-
+    // TODO: PROTECT ADMIN ROUTES
     @PostMapping(path = "/events", consumes = "application/json", produces = "application/json")
     public Object postEvent(@RequestBody Map <String, String> json){
     String registrationStart = json.get("registrationStart");
@@ -55,6 +53,7 @@ public class EventController{
     
     
 }
+//---------- Used on event table to make one event the new current event
 @PutMapping (path="/changeCurrent", consumes = "application/json", produces = "application/json")
 public Object changeCurrentEvent(@RequestBody Map<String, String> json){
  // Old search, search for event that has currentEvent = true
@@ -116,7 +115,10 @@ if (oldEvent == null){
      }    
 
 }
-// Creates a new event that has currentEvent as "true", and returns event from DB that has the same value
+
+
+
+//---------- Used when you create a new event, and it makes that new event the new current event
 @PutMapping (path="/replaceCurrent", consumes = "application/json", produces = "application/json")
 public Object replaceCurrentEvent(){
     Event testEvent = new Event(); 
@@ -143,19 +145,16 @@ public Object replaceCurrentEvent(){
         }
       }
     }    
-    boolean changes = false;
-
-    // set new events currentEvent=true
- 
-    changes = true;
-    if (changes){
+    oldEvent.setCurrentEvent("false");
+    try{
         events.save(oldEvent);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-     else {
-         return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-        }  
+    catch(Exception e) {
+        return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
+
 
 
 // Inverts an events regStatus value

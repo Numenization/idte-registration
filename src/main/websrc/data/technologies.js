@@ -40,7 +40,7 @@ class Technology {
     }
   }
   static async getCategories(opts = null) {
-    let url = '/idte/technologyCategories/all';
+    let url = '/idte/admin/technologyCategories/all';
     let method = 'GET';
     let res = await Technology.req(method, url, opts);
     if (res.statusText) {

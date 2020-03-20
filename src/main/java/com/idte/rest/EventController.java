@@ -29,8 +29,8 @@ public class EventController{
     @Autowired
     private EventRepository events;
 
-    // TODO: PROTECT ADMIN ROUTES
-    @PostMapping(path = "/events", consumes = "application/json", produces = "application/json")
+    
+    @PostMapping(path = "/admin/events", consumes = "application/json", produces = "application/json")
     public Object postEvent(@RequestBody Map <String, String> json){
     String registrationStart = json.get("registrationStart");
     String registrationEnd = json.get("registrationEnd");
@@ -54,7 +54,7 @@ public class EventController{
     
 }
 //---------- Used on event table to make one event the new current event
-@PutMapping (path="/changeCurrent", consumes = "application/json", produces = "application/json")
+@PutMapping (path="/admin/changeCurrent", consumes = "application/json", produces = "application/json")
 public Object changeCurrentEvent(@RequestBody Map<String, String> json){
  // Old search, search for event that has currentEvent = true
  Event testEvent = new Event(); 
@@ -119,7 +119,7 @@ if (oldEvent == null){
 
 
 //---------- Used when you create a new event, and it makes that new event the new current event
-@PutMapping (path="/replaceCurrent", consumes = "application/json", produces = "application/json")
+@PutMapping (path="/admin/replaceCurrent", consumes = "application/json", produces = "application/json")
 public Object replaceCurrentEvent(){
     Event testEvent = new Event(); 
     Example<Event> example = Example.of(testEvent);
@@ -158,7 +158,7 @@ public Object replaceCurrentEvent(){
 
 
 // Inverts an events regStatus value
-@PutMapping(path = "/currentRegStatus")
+@PutMapping(path = "/admin/currentRegStatus")
 public Object updateCurrentRegStatus(){
 
     Event testEvent = new Event(); 
@@ -200,7 +200,7 @@ public Object updateCurrentRegStatus(){
 }
 
 // Inverts an events techSubStatus value
-@PutMapping(path = "/currentTechStatus")
+@PutMapping(path = "/admin/currentTechStatus")
 public Object updateTechStatus(){
 
     Event testEvent = new Event();
@@ -241,7 +241,7 @@ public Object updateTechStatus(){
   }
 }
 
-@GetMapping(path = "/getTechValue")
+@GetMapping(path = "/admin/getTechValue")
 public Object getTechValue(){
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
@@ -273,7 +273,7 @@ public Object getTechValue(){
 
     return map;
 }
-@GetMapping(path = "/getRegValue")
+@GetMapping(path = "/admin/getRegValue")
 public Object getRegValue(){
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
@@ -305,7 +305,7 @@ public Object getRegValue(){
     map.put("status", Boolean.toString(value));
     return map;
 }
-@DeleteMapping(path = "/events", consumes = "application/json", produces = "application/json")
+@DeleteMapping(path = "/admin/events", consumes = "application/json", produces = "application/json")
 public Object deleteEvent(@RequestBody Map<String, String> json){
     Event find = new Event();
     if (json.get("id") != null){
@@ -324,7 +324,7 @@ public Object deleteEvent(@RequestBody Map<String, String> json){
     events.delete(event);
     return new ResponseEntity<>(HttpStatus.OK);
 }
-@GetMapping(path="/events/all", produces = "application/json")
+@GetMapping(path="/admin/events/all", produces = "application/json")
   public Iterable<Event> findAllEvents() {
        
       

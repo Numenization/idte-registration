@@ -21,7 +21,7 @@ class Event {
 
        try {
           if (!opts) return;
-          let res = await Attendee.req('POST', '/idte/events', opts);     
+          let res = await Attendee.req('POST', '/idte/admin/events', opts);     
           return res;
         } catch (e) {
           console.log(e.request);

@@ -1,7 +1,7 @@
 
 class ChangeRegistration{
 static async changeCurrentReg(opts = null){
-    let url = "/idte/currentRegStatus";
+    let url = "/idte/admin/currentRegStatus";
     let method = "PUT";
     let currentComponent = this;
     let res = currentComponent.req(method, url, opts);
@@ -11,7 +11,7 @@ static async changeCurrentReg(opts = null){
     return res;
 }
 static async changeCurrentTech(opts = null){
-    let url = "/idte/currentTechStatus";
+    let url = "/idte/admin/currentTechStatus";
     let method = "PUT";
     let currentComponent = this;
     let res = currentComponent.req(method, url, opts);
@@ -21,7 +21,7 @@ static async changeCurrentTech(opts = null){
     return res;
 }
 static async replaceCurrent(opts = null){
-    let url = "/idte/replaceCurrent";
+    let url = "/idte/admin/replaceCurrent";
     let method = "PUT";
     let currentComponent = this;
     let res = currentComponent.req(method, url, opts);
@@ -31,7 +31,7 @@ static async replaceCurrent(opts = null){
     return res;
 }
 static async changeCurrent(opts = null){
-  let url = "/idte/changeCurrent";
+  let url = "/idte/admin/changeCurrent";
   let method = "PUT";
   let currentComponent = this;
   let res = currentComponent.req(method, url, opts);
@@ -41,7 +41,7 @@ static async changeCurrent(opts = null){
   return res;
 }
 static async getTechStatus(opts = null){
-    let url = "/idte/getTechValue";
+    let url = "/idte/admin/getTechValue";
     let method = "GET";
     let currentComponent = this;
    let res = await currentComponent.req(method, url, opts);
@@ -51,7 +51,7 @@ static async getTechStatus(opts = null){
   return res;
 }
 static async getRegStatus(opts = null){
-    let url = "/idte/getRegValue";
+    let url = "/idte/admin/getRegValue";
     let method = "GET";
     let currentComponent = this;
     let res =  await currentComponent.req(method, url, opts);
@@ -61,7 +61,7 @@ static async getRegStatus(opts = null){
       return res;
 }
 static async getEvents(opts = null) {
-  let url = "/idte/events/all";
+  let url = "/idte/admin/events/all";
   let method = "GET";
   let res = await ChangeRegistration.req(method, url, opts);
   if (res.statusText) {
@@ -74,7 +74,7 @@ static async deleteEvent(opts = null) {
     if (!opts) return;
     let res = await ChangeRegistration.req(
       "DELETE",
-      "/idte/events",
+      "/idte/admin/events",
       opts
     );
     return res;

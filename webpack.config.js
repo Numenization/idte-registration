@@ -187,12 +187,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       chunks: ['eventdb'],
       template: './src/main/websrc/template.html',
-      filename: 'eventdb.html'
+      filename: 'admin/eventdb.html'
     }),
     new HtmlWebpackPlugin({
       chunks: ['events'],
       template: './src/main/websrc/template.html',
-      filename: 'events.html'
+      filename: 'admin/events.html'
     }),
     new HtmlWebpackPlugin({
       chunks: ['adminaccounts'],

@@ -124,7 +124,7 @@ public Object replaceCurrentEvent(){
     Event testEvent = new Event(); 
     Example<Event> example = Example.of(testEvent);
     Event oldEvent = events.findOne(example).orElse(null); 
-
+if (events.findAll(example).size() > 0){
   if (oldEvent == null){
     testEvent.setRegStatus(true);
     example = Example.of(testEvent);
@@ -145,6 +145,7 @@ public Object replaceCurrentEvent(){
         }
       }
     }    
+
     oldEvent.setCurrentEvent("false");
     try{
         events.save(oldEvent);
@@ -153,6 +154,10 @@ public Object replaceCurrentEvent(){
     catch(Exception e) {
         return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
+else{
+    return new ResponseEntity<>(HttpStatus.OK);
+}
 }
 
 

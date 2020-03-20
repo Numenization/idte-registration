@@ -10,17 +10,21 @@ import java.util.Hashtable;
 import javax.imageio.ImageIO;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.Result;
 import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException.NotFound;
 
-@RestController
-@RequestMapping
 public class QRCode
 {
     public static void main(String[] args) throws WriterException, IOException
@@ -33,6 +37,7 @@ public class QRCode
         //Define the location where the image would be saved
         File qrFile = new File(filePath);
         createQRImage(qrFile, qrCodeText, size, filePath);
+        readQRImage(qrFile);
         System.out.println("DONE");
     }
 
@@ -66,5 +71,24 @@ public class QRCode
         }
         ImageIO.write(image, filePath, qrFile);
 
+    }
+
+    //QR code contains the attendee ID
+    private static String readQRImage(File qrFile) throws WriterException, IOException
+    {
+        BufferedImage bufferedImage = ImageIO.read(qrFile);
+        LuminanceSource source = new BufferedImageLuminanceSource(bufferedImage);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+        try 
+        {
+            Result result = new MultiFormatReader().decode(bitmap);
+            return result.getText();
+        }
+        catch (NotFoundException e)
+        {
+            System.out.println("There is no QR code in the image");
+            return null;
+        }
     }
 }

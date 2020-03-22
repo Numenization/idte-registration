@@ -5,11 +5,44 @@ import Header from './components/header.jsx';
 import NavBar from './components/navbar.jsx';
 import Footer from './components/footer.jsx';
 import './css/styles.css';
-
+import Event from "./data/changeregistration.js";
 class App extends React.Component {
+  constructor(props){
+    super(props);
+    this.getRegStatus = this.getRegStatus.bind(this);
+    this.getTechStatus = this.getTechStatus.bind(this);
+  }
+  async getTechStatus(){
+    let k = await Event.getTechStatus();
+    if (k.status == "true" || k.status == "false"){
+      if(k.status== "true"){
+        document.getElementById("techStatus").innerText= "Open";
+      }
+      else{
+        document.getElementById("techStatus").innerText= "Closed";
+      }
+    }
+   
+  }
+  async getRegStatus(){
+  let k = await Event.getRegStatus();
+  if (k.status == "true" || k.status == "false"){
+    if(k.status == "true"){
+      document.getElementById("regStatus").innerText= "Open";
+    }
+    else{
+      document.getElementById("regStatus").innerText= "Closed";
+    }
+  }
+  
+  }
   render() {
     return (
-      <div className='container'>
+      
+      <div className='container' onLoad={async e => {
+        await this.getTechStatus();
+        await this.getRegStatus();
+      }}>
         <div className='background'>
           <img src={require('./images/main.jpg')}></img>
         </div>
@@ -22,7 +55,7 @@ class App extends React.Component {
         <div className='content'>
           <div className='home-container'>
             <div className='home-container-row'>
-              <h1>Innovation and Drive Technology Expo</h1>
+              <h1>Innovation Drive and Technology Expo</h1>
             </div>
             <div className='home-container-row'>
               <p style={{ width: '40%' }}>
@@ -33,13 +66,12 @@ class App extends React.Component {
               </p>
               <div className='home-container-cell'>
                 <h3>Technology Submission</h3>
-                <span>Closed!</span>
-                <a href='technologywaiver.html'>Click to Submit</a>
+                <span id = "techStatus" ></span>
+                
               </div>
               <div className='home-container-cell'>
                 <h3>IDTE Registration</h3>
-                <span>Closed!</span>
-                <a href='registration.html'>Click to Register</a>
+                <span id = "regStatus" ></span>
               </div>
             </div>
           </div>

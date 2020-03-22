@@ -246,7 +246,7 @@ public Object updateTechStatus(){
   }
 }
 
-@GetMapping(path = "/admin/getTechValue")
+@GetMapping(path = "/getTechValue")
 public Object getTechValue(){
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
@@ -278,7 +278,7 @@ public Object getTechValue(){
 
     return map;
 }
-@GetMapping(path = "/admin/getRegValue")
+@GetMapping(path = "/getRegValue")
 public Object getRegValue(){
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);

@@ -41,7 +41,7 @@ static async changeCurrent(opts = null){
   return res;
 }
 static async getTechStatus(opts = null){
-    let url = "/idte/admin/getTechValue";
+    let url = "/idte/getTechValue";
     let method = "GET";
     let currentComponent = this;
    let res = await currentComponent.req(method, url, opts);
@@ -51,7 +51,7 @@ static async getTechStatus(opts = null){
   return res;
 }
 static async getRegStatus(opts = null){
-    let url = "/idte/admin/getRegValue";
+    let url = "/idte/getRegValue";
     let method = "GET";
     let currentComponent = this;
     let res =  await currentComponent.req(method, url, opts);

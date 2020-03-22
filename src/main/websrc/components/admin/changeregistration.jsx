@@ -28,11 +28,27 @@ class ChangeRegistration extends React.Component {
     }
     async getTechStatus(){
       let k = await Event.getTechStatus();
-    document.getElementById("techStatus").innerText= k.status;  
+      if (k.status == "true" || k.status == "false"){
+        if(k.status== "true"){
+          document.getElementById("techStatus").innerText= "Open";
+        }
+        else{
+          document.getElementById("techStatus").innerText= "Closed";
+        }
+      }
+      
     }
     async getRegStatus(){
     let k = await Event.getRegStatus();
-    document.getElementById("regStatus").innerText= k.status;
+    if (k.status == "true" || k.status == "false"){
+      if(k.status == "true"){
+        document.getElementById("regStatus").innerText= "Open";
+      }
+      else{
+        document.getElementById("regStatus").innerText= "Closed";
+      }
+    }
+  
     }
    
   

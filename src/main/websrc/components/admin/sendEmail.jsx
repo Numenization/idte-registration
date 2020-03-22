@@ -18,7 +18,8 @@ class SendEmail extends React.Component {
             body: null,
             file: null,
             isShowing: false,
-            emailSent: false
+            emailSent: false,
+            fname: null
         };
         this.sendAnEmail = this.sendAnEmail.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -49,10 +50,19 @@ class SendEmail extends React.Component {
                 = '*Enter a valid email'
         return
       }
-      else if (this.state.file != null && !this.state.file.includes('.png') && !this.state.file.includes('.jpg') && 
-               !this.state.file.includes('.PNG') && !this.state.file.includes('.JPG')) {
+      else if (this.state.file != null && this.state.file.includes('.bat') && !this.state.file.includes('.BAT')) {
         document.getElementById('error_msg').innerHTML 
-                = '*Please enter a .jpg or a .png file'
+                = '*bat files are not allowed'
+        return
+      }
+      else if (this.state.file != null && this.state.file.includes('.jar') && !this.state.file.includes('.JAR')) {
+        document.getElementById('error_msg').innerHTML 
+                = '*jar files are not allowed'
+        return
+      }
+      else if (this.state.file != null && this.state.file.includes('.zip') && !this.state.file.includes('.ZIP')) {
+        document.getElementById('error_msg').innerHTML 
+                = '*zip files are not allowed'
         return
       }
       //check if there is attachment
@@ -60,14 +70,13 @@ class SendEmail extends React.Component {
         document.getElementById('sending_msg').innerHTML 
                 = 'Sending email... '
         document.getElementById("loader").style.display = "inline";
+        document.getElementById('error_msg').innerHTML = ''
         await Email.sendThatEmail(
           Email.createEmailObjectFromState(this.state)
         );
       }
       else {
-        document.getElementById('sending_msg').innerHTML 
-                = 'Sending email with image attachment... '
-        document.getElementById("loader").style.display = "inline";
+        
         const testFile = this.fileInput.current.files[0]
         if (testFile.size > 20971520) {
           document.getElementById('error_msg').innerHTML 
@@ -78,8 +87,11 @@ class SendEmail extends React.Component {
           return
         }
         else {
+          document.getElementById('sending_msg').innerHTML 
+                = 'Sending email with image attachment... '
+          document.getElementById("loader").style.display = "inline";
+          this.state.fname = testFile.name
           await Email.uploadWithJSON(this.state, testFile)
-          console.log('done with function')
         }
         
       }
@@ -148,12 +160,12 @@ class SendEmail extends React.Component {
 
               <br/>
               <div className='sendemail-buttons'>
-                <input className='email-button-style' type='button' value='Attach image' onClick={this.toggleFileInput} ></input>
+                <input className='email-button-style' type='button' value='Add attachment' onClick={this.toggleFileInput} ></input>
                 {
                   this.state.isShowing?
                   <div>
-                    <h4>Upload Single Image File:</h4>
-                    <input className='email-button-style' type="file" name="file" onChange={this.handleInputChange} ref={this.fileInput}/> <br/><br/>
+                    <h4>Upload a File:</h4>
+                    <input className='email-button-style' type="file" name="file" value={this.file} onChange={this.handleInputChange} ref={this.fileInput}/> <br/><br/>
                   </div>
                   :null
                 }

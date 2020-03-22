@@ -49,11 +49,14 @@ class Email{
     reader.onerror = error => reject(error);
     });
    
+    let x = file.name
+
     const data = {
     to: opts.to,
     file: await toBase64(file),
     subject: opts.subject,
-    body: opts.body
+    body: opts.body,
+    name: x
     }
 
     try {

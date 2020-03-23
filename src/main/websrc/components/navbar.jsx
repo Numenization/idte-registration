@@ -63,7 +63,7 @@ class NavBar extends React.Component {
           </li>
 
           <li>
-            <a href='/idte/technologywaiver.html'>
+            <a href='/idte/technologyform.html'>
               Technology
               <br />
               Submission

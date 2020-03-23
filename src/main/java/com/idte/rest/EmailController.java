@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 
 @RestController
 @RequestMapping
@@ -46,36 +48,45 @@ public class EmailController {
         String subject = json.get("subject");
         String body = json.get("body");
         String attachment = json.get("file");
-
-        File imgOutFile = null;
+        String name = json.get("name");
+        System.out.println(name);
         
         //remove beginning of attachment
         String[] arrofStrs = attachment.split(",");
-        for(String a : arrofStrs)
-            System.out.println(a);
+        // for(String a : arrofStrs)
+        //     System.out.println(a);
 
         attachment = arrofStrs[1];
-        System.out.println("String 1:");
-        System.out.println(attachment);
         //convert Base64 string to img
         byte[] imgBytes = Base64Utils.decodeFromString(arrofStrs[1]);
-        try {
-        BufferedImage bufImg = ImageIO.read(new ByteArrayInputStream(imgBytes));
-        imgOutFile = new File("android.png");
-        ImageIO.write(bufImg, "png", imgOutFile);
-        }
-        catch (IOException e) {
-            System.out.println("Failed to read image");
-        }
         
+        File file = new File(name);
+        // try {
+        // BufferedImage bufImg = ImageIO.read(new ByteArrayInputStream(imgBytes));
+        
+        // ImageIO.write(bufImg, "png", imgOutFile);
+        // }
+        // catch (IOException e) {
+        //     System.out.println("Failed to read image");
+        // }
+        
+        try {
+            OutputStream os = new FileOutputStream(file);
+            os.write(imgBytes);
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         MimeMessage msg = javaMailSender.createMimeMessage();
 
         MimeMessageHelper helper = new MimeMessageHelper(msg, true);
-        helper.addAttachment("Attachment", imgOutFile);
+        helper.addAttachment(name, file);
 
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(body);
         javaMailSender.send(msg);
+        file.delete();
     }
 }

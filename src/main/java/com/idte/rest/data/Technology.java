@@ -13,8 +13,7 @@ public class Technology {
   protected int id;
   protected String title;
   protected String description;
-  @ManyToOne
-  protected TechnologyCategory category;
+  protected String category;
   protected String type;
   protected String shippingCity;
   protected String shippingCountry;
@@ -59,7 +58,7 @@ public class Technology {
     this.description = description;
   }
 
-  public void setCategory(TechnologyCategory category) {
+  public void setCategory(String category) {
     this.category = category;
   }
 
@@ -123,7 +122,7 @@ public class Technology {
     return description;
   }
 
-  public TechnologyCategory getCategory() {
+  public String getCategory() {
     return category;
   }
 

@@ -2,7 +2,9 @@ package com.idte.rest;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import com.idte.rest.data.Error;
@@ -68,17 +70,8 @@ public class TechnologyController {
   @PostMapping(path = "/admin/technologies", consumes = "application/json", produces = "application/json")
   public Object createTechnology(@RequestBody Map<String,String> json) {
     Technology newTech = new Technology();
-    TechnologyCategory find = new TechnologyCategory();
-    if(json.get("id") != null)    {
-    try{
-      find.setId(Integer.parseInt((json.get("id"))));
-    }
-    catch(Exception e){
-      System.out.print(find.getId());
-      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    }
-    newTech.setCategory(find);
+
+    newTech.setCategory(json.get("category"));
     newTech.setTitle(json.get("title"));
     newTech.setDescription(json.get("description"));
     newTech.setType(json.get("type"));
@@ -90,9 +83,6 @@ public class TechnologyController {
     newTech.setSupplierCompany(json.get("supplierCompany"));
     newTech.setComments("");
     newTech.setModifiedBy("");
-
-
-
 
     Technology uniqueTest = new Technology();
     uniqueTest.setTitle(newTech.getTitle());
@@ -288,5 +278,73 @@ public class TechnologyController {
     }
 
     return new ResponseEntity<>(category, HttpStatus.OK);
+  }
+
+  // this is the path that normal users will take to submit their technologies
+  @PostMapping(path = "/technologies", consumes = "application/json", produces = "application/json")
+  public Object submitTechnology(@RequestBody Map<String, String> json) {
+    Technology newTech = new Technology();
+    List<Error> errors = new ArrayList<>();
+    
+    String category = json.get("category");
+    String title = json.get("title");
+    String description = json.get("description");
+    String type = json.get("type");
+    String shippingCity = json.get("shippingCity");
+    String shippingCountry = json.get("shippingCountry");
+    String fordContact = json.get("fordContact");
+    String fordPresenter = json.get("fordPresenter");
+    String director = json.get("director");
+    String supplierCompany = json.get("supplierCompany");
+    String source = json.get("source");
+
+    newTech.setComments("");
+    newTech.setModifiedBy("");
+
+    if(category == null || title == null || description == null || 
+      type == null || shippingCity == null || shippingCountry == null || 
+      fordContact == null || fordPresenter == null || director == null || 
+      supplierCompany == null || source == null ||
+      category.length() == 0 || title.length() == 0 || description.length() == 0 || 
+      type.length() == 0 || shippingCity.length() == 0 || shippingCountry.length() == 0 || 
+      fordContact.length() == 0 || fordPresenter.length() == 0 || director.length() == 0 || 
+      supplierCompany.length() == 0 || source.length() == 0) {
+        errors.add(new Error("Make sure all fields are filled out!"));
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    newTech.setCategory(category);
+    newTech.setTitle(title);
+    newTech.setDescription(description);
+    newTech.setType(type);
+    newTech.setShippingCity(shippingCity);
+    newTech.setShippingCountry(shippingCountry);
+    newTech.setFordContact(fordContact);
+    newTech.setFordPresenter(fordPresenter);
+    newTech.setDirector(director);
+    newTech.setSupplierCompany(supplierCompany);
+    newTech.setSource(source);
+
+    if(technologies.findByTitle(title) != null) {
+      errors.add(new Error("Entity with title " + title + " already exists!"));
+      return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
+    }
+
+    DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    Date date = new Date();
+    String currentDateTime = dateFormat.format(date);
+    newTech.setDateCreated(currentDateTime);
+    newTech.setLastModified(currentDateTime);
+
+    try {
+      technologies.save(newTech);
+    }
+    catch(Exception e) {
+      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // TODO: SEND CONFIRMATION EMAIL
+
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }

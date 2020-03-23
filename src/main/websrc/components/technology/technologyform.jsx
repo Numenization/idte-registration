@@ -5,7 +5,9 @@ import Header from '../header.jsx';
 import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import '../../css/styles.css';
+import '../../css/accounts.css';
 import Technology from '../../data/technologies.js';
+import ErrorTag from '../general/error.jsx';
 class TestPage extends React.Component {
   constructor(props) {
     super(props);
@@ -23,12 +25,17 @@ class TestPage extends React.Component {
       supplierCompany: '',
       categories: [],
       loading: false,
-      error: null
+      errors: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.postATech = this.postATech.bind(this);
     this.getTechCategories = this.getTechCategories.bind(this);
+    this.req = this.req.bind(this);
+    this.closeError = this.closeError.bind(this);
+    this.addError = this.addError.bind(this);
+    this.removeError = this.removeError.bind(this);
   }
+
   async getTechCategories() {
     this.setState({ loading: true });
 
@@ -44,9 +51,22 @@ class TestPage extends React.Component {
   }
 
   async postATech() {
-    await Technology.postTechnology(
-      Technology.createTechnologyObjectFromState(this.state)
-    );
+    for (let i = 0; i < this.state.errors.length; i++) {
+      this.removeError(0);
+    }
+    try {
+      await this.req(
+        'POST',
+        '/idte/technologies',
+        Technology.createTechnologyObjectFromState(this.state)
+      );
+    } catch (e) {
+      console.log(e.errors);
+      for (const error of e.errors) {
+        console.log(error);
+        this.addError(error);
+      }
+    }
   }
 
   handleChange(event) {
@@ -58,6 +78,61 @@ class TestPage extends React.Component {
       [name]: value
     });
   }
+
+  closeError(e) {
+    let error = e.target.parentNode.parentNode;
+    console.log(error);
+    let errorKey = error.id;
+
+    if (!errorKey) {
+      console.log('Key not set in error properly');
+      return;
+    }
+
+    this.removeError(errorKey);
+  }
+
+  addError(error) {
+    let newErrors = this.state.errors;
+    newErrors.push(error);
+
+    this.setState({ errors: newErrors });
+  }
+
+  removeError(errorKey) {
+    let newErrors = this.state.errors;
+    newErrors.splice(errorKey, 1);
+
+    this.setState({ errors: newErrors });
+  }
+
+  async req(method, url, opts = null) {
+    return new Promise(function(resolve, reject) {
+      let xhr = new XMLHttpRequest();
+      xhr.open(method, url);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function() {
+        if (this.status >= 200 && this.status < 300) {
+          resolve(xhr.response ? JSON.parse(xhr.response) : null);
+        } else {
+          reject({
+            status: this.status,
+            errors: xhr.response ? JSON.parse(xhr.response) : null
+          });
+        }
+      };
+      xhr.onerror = function() {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      };
+      xhr.send(JSON.stringify(opts));
+    }).catch(err => {
+      throw err;
+    });
+  }
+
   render() {
     const categories = this.state.categories;
     return (
@@ -72,6 +147,15 @@ class TestPage extends React.Component {
         </div>
 
         <div className='content'>
+          <div className='admin-form-errors'>
+            {this.state.errors.map((error, i) => {
+              return (
+                <ErrorTag onClose={this.closeError} key={i} index={i}>
+                  {error.message.replace(/ *\[[^)]*\] */g, '')}
+                </ErrorTag>
+              );
+            })}
+          </div>
           <div className='technology-form'>
             <h1>Technology Submission Form</h1>
             <p>Sample Text</p>
@@ -95,7 +179,13 @@ class TestPage extends React.Component {
                 <tr>
                   <td>
                     <span>*Technology Category:</span>
-                    <select id='category' name='category'>
+                    <select
+                      id='category'
+                      name='category'
+                      onChange={e => {
+                        this.setState({ category: e.target.value });
+                      }}
+                    >
                       <option disabled selected value>
                         -- select a category --
                       </option>

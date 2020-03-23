@@ -6,7 +6,6 @@ import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import '../../css/styles.css';
 import Attendee from '../../data/attendee.js'
-
 class FormPage extends React.Component {
   constructor(props){
     super(props);
@@ -14,7 +13,10 @@ class FormPage extends React.Component {
       type: "_"
     }
     this.getRegStatus = this.getRegStatus.bind(this);
+   
   }
+  
+
 
   async getRegStatus() {
     let res = await Attendee.req("GET", "/idte/getRegistrationStatus", this.state)
@@ -30,7 +32,7 @@ class FormPage extends React.Component {
 
   render() {
     return (
-      <div className='container'>
+      <div className='container' >
         <div className='background'>
           <img src={require('../../images/main.jpg')}></img>
         </div>

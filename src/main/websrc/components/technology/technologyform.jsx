@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import Header from '../header.jsx';
 import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import '../../css/styles.css';
 import Technology from "../../data/technologies.js";
+import Event from "../../data/changeregistration.js";
 class TestPage extends React.Component {
 constructor(props){
   super(props);
@@ -28,7 +29,18 @@ constructor(props){
   this.handleChange = this.handleChange.bind(this);
   this.postATech = this.postATech.bind(this);
   this.getTechCategories = this.getTechCategories.bind(this);
+
+  this.getTechStatus = this.getTechStatus.bind(this);
 }
+async getTechStatus(){
+  let k = await Event.getTechStatus();
+ if (k.status == "false"){
+  window.location.href = "http://localhost:8080/idte/index.html";
+  alert("Technology Submission is Closed.");
+ 
+ }
+} 
+
 async getTechCategories(){
   this.setState({loading: true});
 
@@ -61,7 +73,10 @@ handleChange() {
   render() {
     const categories = this.state.categories;
     return (
-      <div className='container'>
+      <div className='container' onLoad={async e => {
+        await this.getTechStatus();
+        
+      }}>
         <div className='background'>
           <img src={require('../../images/main.jpg')}></img>
         </div>

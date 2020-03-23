@@ -60,6 +60,61 @@ static async getRegStatus(opts = null){
       }
       return res;
 }
+static async getTechEnd(opts = null){
+  let url = "/idte/getTechEnd";
+  let method = "GET";
+  let currentComponent = this;
+  let res =  await currentComponent.req(method, url, opts);
+  if (res.statusText) {
+      return res;
+    }
+    return res;
+}
+
+static async getTechStart(opts = null){
+  let url = "/idte/getTechStart";
+  let method = "GET";
+  let currentComponent = this;
+  let res =  await currentComponent.req(method, url, opts);
+  if (res.statusText) {
+      return res;
+    }
+    return res;
+}
+static async getRegStart(opts = null){
+  let url = "/idte/getRegStart";
+  let method = "GET";
+  let currentComponent = this;
+  let res =  await currentComponent.req(method, url, opts);
+  if (res.statusText) {
+      return res;
+    }
+    return res;
+}
+static async getRegEnd(opts = null){
+  let url = "/idte/getRegEnd";
+  let method = "GET";
+  let currentComponent = this;
+  let res =  await currentComponent.req(method, url, opts);
+  if (res.statusText) {
+      return res;
+    }
+    return res;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 static async getEvents(opts = null) {
   let url = "/idte/admin/events/all";
   let method = "GET";

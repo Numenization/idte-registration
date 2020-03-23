@@ -1,12 +1,13 @@
 import React from 'react';
+import Event from '../data/changeregistration.js';
 
 class NavBar extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      showTechSub: true,
-      showReg: true,
+      showTechSub: false,
+      showReg: false,
       showAdmin: false
     };
 
@@ -14,11 +15,15 @@ class NavBar extends React.Component {
   }
 
   async componentDidMount() {
-    let role = await this.req('GET', '/idte/navbar');
-
-    if (role == 'ROLE_ADMIN') {
-      this.setState({ showAdmin: true });
-    }
+    (await this.req('GET', '/idte/navbar')) == 'ROLE_ADMIN'
+      ? this.setState({ showAdmin: true })
+      : this.setState({ showAdmin: false });
+    (await Event.getTechStatus()).status == 'true'
+      ? this.setState({ showTechSub: true })
+      : this.setState({ showTechSub: false });
+    (await Event.getRegStatus()).status == 'true'
+      ? this.setState({ showReg: true })
+      : this.setState({ showReg: false });
   }
 
   async req(method, url, opts = null) {
@@ -55,25 +60,30 @@ class NavBar extends React.Component {
       </li>
     ) : null;
 
+    const tech = this.state.showTechSub ? (
+      <li>
+        <a href='/idte/technologyform.html'>
+          Technology
+          <br />
+          Submission
+        </a>
+      </li>
+    ) : null;
+
+    const reg = this.state.showReg ? (
+      <li>
+        <a href='/idte/registration.html'>Register</a>
+      </li>
+    ) : null;
+
     return (
       <div className='navbar'>
         <ul>
           <li>
             <a href='/idte/index.html'>Home</a>
           </li>
-
-          <li>
-            <a href='/idte/technologyform.html'>
-              Technology
-              <br />
-              Submission
-            </a>
-          </li>
-
-          <li>
-            <a href='/idte/registration.html'>Register</a>
-          </li>
-
+          {tech}
+          {reg}
           <li>
             <a id='tiered' href='/idte/info.html'>
               Information

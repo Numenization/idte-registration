@@ -33,9 +33,11 @@ class TestPage extends React.Component {
     this.closeError = this.closeError.bind(this);
     this.addError = this.addError.bind(this);
     this.removeError = this.removeError.bind(this);
-  this.handleChange = this.handleChange.bind(this);
-  this.postATech = this.postATech.bind(this);
-  this.getTechCategories = this.getTechCategories.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.postATech = this.postATech.bind(this);
+    this.getTechCategories = this.getTechCategories.bind(this);
+  }
+
 
 async getTechStatus(){
   let k = await Event.getTechStatus();
@@ -48,10 +50,6 @@ async getTechStatus(){
 
 async getTechCategories(){
   this.setState({loading: true});
-
-  async getTechCategories() {
-    this.setState({ loading: true });
-
     var categories = await Technology.getCategories();
     if (categories.statusText) {
       this.setState({ error: categories.statusText, loading: false });

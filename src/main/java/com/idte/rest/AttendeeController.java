@@ -47,7 +47,6 @@ public class AttendeeController {
   @Autowired
   private PresenterRepository presenters;
 
-  // TODO: PROTECT ADMIN ROUTES
   // get all of either attendees, suppliers, or evaluators
   @GetMapping(path = "/admin/attendees/all")
   public Iterable<Attendee> findAllAttendees() {
@@ -342,7 +341,7 @@ public class AttendeeController {
 
   @PostMapping(path = "/attendees", consumes = "application/json", produces = "application/json")
   public Object submitRegistration(@RequestBody Map<String, String> json) {
-    // TODO: Set technologies and dates
+    // TODO: Set dates to attend and associated technologies on those dates, except for evaluators who only need dates
     Attendee newAttendee;
     List<Error> errors = new ArrayList<>();
     
@@ -476,7 +475,7 @@ public class AttendeeController {
     catch(Exception e) {
       return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
+
     // TODO: SEND CONFIRMATION EMAIL
 
     return new ResponseEntity<>(HttpStatus.OK);

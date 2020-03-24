@@ -14,10 +14,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.MessagingException;
 import org.springframework.util.Base64Utils;
 import java.io.File;
-import java.io.IOException;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
 

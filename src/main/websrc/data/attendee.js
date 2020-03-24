@@ -24,7 +24,7 @@ class Attendee {
   static async postSupplier(opts = null) {
     try {
       if (!opts) return;
-      let res = await Attendee.req('POST', '/idte/suppliers', opts);
+      let res = await Attendee.req('POST', '/idte/admin/suppliers', opts);
       return res;
     } catch (e) {
       console.log(e.request);
@@ -42,7 +42,7 @@ class Attendee {
   static async postEvaluator(opts = null) {
     try {
       if (!opts) return;
-      let res = await Attendee.req('POST', '/idte/evaluators', opts);
+      let res = await Attendee.req('POST', '/idte/admin/evaluators', opts);
       return res;
     } catch (e) {
       console.log(e.request);
@@ -60,7 +60,7 @@ class Attendee {
   static async postPresenter(opts = null) {
     try {
       if (!opts) return;
-      let res = await Attendee.req('POST', '/idte/presenters', opts);
+      let res = await Attendee.req('POST', '/idte/admin/presenters', opts);
       return res;
     } catch (e) {
       console.log(e.request);
@@ -78,7 +78,7 @@ class Attendee {
   static async updateAttendee(opts = null) {
     try {
       if (!opts) return;
-      let res = await Attendee.req('PUT', '/idte/attendees', opts);
+      let res = await Attendee.req('PUT', '/idte/admin/attendees', opts);
       return res;
     } catch (e) {
       console.log(e.request);
@@ -96,7 +96,7 @@ class Attendee {
   static async deleteAttendee(opts = null) {
     try {
       if (!opts) return;
-      let res = await Attendee.req('DELETE', '/idte/attendees', opts);
+      let res = await Attendee.req('DELETE', '/idte/admin/attendees', opts);
       return res;
     } catch (e) {
       console.log(e.request);
@@ -112,7 +112,7 @@ class Attendee {
   }
 
   static async getAllSuppliers(opts = null) {
-    let url = opts ? '/idte/suppliers/search' : '/idte/suppliers';
+    let url = opts ? '/idte/admin/suppliers/search' : '/idte/admin/suppliers';
     let method = opts ? 'POST' : 'GET';
     let res = await Attendee.req(method, url, opts);
     if (res.statusText) {
@@ -125,7 +125,7 @@ class Attendee {
   }
 
   static async getAllEvaluators(opts = null) {
-    let url = opts ? '/idte/evaluators/search' : '/idte/evaluators';
+    let url = opts ? '/idte/admin/evaluators/search' : '/idte/admin/evaluators';
     let method = opts ? 'POST' : 'GET';
     let res = await Attendee.req(method, url, opts);
     if (res.statusText) {
@@ -138,7 +138,7 @@ class Attendee {
   }
 
   static async getAllPresenters(opts = null) {
-    let url = opts ? '/idte/presenters/search' : '/idte/presenters';
+    let url = opts ? '/idte/admin/presenters/search' : '/idte/admin/presenters';
     let method = opts ? 'POST' : 'GET';
     let res = await Attendee.req(method, url, opts);
     if (res.statusText) {

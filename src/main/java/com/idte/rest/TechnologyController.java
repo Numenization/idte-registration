@@ -1,5 +1,6 @@
 package com.idte.rest;
 
+import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -107,7 +108,7 @@ public class TechnologyController {
   }
 
   @PutMapping(path = "/admin/technologies", consumes = "application/json", produces = "application/json")
-  public Object updateTechnology(@RequestBody Map<String, String> json) {
+  public Object updateTechnology(Principal principal, @RequestBody Map<String, String> json) {
     int testId = -1;
     try {
       testId = Integer.parseInt(json.get("id"));
@@ -191,6 +192,7 @@ public class TechnologyController {
       Date date = new Date();
       String currentDateTime = dateFormat.format(date);
       technology.setLastModified(currentDateTime);
+      technology.setModifiedBy(principal.getName());
 
       technologies.save(technology);
       return new ResponseEntity<>(HttpStatus.OK);

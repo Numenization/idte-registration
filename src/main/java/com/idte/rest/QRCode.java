@@ -23,8 +23,6 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import org.springframework.web.client.HttpClientErrorException.NotFound;
-
 public class QRCode
 {
     public static void main(String[] args) throws WriterException, IOException

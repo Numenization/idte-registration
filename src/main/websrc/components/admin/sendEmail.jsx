@@ -25,6 +25,7 @@ class SendEmail extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this)
         this.toggleFileInput = this.toggleFileInput.bind(this)
         this.fileInput = React.createRef()
+        this.hideInputs = this.hideInputs.bind(this);
     }
 
     async sendAnEmail() {
@@ -67,6 +68,7 @@ class SendEmail extends React.Component {
       }
       //check if there is attachment
       if (this.state.isShowing == false || this.fileInput.current.files[0] == null) {
+        this.hideInputs();
         document.getElementById('sending_msg').innerHTML 
                 = 'Sending email... '
         document.getElementById("loader").style.display = "inline";
@@ -74,6 +76,7 @@ class SendEmail extends React.Component {
         await Email.sendThatEmail(
           Email.createEmailObjectFromState(this.state)
         );
+        this.state.emailSent = true
       }
       else {
         
@@ -87,21 +90,26 @@ class SendEmail extends React.Component {
           return
         }
         else {
+          this.hideInputs();
           document.getElementById('sending_msg').innerHTML 
-                = 'Sending email with image attachment... '
-          document.getElementById("loader").style.display = "inline";
+                = 'Sending email with file attachment... '
+          document.getElementById("loader").style.display = "inline"
           this.state.fname = testFile.name
           await Email.uploadWithJSON(this.state, testFile)
+          this.state.emailSent = true
         }
         
       }
-
+      this.setState({emailSent: true})
       document.getElementById('sending_msg').innerHTML 
                 = 'Email sent '
-      document.getElementById('error_msg').innerHTML 
-      = ''
-      document.getElementById("loader").style.display = "none";
+      document.getElementById('error_msg').innerHTML = ''
+      document.getElementById("loader").style.display = "none"
     }// end sendAnEmail  
+
+    async hideInputs() {
+      document.getElementById('inputs').style.display = "none"
+    }
 
     handleInputChange() {
       //update state variables on change 
@@ -138,44 +146,56 @@ class SendEmail extends React.Component {
           <h1>Send an email</h1>
           <div>
             <form>
-              <label>Subject:
-                <input name='subject' type='text' value={this.subject} onChange={this.handleInputChange}/>
-              </label>
-              &emsp;
-              <label>To: 
-                <input name='to' type='text' value={this.to} onChange={this.handleInputChange}/>
-              </label>
-              <br/>
-              <label>Body: 
-                <textarea
-                  rows='4'
-                  cols='50'
-                  name='body'
-                  value={this.body}
-                  style={{ resize: 'none', width: '100%' }}
-                  onChange={this.handleInputChange}
-                ></textarea>
-              </label>
-              <br/>
-
-              <br/>
-              <div className='sendemail-buttons'>
-                <input className='email-button-style' type='button' value='Add attachment' onClick={this.toggleFileInput} ></input>
-                {
-                  this.state.isShowing?
-                  <div>
-                    <h4>Upload a File:</h4>
-                    <input className='email-button-style' type="file" name="file" value={this.file} onChange={this.handleInputChange} ref={this.fileInput}/> <br/><br/>
-                  </div>
-                  :null
-                }
-                <input className='email-button-style' style={{float: 'left'}} type="button" value="Send" onClick={this.sendAnEmail}/>
-                <div className='sending-status'>
-                  <label style={{float: 'left'}} id='sending_msg'/>
-                  <div className="loader" id="loader" style={{float: 'left', display: 'none'}}></div>
+              <div id='inputs'>
+                <label id='field_subject'>Subject:
+                  <input name='subject' type='text' value={this.subject} onChange={this.handleInputChange}/>
+                </label>
+                &emsp;
+                <label id='field_to'>To: 
+                  <input name='to' type='text' value={this.to} onChange={this.handleInputChange}/>
+                </label >
+                <br/>
+                <label id='field_body'>Body: 
+                  <textarea
+                    rows='4'
+                    cols='50'
+                    name='body'
+                    value={this.body}
+                    style={{ resize: 'none', width: '100%' }}
+                    onChange={this.handleInputChange}
+                  ></textarea>
+                </label><br/><br/>
+              
+                <div className='sendemail-buttons'>
+                  <input id='field_button' className='email-button-style' type='button' value='Add attachment' onClick={this.toggleFileInput} ></input>
+                  {
+                    this.state.isShowing?
+                    <div>
+                      <h4>Upload a File:</h4>
+                      <input id='field_fileup' className='email-button-style' type="file" name="file" value={this.file} onChange={this.handleInputChange} ref={this.fileInput}/> <br/><br/>
+                    </div>
+                    :null
+                  }
+                  <input className='email-button-style' style={{float: 'left'}} type="button" value="Send" onClick={this.sendAnEmail}/>
                 </div>
-                <label style={{ color: '#FF0000'}} id='error_msg'/>
               </div>
+
+              <div className='sending-status'>
+                <label id='sending_msg'/>
+                <div className="loader" id="loader" style={{ display: 'none'}}></div>
+              </div>
+              <label style={{ color: '#FF0000'}} id='error_msg'/>
+
+              {
+                this.state.emailSent?
+                <div className='sendemail-buttons'>
+                  <a className='email-button-style' href="sendemail.html">Send another</a>
+                  <a className='email-button-style' href="admin.html" >Back</a>
+                </div>
+                :null
+              }
+              
+              
             </form>
           </div>
         </div>

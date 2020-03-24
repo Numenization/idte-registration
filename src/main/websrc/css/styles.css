@@ -457,6 +457,10 @@ input {
   flex-direction: column;
 }
 
+.registration-form label {
+  margin: 0.5em 0 0 0;
+}
+
 .registration-form button {
   padding: 0.2em 0;
   margin: 0.5em 0;
@@ -743,6 +747,8 @@ a {
 }
 
 .sending-status {
+  display: inline-flex;
   margin: 0 auto;
-  text-align: center;
+  width: 60%;
+  text-align: match-parent;
 }

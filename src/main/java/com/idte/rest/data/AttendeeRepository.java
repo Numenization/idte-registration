@@ -11,6 +11,7 @@ import com.idte.rest.data.Attendee;
 @RepositoryRestResource(exported = false)
 public interface AttendeeRepository extends JpaRepository<Attendee, String> {
   List<Attendee> findAll(Specification<Attendee> spec);
+  Attendee findByEmail(String title);
 
   public static Specification<Attendee> containsTextInAttributes(String text, List<String> attributes) {
     if (!text.contains("%")) {

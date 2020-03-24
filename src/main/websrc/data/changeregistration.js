@@ -60,6 +60,64 @@ static async getRegStatus(opts = null){
       }
       return res;
 }
+static async getTechEnd(opts = null){
+  let url = "/idte/getTechEnd";
+  let method = "GET";
+  let currentComponent = this;
+  let res =  await currentComponent.req(method, url, opts);
+  if (res.statusText) {
+      return res;
+    }
+    return res;
+}
+
+static async getTechStart(opts = null){
+  let url = "/idte/getTechStart";
+  let method = "GET";
+  let currentComponent = this;
+  let res =  await currentComponent.req(method, url, opts);
+  if (res.statusText) {
+      return res;
+    }
+    return res;
+}
+static async getRegStart(opts = null){
+  let url = "/idte/getRegStart";
+  let method = "GET";
+  let currentComponent = this;
+  let res =  await currentComponent.req(method, url, opts);
+  if (res.statusText) {
+      return res;
+    }
+    return res;
+}
+static async getRegEnd(opts = null){
+  let url = "/idte/getRegEnd";
+  let method = "GET";
+  let currentComponent = this;
+  let res =  await currentComponent.req(method, url, opts);
+  if (res.statusText) {
+      return res;
+    }
+    return res;
+}
+
+static updateObjectFromState(state = null) {
+  if (!state) return;
+  var event = {
+    registrationStart: state.registrationStart,
+    registrationEnd: state.registrationEnd,
+    techSubStart: state.techSubStart,
+    techSubEnd: state.techSubEnd
+  };
+
+  for (let [key, val] of Object.entries(event)) {
+    if (val === undefined) event[key] = null;
+  }
+
+  return event;
+}
+
 static async getEvents(opts = null) {
   let url = "/idte/admin/events/all";
   let method = "GET";
@@ -69,6 +127,29 @@ static async getEvents(opts = null) {
   }
   return res;
 }
+
+static async updateEvent(opts = null) {
+  try {
+    if (!opts) return;
+    let res = await ChangeRegistration.req(
+      "PUT",
+      "/idte/admin/updateDates",
+      opts
+    );
+    return res;
+  } catch (e) {
+    console.log(e.request);
+    alert(
+      "Error: " +
+        e.status +
+        "\n" +
+        e.statusText +
+        "\n" +
+        "Event not found"
+    );
+  }
+}
+
 static async deleteEvent(opts = null) {
   try {
     if (!opts) return;

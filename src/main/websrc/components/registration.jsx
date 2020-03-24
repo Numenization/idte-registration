@@ -6,6 +6,7 @@ import NavBar from './navbar.jsx';
 import Footer from './footer.jsx';
 import '../css/styles.css';
 import RegStatus from '../data/regStatus.js';
+import Event from "../data/changeregistration.js";
 
 class RegistrationPage extends React.Component {
   constructor(props){
@@ -14,8 +15,16 @@ class RegistrationPage extends React.Component {
       type: ""
     }
     this.submitSupp = this.submitSupp.bind(this);
+    this.isRegOpen = this.isRegOpen.bind(this);
   }
-
+  async isRegOpen(){
+    let k = await Event.getRegStatus();
+   if (k.status == "false"){
+    window.location.href = "http://localhost:8080/idte/index.html";
+    alert("Registration is Closed.");
+   
+   }
+  } 
   async submitSupp(regtype){
     this.setState({type: regtype})
     let requestbody = {
@@ -37,7 +46,10 @@ class RegistrationPage extends React.Component {
 
   render() {
     return (
-      <div className='container'>
+      <div className='container'onLoad={async e => {
+        await this.isRegOpen();
+        
+      }}>
         <div className='background'>
           <img src={require('../images/main.jpg')}></img>
         </div>

@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import Header from '../header.jsx';
 import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import '../../css/styles.css';
-import '../../css/accounts.css';
-import Technology from '../../data/technologies.js';
-import ErrorTag from '../general/error.jsx';
+import Technology from "../../data/technologies.js";
+import Event from "../../data/changeregistration.js";
 class TestPage extends React.Component {
   constructor(props) {
     super(props);
@@ -34,11 +33,23 @@ class TestPage extends React.Component {
     this.closeError = this.closeError.bind(this);
     this.addError = this.addError.bind(this);
     this.removeError = this.removeError.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.postATech = this.postATech.bind(this);
+    this.getTechCategories = this.getTechCategories.bind(this);
   }
 
-  async getTechCategories() {
-    this.setState({ loading: true });
 
+async getTechStatus(){
+  let k = await Event.getTechStatus();
+ if (k.status == "false"){
+  window.location.href = "http://localhost:8080/idte/index.html";
+  alert("Technology Submission is Closed.");
+ 
+ }
+} 
+
+async getTechCategories(){
+  this.setState({loading: true});
     var categories = await Technology.getCategories();
     if (categories.statusText) {
       this.setState({ error: categories.statusText, loading: false });
@@ -136,7 +147,10 @@ class TestPage extends React.Component {
   render() {
     const categories = this.state.categories;
     return (
-      <div className='container'>
+      <div className='container' onLoad={async e => {
+        await this.getTechStatus();
+        
+      }}>
         <div className='background'>
           <img src={require('../../images/main.jpg')}></img>
         </div>

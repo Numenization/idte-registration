@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import Header from '../header.jsx';
 import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import '../../css/styles.css';
-import Technology from "../../data/technologies.js";
-import Event from "../../data/changeregistration.js";
+import Technology from '../../data/technologies.js';
+import Event from '../../data/changeregistration.js';
 class TestPage extends React.Component {
   constructor(props) {
     super(props);
@@ -38,18 +37,16 @@ class TestPage extends React.Component {
     this.getTechCategories = this.getTechCategories.bind(this);
   }
 
+  async getTechStatus() {
+    let k = await Event.getTechStatus();
+    if (k.status == 'false') {
+      window.location.href = 'http://localhost:8080/idte/index.html';
+      alert('Technology Submission is Closed.');
+    }
+  }
 
-async getTechStatus(){
-  let k = await Event.getTechStatus();
- if (k.status == "false"){
-  window.location.href = "http://localhost:8080/idte/index.html";
-  alert("Technology Submission is Closed.");
- 
- }
-} 
-
-async getTechCategories(){
-  this.setState({loading: true});
+  async getTechCategories() {
+    this.setState({ loading: true });
     var categories = await Technology.getCategories();
     if (categories.statusText) {
       this.setState({ error: categories.statusText, loading: false });
@@ -71,6 +68,7 @@ async getTechCategories(){
         '/idte/technologies',
         Technology.createTechnologyObjectFromState(this.state)
       );
+      window.location.href = 'http://localhost:8080/idte/index.html';
     } catch (e) {
       console.log(e.errors);
       for (const error of e.errors) {
@@ -147,10 +145,12 @@ async getTechCategories(){
   render() {
     const categories = this.state.categories;
     return (
-      <div className='container' onLoad={async e => {
-        await this.getTechStatus();
-        
-      }}>
+      <div
+        className='container'
+        onLoad={async e => {
+          await this.getTechStatus();
+        }}
+      >
         <div className='background'>
           <img src={require('../../images/main.jpg')}></img>
         </div>

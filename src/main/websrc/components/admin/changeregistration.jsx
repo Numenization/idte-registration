@@ -141,13 +141,13 @@ Event.updateObjectFromState(this.state)
             </button>
             <br></br>
             <br></br>
-            <label>Reg. Start Date:<label id="regStart"></label></label> <input name = 'registrationStart' type='text' value={this.registrationStart} onChange={this.handleChange}></input>
+            <label>Reg. Start Date:<label id="regStart"></label></label> <input name = 'registrationStart' type='date' value={this.registrationStart} onChange={this.handleChange}></input>
             <br></br>
-            <label>Reg. End Date:<label id="regEnd"></label></label> <input name = 'registrationEnd' type='text' value={this.registrationEnd} onChange={this.handleChange}></input>
+            <label>Reg. End Date:<label id="regEnd"></label></label> <input name = 'registrationEnd' type='date' value={this.registrationEnd} onChange={this.handleChange}></input>
             <br></br>
-            <label>Tech. Sub. Start Date:<label id="techStart"></label></label> <input name = 'techSubStart' type='text' value={this.techSubStart} onChange={this.handleChange}></input>
+            <label>Tech. Sub. Start Date:<label id="techStart"></label></label> <input name = 'techSubStart' type='date' value={this.techSubStart} onChange={this.handleChange}></input>
             <br></br>
-            <label>Tech. Sub. Start Date:<label id="techEnd"></label></label> <input name = 'techSubEnd' type='text' value={this.techSubEnd} onChange={this.handleChange}></input>
+            <label>Tech. Sub. Start Date:<label id="techEnd"></label></label> <input name = 'techSubEnd' type='date' value={this.techSubEnd} onChange={this.handleChange}></input>
             <br></br>
             <div className = 'submit'>
               <button onClick={

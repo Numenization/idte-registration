@@ -6,7 +6,16 @@ class Event {
         registrationStart: state.registrationStart,
         registrationEnd: state.registrationEnd,
         techSubStart: state.techSubStart,
-        techSubEnd: state.techSubEnd
+        techSubEnd: state.techSubEnd,
+        setUpOne: state.setUpOne,
+        setUpTwo: state.setUpTwo,
+        setUpThree: state.setUpThree,
+        dryRun: state.dryRun,
+        eventDayOne: state.eventDayOne,
+        eventDayTwo: state.eventDayTwo,
+        eventDayThree: state.eventDayThree,
+        eventDayFour: state.eventDayFour,
+        eventDayFive: state.eventDayFive
       };
   
       for (let [key, val] of Object.entries(event)) {

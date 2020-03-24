@@ -59,6 +59,7 @@ render(){
                       <td width="110px"><b>Tech. Sub. End</b></td> 
                       <td width="80px"><b>Reg. Status</b></td> 
                       <td width="80px"><b>Tech. Status</b></td> 
+                      <td width="80px"><b>Event Dates</b></td> 
                       <td width="80px"><b>Current Event</b></td> 
                       <td width="110px"><b>Event ID</b></td> 
                       </table>
@@ -77,6 +78,7 @@ render(){
                       <td width="110px">{event.technologyEnd}</td>
                       <td width="80px">{event.registrationStatus.toString()}</td>
                       <td width="80px">{event.technologyStatus.toString()}</td>
+                      <td width="80px">{event.eventDates}</td>
                       <td width="80px">{event.currentEvent.toString()}</td> 
                       <td width="180px">{event.eventID}</td> 
                       <button id= "link-button" 

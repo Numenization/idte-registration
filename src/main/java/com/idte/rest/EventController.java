@@ -32,18 +32,48 @@ public class EventController{
     
     @PostMapping(path = "/admin/events", consumes = "application/json", produces = "application/json")
     public Object postEvent(@RequestBody Map <String, String> json){
+    Event event = new Event();
     String registrationStart = json.get("registrationStart");
     String registrationEnd = json.get("registrationEnd");
     String techSubStart = json.get("techSubStart");
     String techSubEnd = json.get("techSubEnd");
     
-    Event event = new Event();
+    String setUpOne = event.formatConverter(json.get("setUpOne"));
+    String setUpTwo= event.formatConverter(json.get("setUpTwo"));
+    String setUpThree= event.formatConverter(json.get("setUpThree"));
+    String dryRun= event.formatConverter(json.get("dryRun"));
+    String eventDayOne= event.formatConverter(json.get("eventDayOne"));
+    String eventDayTwo= event.formatConverter(json.get("eventDayTwo"));
+    String eventDayThree= event.formatConverter(json.get("eventDayThree"));
+    String eventDayFour= event.formatConverter(json.get("eventDayFour"));
+    String eventDayFive= event.formatConverter(json.get("eventDayFive"));
+    
+    System.out.println(setUpOne);
+    System.out.println(setUpTwo);
+    System.out.println(setUpThree);
+    System.out.println(dryRun);
+    System.out.println(eventDayOne);
+    System.out.println(eventDayTwo);
+    System.out.println(eventDayThree);
+    System.out.println(eventDayFour);
+    System.out.println(eventDayFive);
+
     event.setEventID(event.GenerateKey());
     event.setRegistrationDates(registrationStart, registrationEnd);
     event.setTechnologyDates(techSubStart, techSubEnd);
     event.setRegStatus(false);
-    event.setTechStatus(false);    
-   
+    event.setTechStatus(false);
+    event.setEventDates(String.join(",",
+     setUpOne,
+     setUpTwo,
+     setUpThree,
+     dryRun,
+     eventDayOne,
+     eventDayTwo,
+     eventDayThree,
+     eventDayFour,
+     eventDayFive
+     ));
     try {
         return new ResponseEntity<>(events.save(event), HttpStatus.CREATED);
     }

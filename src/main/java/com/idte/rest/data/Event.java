@@ -1,4 +1,6 @@
 package com.idte.rest.data;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Random;
 
 import javax.persistence.Entity;
@@ -21,7 +23,9 @@ public class Event{
     protected String technologyEndDate;
     protected boolean registrationStatus;
     protected boolean technologyStatus;
+    protected String eventDates;
     protected boolean currentEvent = true;
+    
     
    // protected List<String> eventDates = new ArrayList<String>();
    
@@ -60,6 +64,12 @@ public class Event{
   public boolean getCurrentEvent(){
     return currentEvent;
   }
+  public String getEventDates(){
+    return eventDates;
+  }
+  public void setEventDates(String dates){
+    eventDates = dates;
+  }
   public void setRegStatus(boolean status){
     registrationStatus = status;
   }
@@ -76,64 +86,44 @@ public class Event{
   public void changeTechStatus(){
     technologyStatus = !technologyStatus;
   }
-  
+  public String formatConverter(String dtc){
+    SimpleDateFormat original = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat newSDF = new SimpleDateFormat("MM-dd-yyyy");
 
-    // Set functions take in strings for now- previous code still commented out when parameters were of type Date. 
-    // Need to work out why parse function gives error, after functions will return to using variables of type Date, and not String.
-    public void setRegistrationDates(String firstDay, String lastDay){
-      /*
-      DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");  
-      String strDate = dateFormat.format(firstDay);
-      String lastDate = dateFormat.format(lastDay);  
-        registrationStartDate = strDate;
-        registrationEndDate = lastDate;
-
-
-        //-----Getting list of days WIP
-        /*
-        Calendar c = Calendar.getInstance();
-        
-        try{
-          SimpleDateFormat.getInstance();
-          c.setTime(SimpleDateFormat.parse(strDate));
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-       
-        while (!strDate.equals(lastDate) {  
-          strDate = dateFormat.format(c.getTime());
-          eventDates.add(strDate);
-          c.add(Calendar.DATE, 1);  // number of days to add 
-         }
-          */
-
-         registrationStartDate = firstDay;
-         registrationEndDate = lastDay;
-
+    try{
+      String newDate = newSDF.format(original.parse(dtc));
+      return newDate;
     }
-    public void setTechnologyDates(String firstDay, String lastDay){
-      /*
-     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");  
-     String strDate = dateFormat.format(firstDay);
-     String lastDate = dateFormat.format(lastDay);  
-        technologyStartDate = strDate;
-        technologyEndDate = lastDate;
-        */
-
-        technologyStartDate = firstDay;
-        technologyEndDate =  lastDay;
+    catch (ParseException e) {
+      e.printStackTrace();
+      return "null";
     }
-/*
-    public Date stringToDates(String Day){
-
-      SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyyy");
-      Date date = formatter.parse(date);
-      return (date);
-
+    
+  }
+  public void setRegistrationDates(String firstDay, String lastDay){
+    SimpleDateFormat original = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat newSDF = new SimpleDateFormat("MM-dd-yyyy");
+      try {
+          String newStart = newSDF.format(original.parse(firstDay));
+          String newEnd = newSDF.format(original.parse(lastDay));
+          registrationStartDate = newStart;
+          registrationEndDate = newEnd;
+      } catch (ParseException e) {
+        e.printStackTrace();
       }
-*/
-
+  }
+  public void setTechnologyDates(String firstDay, String lastDay){
+      SimpleDateFormat original = new SimpleDateFormat("yyyy-MM-dd");
+      SimpleDateFormat newSDF = new SimpleDateFormat("MM-dd-yyyy");
+      try {
+          String newStart = newSDF.format(original.parse(firstDay));
+          String newEnd = newSDF.format(original.parse(lastDay));
+          technologyStartDate = newStart;
+         technologyEndDate = newEnd;
+      } catch (ParseException e) {
+          e.printStackTrace();
+      }
+  }
 
     public String GenerateKey(){
       

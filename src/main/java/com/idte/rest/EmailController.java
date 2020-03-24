@@ -22,7 +22,6 @@ import java.io.FileOutputStream;
 public class EmailController {
   @Autowired
   private JavaMailSender javaMailSender;
-  // TODO: PROTECT ADMIN ROUTES
 
   @PostMapping(path = "/admin/email", consumes = "application/json", produces = "application/json")
   public void sendEmail(@RequestBody Map<String, String> json) {

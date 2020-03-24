@@ -3,6 +3,7 @@ package com.idte.rest;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -46,24 +47,23 @@ public class AttendeeController {
   @Autowired
   private PresenterRepository presenters;
 
-  // TODO: PROTECT ADMIN ROUTES
   // get all of either attendees, suppliers, or evaluators
-  @GetMapping(path = "/attendees/all")
+  @GetMapping(path = "/admin/attendees/all")
   public Iterable<Attendee> findAllAttendees() {
     return attendees.findAll();
   }
 
-  @GetMapping(path = "/suppliers")
+  @GetMapping(path = "/admin/suppliers")
   public Iterable<Supplier> findAllSuppliers() {
     return suppliers.findAll();
   }
 
-  @GetMapping(path = "/evaluators")
+  @GetMapping(path = "/admin/evaluators")
   public Iterable<Evaluator> findAllEvaluators() {
     return evaluators.findAll();
   }
 
-  @GetMapping(path = "/presenters")
+  @GetMapping(path = "/admin/presenters")
   public Iterable<Presenter> findAllPresenters() {
     return presenters.findAll();
   }
@@ -72,7 +72,7 @@ public class AttendeeController {
   // number, city, company, or country
   // due to incorrect implementation of javascripts XHRHttpRequest, this has to be
   // a POST mapping, otherwise we cant have a body
-  @PostMapping(path = "/suppliers/search")
+  @PostMapping(path = "/admin/suppliers/search")
   public Object findSuppliers(@RequestBody Map<String, String> json) {
 
     String search = json.get("search");
@@ -88,7 +88,7 @@ public class AttendeeController {
   // number, city, or country
   // due to incorrect implementation of javascripts XHRHttpRequest, this has to be
   // a POST mapping, otherwise we cant have a body
-  @PostMapping(path = "/evaluators/search")
+  @PostMapping(path = "/admin/evaluators/search")
   public Object findEvaluators(@RequestBody Map<String, String> json) {
 
     String search = json.get("search");
@@ -104,7 +104,7 @@ public class AttendeeController {
   // number, city, or country
   // due to incorrect implementation of javascripts XHRHttpRequest, this has to be
   // a POST mapping, otherwise we cant have a body
-  @PostMapping(path = "/presenters/search")
+  @PostMapping(path = "/admin/presenters/search")
   public Object findPresenters(@RequestBody Map<String, String> json) {
 
     String search = json.get("search");
@@ -117,7 +117,7 @@ public class AttendeeController {
   }
 
   // create a new supplier
-  @PostMapping(path = "/suppliers", consumes = "application/json", produces = "application/json")
+  @PostMapping(path = "/admin/suppliers", consumes = "application/json", produces = "application/json")
   public Object createSupplier(@RequestBody Supplier attendee) {
     // extract request info into new supplier object
     Supplier newAttendee = Supplier.from(attendee);
@@ -148,7 +148,7 @@ public class AttendeeController {
   }
 
   // create a new evaluator
-  @PostMapping(path = "/evaluators", consumes = "application/json", produces = "application/json")
+  @PostMapping(path = "/admin/evaluators", consumes = "application/json", produces = "application/json")
   public Object createEvaluator(@RequestBody Evaluator attendee) {
     // extract request info into new supplier object
     Evaluator newAttendee = Evaluator.from(attendee);
@@ -179,7 +179,7 @@ public class AttendeeController {
   }
 
   // create a new presenter
-  @PostMapping(path = "/presenters", consumes = "application/json", produces = "application/json")
+  @PostMapping(path = "/admin/presenters", consumes = "application/json", produces = "application/json")
   public Object createPresenter(@RequestBody Presenter attendee) {
     // extract request info into new supplier object
     Presenter newAttendee = Presenter.from(attendee);
@@ -210,7 +210,7 @@ public class AttendeeController {
   }
 
   // update an attendees fields in the database
-  @PutMapping(path = "/attendees")
+  @PutMapping(path = "/admin/attendees")
   public Object updateAttendee(Principal principal, @RequestBody Map<String, String> json) {
     // no matter what, we need the original email of the attendee to perform this
     // update
@@ -319,7 +319,7 @@ public class AttendeeController {
   }
 
   // delete an attendee from the database
-  @DeleteMapping(path = "/attendees")
+  @DeleteMapping(path = "/admin/attendees")
   public Object delete(@RequestBody Map<String, String> json) {
     // try to find the requested user to delete
     Attendee find = new Attendee();
@@ -336,6 +336,148 @@ public class AttendeeController {
 
     // we found it so lets delete it
     attendees.delete(attendee);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @PostMapping(path = "/attendees", consumes = "application/json", produces = "application/json")
+  public Object submitRegistration(@RequestBody Map<String, String> json) {
+    // TODO: Set dates to attend and associated technologies on those dates, except for evaluators who only need dates
+    Attendee newAttendee;
+    List<Error> errors = new ArrayList<>();
+    
+    String type = json.get("type");
+    String firstName = json.get("firstName");
+    String lastName = json.get("lastName");
+    String nickname = json.get("nickname");
+    String email = json.get("email");
+    String phone = json.get("phone");
+    String cell = json.get("cell");
+    String company = json.get("company");
+    String city = json.get("city");
+    String country = json.get("country");
+
+    if(email == null || firstName == null || lastName == null ||
+      email.length() == 0 || firstName.length() == 0 ||
+      lastName.length() == 0) {
+      errors.add(new Error("Make sure all required fields are filled out!"));
+      return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    if(type == null || type == "_") {
+      errors.add(new Error("Missing type in registration!"));
+      return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    } else if(type == "supplier") {
+      newAttendee = new Supplier();
+
+      // set general fields
+      newAttendee.setEmail(email);
+      newAttendee.setFirstName(firstName);
+      newAttendee.setLastName(lastName);
+      
+      // set optional fields
+      if(phone != null) {
+        newAttendee.setPhoneNumber(phone);
+      }
+      if(cell != null) {
+        newAttendee.setCellNumber(cell);
+      }
+      if(nickname != null) {
+        newAttendee.setNickname(nickname);
+      }
+
+      // set supplier specific fields
+      if(city == null || country == null || company == null ||
+        city.length() == 0 || country.length() == 0 || company.length() == 0) {
+        errors.add(new Error("Make sure all required fields are filled out!"));
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+      }
+
+      newAttendee.setCity(city);
+      newAttendee.setCountry(country);
+      ((Supplier)newAttendee).setCompany(company);
+    } else if(type == "presenter") {
+      newAttendee = new Presenter();
+
+      // set general fields
+      newAttendee.setEmail(email);
+      newAttendee.setFirstName(firstName);
+      newAttendee.setLastName(lastName);
+
+      // set optional fields
+      if(phone != null) {
+        newAttendee.setPhoneNumber(phone);
+      }
+      if(cell != null) {
+        newAttendee.setCellNumber(cell);
+      }
+      if(nickname != null) {
+        newAttendee.setNickname(nickname);
+      }
+
+      // set presenter specific fields
+      if(city == null || country == null || 
+        city.length() == 0 || country.length() == 0) {
+        errors.add(new Error("Make sure all required fields are filled out!"));
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+      }
+
+      newAttendee.setCity(city);
+      newAttendee.setCountry(country);
+    } else if(type == "evaluator") {
+      newAttendee = new Evaluator();
+
+      // set general fields
+      newAttendee.setEmail(email);
+      newAttendee.setFirstName(firstName);
+      newAttendee.setLastName(lastName);
+
+      // set optional fields
+      if(phone != null) {
+        newAttendee.setPhoneNumber(phone);
+      }
+      if(cell != null) {
+        newAttendee.setCellNumber(cell);
+      }
+      if(nickname != null) {
+        newAttendee.setNickname(nickname);
+      }
+
+      // set presenter specific fields
+      if(city == null || country == null || 
+        city.length() == 0 || country.length() == 0) {
+        errors.add(new Error("Make sure all required fields are filled out!"));
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+      }
+
+      newAttendee.setCity(city);
+      newAttendee.setCountry(country);
+    } else {
+      errors.add(new Error("Unrecognized registration type!"));
+      return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    if(attendees.findByEmail(email) != null) {
+      errors.add(new Error("Registration with email " + email + " already exists!"));
+      return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
+    }
+
+    try {
+      if(type == "supplier") {
+        suppliers.save((Supplier)newAttendee);
+      } else if(type == "presenter") {
+        presenters.save((Presenter)newAttendee);
+      } else if(type == "evaluator") {
+        evaluators.save((Evaluator)newAttendee);
+      } else {
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      }
+    }
+    catch(Exception e) {
+      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // TODO: SEND CONFIRMATION EMAIL
+
     return new ResponseEntity<>(HttpStatus.OK);
   }
 

@@ -235,74 +235,52 @@ public class EventController {
     }
   }
 
-@PutMapping(path = "/admin/updateDates")
-public Object updateDates(@RequestBody Map<String, String> json){
+  @PutMapping(path = "/admin/updateDates")
+  public Object updateDates(@RequestBody Map<String, String> json) {
 
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
     Event event = events.findOne(example).orElse(null);
 
-    if (event == null){
-        testEvent.setTechStatus(true);
+    if (event == null) {
+      testEvent.setTechStatus(true);
+      example = Example.of(testEvent);
+      event = events.findOne(example).orElse(null);
+      if (event == null) {
+        testEvent.setRegStatus(true);
+        testEvent.setTechStatus(false);
         example = Example.of(testEvent);
         event = events.findOne(example).orElse(null);
-        if (event == null){
+        if (event == null) {
           testEvent.setRegStatus(true);
-          testEvent.setTechStatus(false);
+          testEvent.setTechStatus(true);
           example = Example.of(testEvent);
           event = events.findOne(example).orElse(null);
-          if (event == null){
-              testEvent.setRegStatus(true);
-              testEvent.setTechStatus(true);
-              example = Example.of(testEvent);
-              event = events.findOne(example).orElse(null);
-              if (event == null){
-                  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-              }
+          if (event == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
           }
-        }   
+        }
+      }
     }
     String registrationStart = json.get("registrationStart");
     String registrationEnd = json.get("registrationEnd");
     String techSubStart = json.get("techSubStart");
     String techSubEnd = json.get("techSubEnd");
-  boolean changes = false;
-  
-  event.setRegistrationDates(registrationStart, registrationEnd);
-  event.setTechnologyDates(techSubStart, techSubEnd);
-  changes = true;
-  if (changes){
+    boolean changes = false;
+
+    event.setRegistrationDates(registrationStart, registrationEnd);
+    event.setTechnologyDates(techSubStart, techSubEnd);
+    changes = true;
+    if (changes) {
       events.save(event);
       return new ResponseEntity<>(HttpStatus.OK);
-  }
-  else {
+    } else {
       return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
   }
-}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@GetMapping(path = "/getTechValue")
-public Object getTechValue(){
+  @GetMapping(path = "/getTechValue")
+  public Object getTechValue() {
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
     Event event = events.findOne(example).orElse(null);
@@ -332,141 +310,142 @@ public Object getTechValue(){
     map.put("status", Boolean.toString(value));
 
     return map;
-}
-@GetMapping(path = "/getTechEnd")
-public Object getTechEnd(){
+  }
+
+  @GetMapping(path = "/getTechEnd")
+  public Object getTechEnd() {
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
     Event event = events.findOne(example).orElse(null);
 
-    if (event == null){
-        testEvent.setTechStatus(true);
+    if (event == null) {
+      testEvent.setTechStatus(true);
+      example = Example.of(testEvent);
+      event = events.findOne(example).orElse(null);
+      if (event == null) {
+        testEvent.setRegStatus(true);
+        testEvent.setTechStatus(false);
         example = Example.of(testEvent);
         event = events.findOne(example).orElse(null);
-        if (event == null){
+        if (event == null) {
           testEvent.setRegStatus(true);
-          testEvent.setTechStatus(false);
+          testEvent.setTechStatus(true);
           example = Example.of(testEvent);
           event = events.findOne(example).orElse(null);
-          if (event == null){
-              testEvent.setRegStatus(true);
-              testEvent.setTechStatus(true);
-              example = Example.of(testEvent);
-              event = events.findOne(example).orElse(null);
-              if (event == null){
-                  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-              }
+          if (event == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
           }
-        }   
+        }
+      }
     }
-    String date = event.getTechnologyEnd(); 
-    Map<String,String> map=new HashMap<String,String>();
+    String date = event.getTechnologyEnd();
+    Map<String, String> map = new HashMap<String, String>();
     map.put("date", date);
 
     return map;
-}
+  }
 
-@GetMapping(path = "/getTechStart")
-public Object getTechStart(){
+  @GetMapping(path = "/getTechStart")
+  public Object getTechStart() {
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
     Event event = events.findOne(example).orElse(null);
 
-    if (event == null){
-        testEvent.setTechStatus(true);
+    if (event == null) {
+      testEvent.setTechStatus(true);
+      example = Example.of(testEvent);
+      event = events.findOne(example).orElse(null);
+      if (event == null) {
+        testEvent.setRegStatus(true);
+        testEvent.setTechStatus(false);
         example = Example.of(testEvent);
         event = events.findOne(example).orElse(null);
-        if (event == null){
+        if (event == null) {
           testEvent.setRegStatus(true);
-          testEvent.setTechStatus(false);
+          testEvent.setTechStatus(true);
           example = Example.of(testEvent);
           event = events.findOne(example).orElse(null);
-          if (event == null){
-              testEvent.setRegStatus(true);
-              testEvent.setTechStatus(true);
-              example = Example.of(testEvent);
-              event = events.findOne(example).orElse(null);
-              if (event == null){
-                  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-              }
+          if (event == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
           }
-        }   
+        }
+      }
     }
-    String date = event.getTechnologyStart(); 
-    Map<String,String> map=new HashMap<String,String>();
+    String date = event.getTechnologyStart();
+    Map<String, String> map = new HashMap<String, String>();
     map.put("date", date);
 
     return map;
-}
+  }
 
-@GetMapping(path = "/getRegStart")
-public Object getRegStart(){
+  @GetMapping(path = "/getRegStart")
+  public Object getRegStart() {
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
     Event event = events.findOne(example).orElse(null);
 
-    if (event == null){
-        testEvent.setTechStatus(true);
+    if (event == null) {
+      testEvent.setTechStatus(true);
+      example = Example.of(testEvent);
+      event = events.findOne(example).orElse(null);
+      if (event == null) {
+        testEvent.setRegStatus(true);
+        testEvent.setTechStatus(false);
         example = Example.of(testEvent);
         event = events.findOne(example).orElse(null);
-        if (event == null){
+        if (event == null) {
           testEvent.setRegStatus(true);
-          testEvent.setTechStatus(false);
+          testEvent.setTechStatus(true);
           example = Example.of(testEvent);
           event = events.findOne(example).orElse(null);
-          if (event == null){
-              testEvent.setRegStatus(true);
-              testEvent.setTechStatus(true);
-              example = Example.of(testEvent);
-              event = events.findOne(example).orElse(null);
-              if (event == null){
-                  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-              }
+          if (event == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
           }
-        }   
+        }
+      }
     }
-    String date = event.getRegistrationStart(); 
-    Map<String,String> map=new HashMap<String,String>();
+    String date = event.getRegistrationStart();
+    Map<String, String> map = new HashMap<String, String>();
     map.put("date", date);
 
     return map;
-}
+  }
 
-@GetMapping(path = "/getRegEnd")
-public Object getRegEnd(){
+  @GetMapping(path = "/getRegEnd")
+  public Object getRegEnd() {
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
     Event event = events.findOne(example).orElse(null);
 
-    if (event == null){
-        testEvent.setTechStatus(true);
+    if (event == null) {
+      testEvent.setTechStatus(true);
+      example = Example.of(testEvent);
+      event = events.findOne(example).orElse(null);
+      if (event == null) {
+        testEvent.setRegStatus(true);
+        testEvent.setTechStatus(false);
         example = Example.of(testEvent);
         event = events.findOne(example).orElse(null);
-        if (event == null){
+        if (event == null) {
           testEvent.setRegStatus(true);
-          testEvent.setTechStatus(false);
+          testEvent.setTechStatus(true);
           example = Example.of(testEvent);
           event = events.findOne(example).orElse(null);
-          if (event == null){
-              testEvent.setRegStatus(true);
-              testEvent.setTechStatus(true);
-              example = Example.of(testEvent);
-              event = events.findOne(example).orElse(null);
-              if (event == null){
-                  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-              }
+          if (event == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
           }
-        }   
+        }
+      }
     }
-    String date = event.getRegistrationEnd(); 
-    Map<String,String> map=new HashMap<String,String>();
+    String date = event.getRegistrationEnd();
+    Map<String, String> map = new HashMap<String, String>();
     map.put("date", date);
 
     return map;
-}
+  }
 
-@GetMapping(path = "/getRegValue")
-public Object getRegValue(){
+  @GetMapping(path = "/getRegValue")
+  public Object getRegValue() {
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
     Event event = events.findOne(example).orElse(null);

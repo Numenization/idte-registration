@@ -246,6 +246,72 @@ public Object updateTechStatus(){
   }
 }
 
+@PutMapping(path = "/admin/updateDates")
+public Object updateDates(@RequestBody Map<String, String> json){
+
+    Event testEvent = new Event();
+    Example<Event> example = Example.of(testEvent);
+    Event event = events.findOne(example).orElse(null);
+
+    if (event == null){
+        testEvent.setTechStatus(true);
+        example = Example.of(testEvent);
+        event = events.findOne(example).orElse(null);
+        if (event == null){
+          testEvent.setRegStatus(true);
+          testEvent.setTechStatus(false);
+          example = Example.of(testEvent);
+          event = events.findOne(example).orElse(null);
+          if (event == null){
+              testEvent.setRegStatus(true);
+              testEvent.setTechStatus(true);
+              example = Example.of(testEvent);
+              event = events.findOne(example).orElse(null);
+              if (event == null){
+                  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+              }
+          }
+        }   
+    }
+    String registrationStart = json.get("registrationStart");
+    String registrationEnd = json.get("registrationEnd");
+    String techSubStart = json.get("techSubStart");
+    String techSubEnd = json.get("techSubEnd");
+  boolean changes = false;
+  
+  event.setRegistrationDates(registrationStart, registrationEnd);
+  event.setTechnologyDates(techSubStart, techSubEnd);
+  changes = true;
+  if (changes){
+      events.save(event);
+      return new ResponseEntity<>(HttpStatus.OK);
+  }
+  else {
+      return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @GetMapping(path = "/getTechValue")
 public Object getTechValue(){
     Event testEvent = new Event();

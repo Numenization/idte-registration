@@ -102,18 +102,21 @@ static async getRegEnd(opts = null){
     return res;
 }
 
+static updateObjectFromState(state = null) {
+  if (!state) return;
+  var event = {
+    registrationStart: state.registrationStart,
+    registrationEnd: state.registrationEnd,
+    techSubStart: state.techSubStart,
+    techSubEnd: state.techSubEnd
+  };
 
+  for (let [key, val] of Object.entries(event)) {
+    if (val === undefined) event[key] = null;
+  }
 
-
-
-
-
-
-
-
-
-
-
+  return event;
+}
 
 static async getEvents(opts = null) {
   let url = "/idte/admin/events/all";
@@ -124,6 +127,29 @@ static async getEvents(opts = null) {
   }
   return res;
 }
+
+static async updateEvent(opts = null) {
+  try {
+    if (!opts) return;
+    let res = await ChangeRegistration.req(
+      "PUT",
+      "/idte/admin/updateDates",
+      opts
+    );
+    return res;
+  } catch (e) {
+    console.log(e.request);
+    alert(
+      "Error: " +
+        e.status +
+        "\n" +
+        e.statusText +
+        "\n" +
+        "Event not found"
+    );
+  }
+}
+
 static async deleteEvent(opts = null) {
   try {
     if (!opts) return;

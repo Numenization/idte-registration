@@ -743,6 +743,8 @@ a {
 }
 
 .sending-status {
+  display: inline-flex;
   margin: 0 auto;
-  text-align: center;
+  width: 60%;
+  text-align: match-parent;
 }

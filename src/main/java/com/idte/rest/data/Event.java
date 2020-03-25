@@ -104,10 +104,15 @@ public class Event{
     SimpleDateFormat original = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat newSDF = new SimpleDateFormat("MM-dd-yyyy");
       try {
+        if (firstDay != null && firstDay != ""){
           String newStart = newSDF.format(original.parse(firstDay));
-          String newEnd = newSDF.format(original.parse(lastDay));
           registrationStartDate = newStart;
+        }
+        if (lastDay != null && lastDay != ""){
+          String newEnd = newSDF.format(original.parse(lastDay));
           registrationEndDate = newEnd;
+        }
+         
       } catch (ParseException e) {
         e.printStackTrace();
       }
@@ -116,10 +121,14 @@ public class Event{
       SimpleDateFormat original = new SimpleDateFormat("yyyy-MM-dd");
       SimpleDateFormat newSDF = new SimpleDateFormat("MM-dd-yyyy");
       try {
+        if (firstDay != null && firstDay != ""){
           String newStart = newSDF.format(original.parse(firstDay));
-          String newEnd = newSDF.format(original.parse(lastDay));
           technologyStartDate = newStart;
-         technologyEndDate = newEnd;
+        }
+        if (lastDay != null && lastDay != ""){
+          String newEnd = newSDF.format(original.parse(lastDay));
+          technologyEndDate = newEnd;
+        }
       } catch (ParseException e) {
           e.printStackTrace();
       }

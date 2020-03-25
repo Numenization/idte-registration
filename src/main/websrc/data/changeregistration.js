@@ -101,7 +101,6 @@ static async getRegEnd(opts = null){
     }
     return res;
 }
-
 static updateObjectFromState(state = null) {
   if (!state) return;
   var event = {
@@ -114,7 +113,25 @@ static updateObjectFromState(state = null) {
   for (let [key, val] of Object.entries(event)) {
     if (val === undefined) event[key] = null;
   }
+  return event;
+}
+static updateDatesFromState(state = null) {
+  if (!state) return;
+  var event = {
+    setUpOne: state.setUpOne,
+    setUpTwo: state.setUpTwo,
+    setUpThree: state.setUpThree,
+    dryRun: state.dryRun,
+    eventDayOne: state.eventDayOne,
+    eventDayTwo: state.eventDayTwo,
+    eventDayThree: state.eventDayThree,
+    eventDayFour: state.eventDayFour,
+    eventDayFive: state.eventDayFive
+  };
 
+  for (let [key, val] of Object.entries(event)) {
+    if (val === undefined) event[key] = null;
+  }
   return event;
 }
 
@@ -127,7 +144,15 @@ static async getEvents(opts = null) {
   }
   return res;
 }
-
+static async getEventDates(opts = null) {
+  let url = "/idte/eventDates"
+  let method = "GET";
+  let res = await ChangeRegistration.req(method, url, opts);
+  if (res.statusText) {
+    return res;
+  }
+  return res;
+}
 static async updateEvent(opts = null) {
   try {
     if (!opts) return;
@@ -149,7 +174,27 @@ static async updateEvent(opts = null) {
     );
   }
 }
-
+static async updateEventDates(opts = null) {
+  try {
+    if (!opts) return;
+    let res = await ChangeRegistration.req(
+      "PUT",
+      "/idte/admin/updateEventDates",
+      opts
+    );
+    return res;
+  } catch (e) {
+    console.log(e.request);
+    alert(
+      "Error: " +
+        e.status +
+        "\n" +
+        e.statusText +
+        "\n" +
+        "Event not found"
+    );
+  }
+}
 static async deleteEvent(opts = null) {
   try {
     if (!opts) return;

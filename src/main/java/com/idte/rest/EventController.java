@@ -2,12 +2,14 @@ package com.idte.rest;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 
-
+import com.beust.jcommander.internal.Console;
 import com.idte.rest.data.Event;
 import com.idte.rest.data.EventRepository;
 
 import org.springframework.data.domain.Example;
+import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
@@ -27,20 +29,14 @@ public class EventController {
   @Autowired
   private EventRepository events;
 
-<<<<<<< HEAD
     
     @PostMapping(path = "/admin/events", consumes = "application/json", produces = "application/json")
     public Object postEvent(@RequestBody Map <String, String> json){
     Event event = new Event();
-=======
-  @PostMapping(path = "/admin/events", consumes = "application/json", produces = "application/json")
-  public Object postEvent(@RequestBody Map<String, String> json) {
->>>>>>> c591bd7777c3719fc1cf24707094e888ab1e5b97
     String registrationStart = json.get("registrationStart");
     String registrationEnd = json.get("registrationEnd");
     String techSubStart = json.get("techSubStart");
     String techSubEnd = json.get("techSubEnd");
-<<<<<<< HEAD
     
     String setUpOne = event.formatConverter(json.get("setUpOne"));
     String setUpTwo= event.formatConverter(json.get("setUpTwo"));
@@ -52,26 +48,11 @@ public class EventController {
     String eventDayFour= event.formatConverter(json.get("eventDayFour"));
     String eventDayFive= event.formatConverter(json.get("eventDayFive"));
     
-    System.out.println(setUpOne);
-    System.out.println(setUpTwo);
-    System.out.println(setUpThree);
-    System.out.println(dryRun);
-    System.out.println(eventDayOne);
-    System.out.println(eventDayTwo);
-    System.out.println(eventDayThree);
-    System.out.println(eventDayFour);
-    System.out.println(eventDayFive);
-
-=======
-
-    Event event = new Event();
->>>>>>> c591bd7777c3719fc1cf24707094e888ab1e5b97
     event.setEventID(event.GenerateKey());
     event.setRegistrationDates(registrationStart, registrationEnd);
     event.setTechnologyDates(techSubStart, techSubEnd);
     event.setRegStatus(false);
     event.setTechStatus(false);
-<<<<<<< HEAD
     event.setEventDates(String.join(",",
      setUpOne,
      setUpTwo,
@@ -83,9 +64,6 @@ public class EventController {
      eventDayFour,
      eventDayFive
      ));
-=======
-
->>>>>>> c591bd7777c3719fc1cf24707094e888ab1e5b97
     try {
       return new ResponseEntity<>(events.save(event), HttpStatus.CREATED);
     } catch (Exception e) {
@@ -310,9 +288,112 @@ public class EventController {
     String techSubStart = json.get("techSubStart");
     String techSubEnd = json.get("techSubEnd");
     boolean changes = false;
-
     event.setRegistrationDates(registrationStart, registrationEnd);
     event.setTechnologyDates(techSubStart, techSubEnd);
+    changes = true;
+    if (changes) {
+      events.save(event);
+      return new ResponseEntity<>(HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
+  }
+
+  @PutMapping(path = "/admin/updateEventDates")
+  public Object updateEventDates(@RequestBody Map<String, String> json) {
+
+    Event testEvent = new Event();
+    Example<Event> example = Example.of(testEvent);
+    Event event = events.findOne(example).orElse(null);
+
+    if (event == null) {
+      testEvent.setTechStatus(true);
+      example = Example.of(testEvent);
+      event = events.findOne(example).orElse(null);
+      if (event == null) {
+        testEvent.setRegStatus(true);
+        testEvent.setTechStatus(false);
+        example = Example.of(testEvent);
+        event = events.findOne(example).orElse(null);
+        if (event == null) {
+          testEvent.setRegStatus(true);
+          testEvent.setTechStatus(true);
+          example = Example.of(testEvent);
+          event = events.findOne(example).orElse(null);
+          if (event == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+          }
+        }
+      }
+    }
+    String newSetUpOne;
+    String newSetUpTwo;
+    String newSetUpThree;
+    String newDryRun;
+    String newEventDayOne;;
+    String newEventDayTwo;
+    String newEventDayThree;
+    String newEventDayFour;
+    String newEventDayFive;
+    
+    String[] oldEventDates = event.getEventDates().split(",");
+    if(json.get("setUpOne") != null && json.get("setUpOne") != ""){
+      newSetUpOne = event.formatConverter(json.get("setUpOne"));
+      if(newSetUpOne != oldEventDates[0]){
+        oldEventDates[0] = newSetUpOne;
+      }
+    }
+    if(json.get("setUpTwo") != null && json.get("setUpTwo") != ""){
+      newSetUpTwo = event.formatConverter(json.get("setUpTwo"));
+      if(newSetUpTwo != oldEventDates[1]){
+        oldEventDates[1] = newSetUpTwo;
+      }
+    }
+    if(json.get("setUpThree") != null && json.get("setUpThree") != ""){
+      newSetUpThree = event.formatConverter(json.get("setUpThree"));
+      if(newSetUpThree != oldEventDates[2]){
+        oldEventDates[2] = newSetUpThree;
+      }
+    }
+    if(json.get("dryRun") != null && json.get("dryRun") != ""){
+      newDryRun = event.formatConverter(json.get("dryRun"));
+      if(newDryRun != oldEventDates[3]){
+        oldEventDates[3] = newDryRun;
+      }
+    }
+    if(json.get("eventDayOne") != null && json.get("eventDayOne") != ""){
+      newEventDayOne = event.formatConverter(json.get("eventDayOne"));
+      if(newEventDayOne != oldEventDates[4]){
+        oldEventDates[4] = newEventDayOne;
+      }
+    }
+    if(json.get("eventDayTwo") != null && json.get("eventDayTwo") != ""){
+      newEventDayTwo = event.formatConverter(json.get("eventDayTwo"));
+      if(newEventDayTwo != oldEventDates[5]){
+        oldEventDates[5] = newEventDayTwo;
+      }
+    }
+    if(json.get("eventDayThree") != null && json.get("eventDayThree") != ""){
+      newEventDayThree = event.formatConverter(json.get("eventDayThree"));
+      if(newEventDayThree != oldEventDates[6]){
+        oldEventDates[6] = newEventDayThree;
+      }
+    }
+    if(json.get("eventDayFour") != null && json.get("eventDayFour") != ""){
+      newEventDayFour = event.formatConverter(json.get("eventDayFour"));
+      if(newEventDayFour != oldEventDates[7]){
+        oldEventDates[7] = newEventDayFour;
+      }
+    }
+    if(json.get("eventDayFive") != null && json.get("eventDayFive") != ""){
+      newEventDayFive = event.formatConverter(json.get("eventDayFive"));
+      if(newEventDayFive != oldEventDates[8]){
+        oldEventDates[8] = newEventDayFive;
+      }
+    }
+  
+    boolean changes = false;
+    event.setEventDates(StringUtils.join(oldEventDates));
     changes = true;
     if (changes) {
       events.save(event);
@@ -544,4 +625,37 @@ public class EventController {
 
     return events.findAll();
   }
+
+  @GetMapping(path = "/eventDates")
+  public Object getEventDates(){
+    Event testEvent = new Event();
+    Example<Event> example = Example.of(testEvent);
+    Event event = events.findOne(example).orElse(null);
+    if (event == null) {
+      testEvent.setTechStatus(true);
+      example = Example.of(testEvent);
+      event = events.findOne(example).orElse(null);
+      if (event == null) {
+        testEvent.setRegStatus(true);
+        testEvent.setTechStatus(false);
+        example = Example.of(testEvent);
+        event = events.findOne(example).orElse(null);
+        if (event == null) {
+          testEvent.setRegStatus(true);
+          testEvent.setTechStatus(true);
+          example = Example.of(testEvent);
+          event = events.findOne(example).orElse(null);
+          if (event == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+          }
+        }
+      }
+    }
+    String dates = event.getEventDates();
+    Map<String, String> map = new HashMap<String, String>();
+    map.put("status", dates);
+    return map;
+  }
+
+  
 }

@@ -25,7 +25,7 @@ public class Event{
     protected String eventDates;
     protected boolean currentEvent = true;
     protected String lastModified;
-    protected String modifiedBy;
+    protected String lastModifiedBy;
     
     
     public String getEventID(){
@@ -56,7 +56,7 @@ public class Event{
     return eventDates;
   }
   public String getLastModifiedBy(){
-    return modifiedBy;
+    return lastModifiedBy;
   }
   public String getLastModified(){
     return lastModified;
@@ -71,7 +71,7 @@ public class Event{
     technologyStatus = status;
   }
   public void setLastModifiedBy(String who){
-    modifiedBy = who;
+    lastModifiedBy = who;
   }
   public void setLastModified(String when){
     lastModified = when;

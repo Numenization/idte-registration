@@ -81,7 +81,7 @@ render(){
                       <td width="80px">{event.currentEvent.toString()}</td> 
                       <td width="180px">{event.eventID}</td>
                       <td width="180px">{event.lastModified}</td>
-                      <td width="180px">{event.modifiedBy}</td>
+                      <td width="180px">{event.lastModifiedBy}</td>
                        </tr>
                        <button id= "link-button" 
                       onClick={

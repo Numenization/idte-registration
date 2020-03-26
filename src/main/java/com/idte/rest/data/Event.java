@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 @Entity
 @Table(name="Events")
 public class Event{
@@ -25,21 +24,10 @@ public class Event{
     protected boolean technologyStatus;
     protected String eventDates;
     protected boolean currentEvent = true;
+    protected String lastModified;
+    protected String modifiedBy;
     
     
-   // protected List<String> eventDates = new ArrayList<String>();
-   
-    public void setEventID(String generatedID){
-      eventID = generatedID;
-    }
-    public void setCurrentEvent(String choice){
-      if (choice.equals("true"))
-        currentEvent = true;
-      else{
-        currentEvent = false;
-      }
-      
-    }
     public String getEventID(){
       return eventID;
     }
@@ -67,6 +55,12 @@ public class Event{
   public String getEventDates(){
     return eventDates;
   }
+  public String getLastModifiedBy(){
+    return modifiedBy;
+  }
+  public String getLastModified(){
+    return lastModified;
+  }
   public void setEventDates(String dates){
     eventDates = dates;
   }
@@ -76,7 +70,12 @@ public class Event{
   public void setTechStatus(boolean status){
     technologyStatus = status;
   }
-
+  public void setLastModifiedBy(String who){
+    modifiedBy = who;
+  }
+  public void setLastModified(String when){
+    lastModified = when;
+  }
   public void changeEventStatus(){
     currentEvent = !currentEvent;
   }
@@ -133,7 +132,17 @@ public class Event{
           e.printStackTrace();
       }
   }
-
+  public void setEventID(String generatedID){
+    eventID = generatedID;
+  }
+  public void setCurrentEvent(String choice){
+    if (choice.equals("true"))
+      currentEvent = true;
+    else{
+      currentEvent = false;
+    }
+    
+  }
     public String GenerateKey(){
       
       String generatedKey;

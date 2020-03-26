@@ -1,5 +1,9 @@
 package com.idte.rest;
 
+import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -74,7 +78,7 @@ public class EventController {
 
   // ---------- Used on event table to make one event the new current event
   @PutMapping(path = "/admin/changeCurrent", consumes = "application/json", produces = "application/json")
-  public Object changeCurrentEvent(@RequestBody Map<String, String> json) {
+  public Object changeCurrentEvent(Principal principal, @RequestBody Map<String, String> json) {
     // Old search, search for event that has currentEvent = true
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
@@ -124,13 +128,19 @@ public class EventController {
 
     // Save both new values for the events
     if (changes) {
+      DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+      Date date = new Date();
+      String currentDateTime = dateFormat.format(date);
+      oldEvent.setLastModified(currentDateTime);
+      oldEvent.setLastModifiedBy(principal.getName());
+      event.setLastModified(currentDateTime);
+      event.setLastModifiedBy(principal.getName());
       events.save(oldEvent);
       events.save(event);
       return new ResponseEntity<>(HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
-
   }
 
   // ---------- Used when you create a new event, and it makes that new event the
@@ -176,7 +186,7 @@ public class EventController {
 
   // Inverts an events regStatus value
   @PutMapping(path = "/admin/currentRegStatus")
-  public Object updateCurrentRegStatus() {
+  public Object updateCurrentRegStatus(Principal principal) {
 
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
@@ -208,6 +218,11 @@ public class EventController {
     event.changeRegStatus();
     changes = true;
     if (changes) {
+      DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+      Date date = new Date();
+      String currentDateTime = dateFormat.format(date);
+      event.setLastModified(currentDateTime);
+      event.setLastModifiedBy(principal.getName());
       events.save(event);
       return new ResponseEntity<>(HttpStatus.OK);
     } else {
@@ -217,7 +232,7 @@ public class EventController {
 
   // Inverts an events techSubStatus value
   @PutMapping(path = "/admin/currentTechStatus")
-  public Object updateTechStatus() {
+  public Object updateTechStatus(Principal principal) {
 
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
@@ -249,6 +264,11 @@ public class EventController {
     event.changeTechStatus();
     changes = true;
     if (changes) {
+      DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+      Date date = new Date();
+      String currentDateTime = dateFormat.format(date);
+      event.setLastModified(currentDateTime);
+      event.setLastModifiedBy(principal.getName());
       events.save(event);
       return new ResponseEntity<>(HttpStatus.OK);
     } else {
@@ -257,7 +277,7 @@ public class EventController {
   }
 
   @PutMapping(path = "/admin/updateDates")
-  public Object updateDates(@RequestBody Map<String, String> json) {
+  public Object updateDates(Principal principal,@RequestBody Map<String, String> json) {
 
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
@@ -292,6 +312,11 @@ public class EventController {
     event.setTechnologyDates(techSubStart, techSubEnd);
     changes = true;
     if (changes) {
+      DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+      Date date = new Date();
+      String currentDateTime = dateFormat.format(date);
+      event.setLastModified(currentDateTime);
+      event.setLastModifiedBy(principal.getName());
       events.save(event);
       return new ResponseEntity<>(HttpStatus.OK);
     } else {
@@ -300,7 +325,7 @@ public class EventController {
   }
 
   @PutMapping(path = "/admin/updateEventDates")
-  public Object updateEventDates(@RequestBody Map<String, String> json) {
+  public Object updateEventDates(Principal principal,@RequestBody Map<String, String> json) {
 
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
@@ -396,6 +421,12 @@ public class EventController {
     event.setEventDates(StringUtils.join(oldEventDates));
     changes = true;
     if (changes) {
+      DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+      Date date = new Date();
+      String currentDateTime = dateFormat.format(date);
+      event.setLastModified(currentDateTime);
+      System.out.println(principal.getName());
+      event.setLastModifiedBy(principal.getName());
       events.save(event);
       return new ResponseEntity<>(HttpStatus.OK);
     } else {

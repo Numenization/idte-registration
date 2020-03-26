@@ -16,7 +16,6 @@ class EventDB extends React.Component {
         };
         this.getEvents = this.getEvents.bind(this);
     }
-
     async getEvents(){
         this.setState({loading: true});
 
@@ -28,8 +27,6 @@ class EventDB extends React.Component {
         this.setState({events: events, loading:false});
            
     }
-
-    
     async componentDidMount(){
         this.getEvents();
     }
@@ -54,14 +51,16 @@ render(){
         </div>
         <table>
                       <td width="110px"><b>Reg. Start</b></td>
-                      <td width="120px"><b>Reg. End</b></td> 
-                      <td width="110px"><b>Tech. Sub. Start</b></td> 
-                      <td width="110px"><b>Tech. Sub. End</b></td> 
-                      <td width="80px"><b>Reg. Status</b></td> 
-                      <td width="80px"><b>Tech. Status</b></td> 
-                      <td width="80px"><b>Event Dates</b></td> 
+                      <td width="90px"><b>Reg. End</b></td> 
+                      <td width="85px"><b>Sub. Start</b></td> 
+                      <td width="95px"><b>Sub. End</b></td> 
+                      <td width="60px"><b>Reg. Status</b></td> 
+                      <td width="65px"><b>Tech. Status</b></td> 
+                      <td width="80px"><b>Dates</b></td> 
                       <td width="80px"><b>Current Event</b></td> 
-                      <td width="110px"><b>Event ID</b></td> 
+                      <td width="180px"><b>Event ID</b></td>
+                      <td width="115px"><b>Modified Time</b></td>
+                      <td width="115px"><b>Modified By</b></td>
                       </table>
           {events.map((event, i) => {
               return(
@@ -80,8 +79,11 @@ render(){
                       <td width="80px">{event.technologyStatus.toString()}</td>
                       <td width="80px">{event.eventDates}</td>
                       <td width="80px">{event.currentEvent.toString()}</td> 
-                      <td width="180px">{event.eventID}</td> 
-                      <button id= "link-button" 
+                      <td width="180px">{event.eventID}</td>
+                      <td width="180px">{event.lastModified}</td>
+                      <td width="180px">{event.modifiedBy}</td>
+                       </tr>
+                       <button id= "link-button" 
                       onClick={
                         async e=> {
                             await Event.changeCurrent({
@@ -99,7 +101,6 @@ render(){
                               await this.getEvents();
                           }}
                       >Delete</button>
-                       </tr>
                        </tbody>
                       </table>
                       </div>

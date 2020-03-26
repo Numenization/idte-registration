@@ -28,6 +28,7 @@ public class Attendee {
     protected String country;
     @NotNull
     protected String city;
+    protected String dateString;
     protected String dateCreated;
     protected String lastModified;
     protected String modifiedBy;
@@ -97,6 +98,10 @@ public class Attendee {
         this.comments = comments;
     }
 
+    public void setDateString(String dateString) {
+        this.dateString = dateString;
+    }
+
     public String getId() {
         return id;
     }
@@ -147,5 +152,9 @@ public class Attendee {
 
     public String getComments() {
         return comments;
+    }
+
+    public String getDateString() {
+        return dateString;
     }
 }

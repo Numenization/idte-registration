@@ -282,16 +282,9 @@ public class AttendeeController {
     }
 
     // now try to update supplier specific fields
-    String technologyNumber = json.get("technologyNumber");
     String company = json.get("company");
 
     try {
-      if (technologyNumber != null && ((Supplier) attendee).getTechnologyNumber() != null) {
-        if (!technologyNumber.equals(((Supplier) attendee).getTechnologyNumber())) {
-          ((Supplier) attendee).setTechnologyNumber(technologyNumber);
-          changes = true;
-        }
-      }
       if (company != null && ((Supplier) attendee).getCompany() != null) {
         if (!company.equals(((Supplier) attendee).getCompany())) {
           ((Supplier) attendee).setCompany(company);
@@ -355,24 +348,27 @@ public class AttendeeController {
     String company = json.get("company");
     String city = json.get("city");
     String country = json.get("country");
+    String dateString = json.get("dateString");
 
-    if(email == null || firstName == null || lastName == null ||
+    if(email == null || firstName == null || lastName == null || dateString == null ||
       email.length() == 0 || firstName.length() == 0 ||
-      lastName.length() == 0) {
+      lastName.length() == 0 || dateString.length() == 0) {
       errors.add(new Error("Make sure all required fields are filled out!"));
       return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
-    if(type == null || type == "_") {
+    if(type == null || type.equals("_")) {
       errors.add(new Error("Missing type in registration!"));
       return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    } else if(type == "supplier") {
+    } else if(type.equals("supplier")) {
       newAttendee = new Supplier();
 
       // set general fields
       newAttendee.setEmail(email);
       newAttendee.setFirstName(firstName);
       newAttendee.setLastName(lastName);
+      newAttendee.setDateString(dateString);
+
       
       // set optional fields
       if(phone != null) {
@@ -395,7 +391,7 @@ public class AttendeeController {
       newAttendee.setCity(city);
       newAttendee.setCountry(country);
       ((Supplier)newAttendee).setCompany(company);
-    } else if(type == "presenter") {
+    } else if(type.equals("presenter")) {
       newAttendee = new Presenter();
 
       // set general fields
@@ -423,7 +419,7 @@ public class AttendeeController {
 
       newAttendee.setCity(city);
       newAttendee.setCountry(country);
-    } else if(type == "evaluator") {
+    } else if(type.equals("evaluator")) {
       newAttendee = new Evaluator();
 
       // set general fields
@@ -462,23 +458,33 @@ public class AttendeeController {
     }
 
     try {
-      if(type == "supplier") {
+      newAttendee.createId();
+
+      // get time stamp
+      DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+      Date date = new Date();
+      String currentDateTime = dateFormat.format(date);
+      newAttendee.setDateCreated(currentDateTime);
+      newAttendee.setLastModified(currentDateTime);
+      
+      if(type.equals("supplier")) {
         suppliers.save((Supplier)newAttendee);
-      } else if(type == "presenter") {
+      } else if(type.equals("presenter")) {
         presenters.save((Presenter)newAttendee);
-      } else if(type == "evaluator") {
+      } else if(type.equals("evaluator")) {
         evaluators.save((Evaluator)newAttendee);
       } else {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
     }
     catch(Exception e) {
+      System.out.println(e);
       return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // TODO: SEND CONFIRMATION EMAIL
 
-    return new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   // get registration type from user for use on registration page.

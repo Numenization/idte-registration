@@ -6,9 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringJoiner;
-
-import com.beust.jcommander.internal.Console;
 import com.idte.rest.data.Event;
 import com.idte.rest.data.EventRepository;
 

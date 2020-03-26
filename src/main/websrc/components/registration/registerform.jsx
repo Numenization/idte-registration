@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Header from '../header.jsx';
 import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
+import ErrorTag from '../general/error.jsx';
 import '../../css/styles.css';
-import Attendee from '../../data/attendee.js';
+import '../../css/registerform.css';
 class FormPage extends React.Component {
   constructor(props) {
     super(props);
@@ -20,7 +20,10 @@ class FormPage extends React.Component {
       company: '',
       city: '',
       country: '',
-      errors: []
+      errors: [],
+      eventDates: [],
+      technologies: [],
+      showDropdowns: []
     };
     this.getRegStatus = this.getRegStatus.bind(this);
     this.req = this.req.bind(this);
@@ -29,22 +32,32 @@ class FormPage extends React.Component {
     this.removeError = this.removeError.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.register = this.register.bind(this);
+    this.getEventDates = this.getEventDates.bind(this);
+    this.getTechnologies = this.getTechnologies.bind(this);
   }
 
   async getRegStatus() {
-    let res = await Attendee.req(
-      'GET',
-      '/idte/getRegistrationStatus',
-      this.state
-    );
+    let res = await this.req('GET', '/idte/getRegistrationStatus');
     this.setState({
       type: res.type
     });
     document.getElementById('mytype').innerText = this.state.type;
   }
 
+  async getEventDates() {
+    let res = await this.req('GET', '/idte/eventDates');
+    this.setState({ eventDates: res.status.split(',') });
+  }
+
+  async getTechnologies() {
+    let res = await this.req('GET', '/idte/technologies');
+    this.setState({ technologies: res.status });
+  }
+
   async componentDidMount() {
     this.getRegStatus();
+    this.getEventDates();
+    this.getTechnologies();
   }
 
   handleChange(event) {
@@ -88,6 +101,38 @@ class FormPage extends React.Component {
     for (let i = 0; i < this.state.errors.length; i++) {
       this.removeError(0);
     }
+
+    let dateString = '';
+    let dateSelectRows = document.getElementsByClassName(
+      'date-tech-selector-row'
+    );
+
+    for (let element of dateSelectRows) {
+      if (!element.childNodes) continue;
+
+      let checkbox = element.childNodes[0];
+      let select = element.childNodes[2];
+
+      if (!checkbox.checked) continue;
+      if (select.value != '-- select a technology --') {
+        dateString = dateString + ',' + element.id + ':' + select.value;
+      } else {
+        this.addError({
+          message: 'Select a technology for ' + element.id + '!'
+        });
+        return;
+      }
+    }
+
+    if (dateString.length == 0) {
+      this.addError({
+        message: 'Select some dates to attend!'
+      });
+      return;
+    }
+
+    dateString = dateString.substring(1);
+
     try {
       await this.req('POST', '/idte/attendees', {
         type: this.state.type,
@@ -99,13 +144,12 @@ class FormPage extends React.Component {
         cell: this.state.cell,
         company: this.state.company,
         city: this.state.city,
-        country: this.state.country
+        country: this.state.country,
+        dateString: dateString
       });
-      //window.location.href = 'http://localhost:8080/idte/index.html';
+      window.location.href = 'http://localhost:8080/idte/index.html';
     } catch (e) {
-      console.log(e.errors);
       for (const error of e.errors) {
-        console.log(error);
         this.addError(error);
       }
     }
@@ -162,8 +206,14 @@ class FormPage extends React.Component {
           </div>
           <div className='registration-form'>
             <form>
+              <h1>IDTE Registration</h1>
+
+              <p>Please fill out the required information</p>
+
               <label>Attendee Type:</label>
               <span id='mytype'></span>
+
+              <h3>Attendee Information</h3>
 
               <label>*First/Given Name:</label>
               <input
@@ -236,8 +286,43 @@ class FormPage extends React.Component {
                 name='country'
                 onChange={this.handleChange}
               ></input>
+              <div className='date-tech-selector' id='date-tech-selector'>
+                <h3>Dates of Attendance</h3>
+                <p>
+                  Select the days you wish to attend, as well as the technology
+                  you wish to participate with on that day
+                </p>
+                <p>
+                  Read the FAQ under the information tab to see what dates
+                  coorespond with the type of activity to be performed on that
+                  day (setup, dry run, presentations, etc..)
+                </p>
+                {this.state.eventDates.map((date, i) => {
+                  return (
+                    <div className='date-tech-selector-row' key={i} id={date}>
+                      <input type='checkbox' id='checkbox'></input>
+                      <label>{date}</label>
+                      <select
+                        defaultValue='-- select a technology --'
+                        id='dropdown'
+                      >
+                        <option disabled value='-- select a technology --'>
+                          -- select a technology --
+                        </option>
+                        {this.state.technologies.map((tech, k) => {
+                          return (
+                            <option key={k} value={tech}>
+                              {tech}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                  );
+                })}
+              </div>
             </form>
-            <button>Submit Registration</button>
+            <button onClick={this.register}>Submit Registration</button>
           </div>
         </div>
 

@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class TechnologyController {
     return categories.findAll();
   }
 
-  @GetMapping(path="/technologies", consumes = "application/json", produces = "application/json")
+  @GetMapping(path="/admin/technologies", consumes = "application/json", produces = "application/json")
   public Object findTechnology(@RequestBody Map<String, String> json) {
     Technology find = new Technology();
     if(json.get("id") != null) {
@@ -280,6 +281,22 @@ public class TechnologyController {
     }
 
     return new ResponseEntity<>(category, HttpStatus.OK);
+  }
+
+  // path for normal users to get the list of technologies by their id, to hide info from other users
+  @GetMapping(path = "/technologies", consumes = "application/json", produces = "application/json")
+  public Object getTechnologyIds() {
+    Iterable<Technology> techs = technologies.findAll();
+    List<String> ids = new ArrayList<>();
+
+    for(Technology tech: techs) {
+      ids.add(tech.getId() + "");
+    }
+
+    Map<String, List<String>> json = new HashMap<>();
+    json.put("status", ids);
+
+    return new ResponseEntity<>(json, HttpStatus.OK);
   }
 
   // this is the path that normal users will take to submit their technologies

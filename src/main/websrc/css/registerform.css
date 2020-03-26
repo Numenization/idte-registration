@@ -1,0 +1,7 @@
+.date-tech-selector-row {
+  margin: 0.5em auto;
+}
+
+.date-tech-selector-row select {
+  float: right;
+}

@@ -22,15 +22,18 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.idte.rest.data.Attendee;
 
 public class QRCode
 {
-    public static void main(String[] args) throws WriterException, IOException
-    {
-        //This is what will be stored in the QR code
-        //Eventually change this to the attendee ID
-        String qrCodeText = "https://google.com";
-        String filePath = "IDTE.png";
+    //Reference the Attendee class
+    static Attendee attendee = new Attendee();
+
+    public static void main(String[] args) throws WriterException, IOException {
+        // This is what will be stored in the QR code
+        String qrCodeText = attendee.getId();
+        //Image file name to save to
+        String filePath = "QRCode.png";
         int size = 125;
         //Define the location where the image would be saved
         File qrFile = new File(filePath);

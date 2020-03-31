@@ -10,39 +10,15 @@ import java.util.Hashtable;
 import javax.imageio.ImageIO;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
 import com.google.zxing.EncodeHintType;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.Result;
 import com.google.zxing.WriterException;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.idte.rest.data.Attendee;
 
 public class QRCode
 {
-    //Reference the Attendee class
-    static Attendee attendee = new Attendee();
-
-    public static void main(String[] args) throws WriterException, IOException {
-        // This is what will be stored in the QR code
-        String qrCodeText = attendee.getId();
-        //Image file name to save to
-        String filePath = "QRCode.png";
-        int size = 125;
-        //Define the location where the image would be saved
-        File qrFile = new File(filePath);
-        createQRImage(qrFile, qrCodeText, size, filePath);
-       // readQRImage(qrFile);
-        System.out.println("DONE");
-    }
-
-    private static void createQRImage(File qrFile, String qrCodeText, int size, String filePath) throws WriterException, IOException
+    public static void createQRImage(File qrFile, String qrCodeText, int size, String filePath) throws WriterException, IOException
     {
         //Create ByteMatrix for QRCode that would encode the value
         Hashtable<EncodeHintType, ErrorCorrectionLevel> hintMap = new Hashtable<>();

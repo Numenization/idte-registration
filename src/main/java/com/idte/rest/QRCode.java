@@ -38,7 +38,7 @@ public class QRCode
         //Define the location where the image would be saved
         File qrFile = new File(filePath);
         createQRImage(qrFile, qrCodeText, size, filePath);
-        readQRImage(qrFile);
+       // readQRImage(qrFile);
         System.out.println("DONE");
     }
 
@@ -74,6 +74,7 @@ public class QRCode
 
     }
 
+    /*
     //QR code contains the attendee ID
     private static String readQRImage(File qrFile) throws WriterException, IOException
     {
@@ -92,4 +93,5 @@ public class QRCode
             return null;
         }
     }
+    */
 }

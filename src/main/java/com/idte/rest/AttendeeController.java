@@ -403,6 +403,7 @@ public class AttendeeController {
       newAttendee.setEmail(email);
       newAttendee.setFirstName(firstName);
       newAttendee.setLastName(lastName);
+      newAttendee.setDateString(dateString);
 
       // set optional fields
       if(phone != null) {
@@ -431,6 +432,7 @@ public class AttendeeController {
       newAttendee.setEmail(email);
       newAttendee.setFirstName(firstName);
       newAttendee.setLastName(lastName);
+      newAttendee.setDateString(dateString);
 
       // set optional fields
       if(phone != null) {

@@ -17,6 +17,7 @@ public class Evaluator extends Attendee {
         newEvaluator.country = evaluator.country;
         newEvaluator.city = evaluator.city;
         newEvaluator.comments = evaluator.comments;
+        newEvaluator.dateString = evaluator.dateString;
 
         return newEvaluator;
     }

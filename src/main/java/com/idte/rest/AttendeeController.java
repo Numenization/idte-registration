@@ -243,6 +243,7 @@ public class AttendeeController {
     String country = json.get("country");
     String city = json.get("city");
     String comments = json.get("comments");
+    String dateString = json.get("dateString");
 
     if (newEmail != null && !newEmail.equals(attendee.getEmail())) {
       attendee.setEmail(newEmail);
@@ -278,6 +279,10 @@ public class AttendeeController {
     }
     if (comments != null && !comments.equals(attendee.getComments())) {
       attendee.setComments(comments);
+      changes = true;
+    }
+    if (dateString != null && !dateString.equals(attendee.getDateString())) {
+      attendee.setDateString(dateString);
       changes = true;
     }
 

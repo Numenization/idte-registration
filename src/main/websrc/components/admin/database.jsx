@@ -7,6 +7,7 @@ import { Table, TableRow } from '../general/table.jsx';
 import '../../css/styles.css';
 import Modal from '../general/modal.jsx';
 import Attendee from '../../data/attendee.js';
+import '../../css/registerform.css';
 
 class DatabasePage extends React.Component {
   constructor(props) {
@@ -23,7 +24,9 @@ class DatabasePage extends React.Component {
       page: 0,
       attendeesOnPage: [],
       sortBy: null,
-      search: ''
+      search: '',
+      eventDates: [],
+      technologies: []
     };
 
     this.getAttendees = this.getAttendees.bind(this);
@@ -50,6 +53,37 @@ class DatabasePage extends React.Component {
     this.generatePaginationButtons = this.generatePaginationButtons.bind(this);
     this.runChild = this.runChild.bind(this);
     this.sortAttendees = this.sortAttendees.bind(this);
+    this.getEventDates = this.getEventDates.bind(this);
+    this.getTechnologies = this.getTechnologies.bind(this);
+    this.req = this.req.bind(this);
+    this.updateDateString = this.updateDateString.bind(this);
+  }
+
+  async req(method, url, opts = null) {
+    return new Promise(function(resolve, reject) {
+      let xhr = new XMLHttpRequest();
+      xhr.open(method, url);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = function() {
+        if (this.status >= 200 && this.status < 300) {
+          resolve(xhr.response ? JSON.parse(xhr.response) : null);
+        } else {
+          reject({
+            status: this.status,
+            errors: xhr.response ? JSON.parse(xhr.response) : null
+          });
+        }
+      };
+      xhr.onerror = function() {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      };
+      xhr.send(JSON.stringify(opts));
+    }).catch(err => {
+      throw err;
+    });
   }
 
   clearUserValues() {
@@ -69,7 +103,8 @@ class DatabasePage extends React.Component {
       'lastModified',
       'dateCreated',
       'modifiedBy',
-      'type'
+      'type',
+      'dateString'
     ];
     for (let property of values) {
       this.setState({ [property]: undefined });
@@ -335,8 +370,20 @@ class DatabasePage extends React.Component {
     this.toggleEditModal();
   }
 
+  async getEventDates() {
+    let res = await this.req('GET', '/idte/eventDates');
+    this.setState({ eventDates: res.status.split(',') });
+  }
+
+  async getTechnologies() {
+    let res = await this.req('GET', '/idte/technologies');
+    this.setState({ technologies: res.status });
+  }
+
   async componentDidMount() {
     this.getAttendees();
+    this.getEventDates();
+    this.getTechnologies();
   }
 
   getRows(dataColumns) {
@@ -513,6 +560,59 @@ class DatabasePage extends React.Component {
     }
   }
 
+  updateDateString(e) {
+    let element = e.target;
+    if (element.id == 'checkbox') {
+      // update the cooresponding field to make sure we have valid values
+      let dropdown = element.parentElement.childNodes[2];
+
+      if (element.checked) {
+        if (dropdown.value == '-- select a technology --') {
+          dropdown.selectedIndex = 1;
+        }
+      } else {
+        dropdown.selectedIndex = 0;
+      }
+    } else if (element.id == 'dropdown') {
+      // update the cooresponding field to make sure we have valid values
+      let checkbox = element.parentElement.childNodes[0];
+
+      if (element.value != '-- select a technology --') {
+        checkbox.checked = true;
+      } else {
+        checkbox.checked = false;
+      }
+    }
+    // start generating the date string
+    let rawRows = element.parentElement.parentElement.childNodes;
+    let rows = [];
+    for (let row of rawRows) {
+      if (row.tagName == 'DIV') {
+        rows.push(row);
+      }
+    }
+
+    let dateString = '';
+
+    for (let row of rows) {
+      let rowCheckbox = row.childNodes[0];
+      let rowDropdown = row.childNodes[2];
+
+      if (rowCheckbox.checked) {
+        let stringlet = row.id;
+        stringlet = stringlet + ':' + rowDropdown.value;
+
+        dateString = dateString + ',' + stringlet;
+      }
+    }
+
+    if (dateString.length > 0) {
+      dateString = dateString.substring(1);
+    }
+
+    this.setState({ dateString: dateString });
+  }
+
   sortAttendees(sortBy) {
     const dict = {
       0: 'lastName',
@@ -656,17 +756,37 @@ class DatabasePage extends React.Component {
                   onChange={this.updateField}
                 ></input>
               </td>
-              <td>
-                <span>Technology Number*: </span>
-                <input
-                  type='text'
-                  name='technologyNumber'
-                  onChange={this.updateField}
-                ></input>
-              </td>
             </tr>
           </tbody>
         </table>
+        {this.state.eventDates.map((date, i) => {
+          return (
+            <div className='date-tech-selector-row' key={i} id={date}>
+              <input
+                type='checkbox'
+                id='checkbox'
+                onChange={this.updateDateString}
+              ></input>
+              <label>{date}</label>
+              <select
+                defaultValue='-- select a technology --'
+                id='dropdown'
+                onChange={this.updateDateString}
+              >
+                <option disabled value='-- select a technology --'>
+                  -- select a technology --
+                </option>
+                {this.state.technologies.map((tech, k) => {
+                  return (
+                    <option key={k} value={tech}>
+                      {tech}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          );
+        })}
         <span>Comments:</span>
         <br />
         <textarea
@@ -795,18 +915,71 @@ class DatabasePage extends React.Component {
                   onChange={this.updateField}
                 ></input>
               </td>
-              <td>
-                <span>Technology Number*: </span>
-                <input
-                  type='text'
-                  defaultValue={selectedUser.technologyNumber}
-                  name='technologyNumber'
-                  onChange={this.updateField}
-                ></input>
-              </td>
             </tr>
           </tbody>
         </table>
+        {this.state.eventDates.map((date, i) => {
+          const dateString = this.state.dateString;
+          if (!dateString) return;
+
+          const dateStrings = dateString.split(',');
+          let dates = [];
+          let techs = [];
+
+          for (let str of dateStrings) {
+            let dateStr = str.split(':')[0];
+            let techOnDate = str.split(':')[1];
+
+            dates.push(dateStr);
+            techs.push(techOnDate);
+          }
+
+          let checked = (
+            <input
+              type='checkbox'
+              id='checkbox'
+              onChange={this.updateDateString}
+            ></input>
+          );
+          let tech = '-- select a technology --';
+
+          for (let i = 0; i < dates.length; i++) {
+            if (dates[i] == date) {
+              checked = (
+                <input
+                  type='checkbox'
+                  id='checkbox'
+                  defaultChecked
+                  onChange={this.updateDateString}
+                ></input>
+              );
+              tech = techs[i];
+            }
+          }
+
+          return (
+            <div className='date-tech-selector-row' key={i} id={date}>
+              {checked}
+              <label>{date}</label>
+              <select
+                defaultValue={tech}
+                id='dropdown'
+                onChange={this.updateDateString}
+              >
+                <option disabled value='-- select a technology --'>
+                  -- select a technology --
+                </option>
+                {this.state.technologies.map((tech, k) => {
+                  return (
+                    <option key={k} value={tech}>
+                      {tech}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          );
+        })}
         <span>Comments:</span>
         <br />
         <textarea
@@ -882,10 +1055,9 @@ class DatabasePage extends React.Component {
                   var sortBy = e.target.value;
                   this.setState({ sortBy: sortBy });
                 }}
+                defaultValue='-- select an option --'
               >
-                <option disabled selected value>
-                  -- select an option --
-                </option>
+                <option disabled>-- select an option --</option>
                 <option value={0}>Last Name</option>
                 <option value={1}>First Name</option>
                 <option value={2}>Email</option>

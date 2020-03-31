@@ -12,7 +12,7 @@ class Attendee {
       country: state.country,
       comments: state.comments,
       city: state.city,
-      technologyNumber: state.technologyNumber
+      dateString: state.dateString
     };
 
     for (let [key, val] of Object.entries(attendee)) {

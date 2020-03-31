@@ -16,6 +16,7 @@ public class Presenter extends Attendee {
     newPresenter.country = evaluator.country;
     newPresenter.city = evaluator.city;
     newPresenter.comments = evaluator.comments;
+    newPresenter.dateString = evaluator.dateString;
 
     return newPresenter;
 }

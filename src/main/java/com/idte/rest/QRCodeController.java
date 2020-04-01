@@ -4,13 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.lang.model.util.Elements;
 
 import com.google.zxing.WriterException;
 import com.idte.rest.data.Attendee;
 import com.idte.rest.data.AttendeeRepository;
 
-import org.hibernate.boot.model.relational.Database;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.PostMapping;

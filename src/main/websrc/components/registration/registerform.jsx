@@ -147,6 +147,40 @@ class FormPage extends React.Component {
         country: this.state.country,
         dateString: dateString
       });
+    } catch (e) {
+      for (const error of e.errors) {
+        this.addError(error);
+      }
+    }
+    
+    //Generate QR Code
+    try {
+      await this.req('POST', '/idte/MakeQRCode', {
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        email: this.state.email,
+      });
+    } catch (e) {
+      for (const error of e.errors) {
+        this.addError(error);
+      }
+    }
+
+    let outmessage = "Thank you for registering for the Ford IDTE event, " 
+    + "attached below is your QRCode which will be used to identify you at check in."
+    
+
+    // TODO: show that this is working somehow
+    //Send email
+    try {
+      await this.req('POST', '/idte/emailqr', {
+        subject: "Ford IDTE: Registration Confirmation",
+        body: outmessage,
+        to: this.state.email,
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+        email: this.state.email,
+      });
       window.location.href = 'http://localhost:8080/idte/index.html';
     } catch (e) {
       for (const error of e.errors) {

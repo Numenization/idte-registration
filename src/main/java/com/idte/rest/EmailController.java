@@ -2,6 +2,9 @@ package com.idte.rest;
 
 import java.util.Map;
 
+import com.google.zxing.WriterException;
+import com.idte.rest.data.AttendeeRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,12 +19,17 @@ import org.springframework.util.Base64Utils;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 @RestController
 @RequestMapping
 public class EmailController {
   @Autowired
   private JavaMailSender javaMailSender;
+
+  @Autowired
+    private AttendeeRepository attendees;
+
 
   @PostMapping(path = "/admin/email", consumes = "application/json", produces = "application/json")
   public void sendEmail(@RequestBody Map<String, String> json) {
@@ -82,6 +90,29 @@ public class EmailController {
     helper.setSubject(subject);
     helper.setText(body);
     javaMailSender.send(msg);
+    file.delete();
+  }
+
+  @PostMapping(path = "/emailqr", consumes = "application/json", produces = "application/json")
+  public void sendEmailwQRCode(@RequestBody Map<String, String> json) throws MessagingException, WriterException, IOException {
+    
+    String to = json.get("to");
+    String subject = json.get("subject");
+    String body = json.get("body");
+
+    File file = new File("QRCode.png");
+
+    MimeMessage msg = javaMailSender.createMimeMessage();
+
+    MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+    helper.addAttachment("QRCode.png", file);
+
+    helper.setTo(to);
+    helper.setSubject(subject);
+    helper.setText(body);
+    javaMailSender.send(msg);
+  
+    System.out.println("Sent?");
     file.delete();
   }
 }

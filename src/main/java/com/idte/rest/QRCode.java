@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
@@ -25,6 +28,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
 
 public class QRCode
 {
@@ -56,7 +60,19 @@ public class QRCode
                 }
             }
         }
-        ImageIO.write(image, filePath, qrFile);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", baos);
+        baos.flush();
+        byte[] imageBytes = baos.toByteArray();
+
+        //write to file 
+        try {
+            OutputStream os = new FileOutputStream(qrFile);
+            os.write(imageBytes);
+            os.close();
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
 
     }
 

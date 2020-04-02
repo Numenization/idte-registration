@@ -22,7 +22,7 @@ class AttendeeCheckin extends React.Component {
         <div className='content'>
           <h1>Attendee Checkin</h1>
           <div className='admin-buttons'>
-            <a> Scan QR Code</a>
+            <a href='qrsignin.html'> Scan QR Code</a>
             <a href='attendeesearch.html'> Search Attendee</a>
             <div className='submit'>
               <a href='/idte/admin.html'>Submit</a>

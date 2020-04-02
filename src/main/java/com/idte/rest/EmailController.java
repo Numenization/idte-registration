@@ -31,8 +31,23 @@ public class EmailController {
     private AttendeeRepository attendees;
 
 
+  // this is for the admin page
   @PostMapping(path = "/admin/email", consumes = "application/json", produces = "application/json")
   public void sendEmail(@RequestBody Map<String, String> json) {
+    SimpleMailMessage msg = new SimpleMailMessage();
+
+    String to = json.get("to");
+    String subject = json.get("subject");
+    String body = json.get("body");
+    msg.setTo(to);
+    msg.setSubject(subject);
+    msg.setText(body);
+    javaMailSender.send(msg);
+  }
+
+  // tech submission confirmation, not really a diff from above...
+  @PostMapping(path = "/techconfirm", consumes = "application/json", produces = "application/json")
+  public void sendTechConfirm(@RequestBody Map<String, String> json) {
     SimpleMailMessage msg = new SimpleMailMessage();
 
     String to = json.get("to");
@@ -56,22 +71,12 @@ public class EmailController {
 
     // remove beginning of attachment
     String[] arrofStrs = attachment.split(",");
-    // for(String a : arrofStrs)
-    // System.out.println(a);
 
     attachment = arrofStrs[1];
     // convert Base64 string to img
     byte[] imgBytes = Base64Utils.decodeFromString(arrofStrs[1]);
 
     File file = new File(name);
-    // try {
-    // BufferedImage bufImg = ImageIO.read(new ByteArrayInputStream(imgBytes));
-
-    // ImageIO.write(bufImg, "png", imgOutFile);
-    // }
-    // catch (IOException e) {
-    // System.out.println("Failed to read image");
-    // }
 
     try {
       OutputStream os = new FileOutputStream(file);
@@ -93,6 +98,7 @@ public class EmailController {
     file.delete();
   }
 
+  // reg confirmation
   @PostMapping(path = "/emailqr", consumes = "application/json", produces = "application/json")
   public void sendEmailwQRCode(@RequestBody Map<String, String> json) throws MessagingException, WriterException, IOException {
     

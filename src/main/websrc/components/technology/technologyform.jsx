@@ -23,7 +23,8 @@ class TestPage extends React.Component {
       supplierCompany: '',
       categories: [],
       loading: false,
-      errors: []
+      errors: [],
+      email: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.postATech = this.postATech.bind(this);
@@ -67,6 +68,24 @@ class TestPage extends React.Component {
         'POST',
         '/idte/technologies',
         Technology.createTechnologyObjectFromState(this.state)
+      );
+    } catch (e) {
+      console.log(e.errors);
+      for (const error of e.errors) {
+        console.log(error);
+        this.addError(error);
+      }
+    }
+    let data =  {
+      to: this.state.email,
+      body: "Thank you for your submission",
+      subject: "Ford IDTE: Tech submission confirmation"
+    }
+    try {
+      await this.req(
+        'POST',
+        '/idte/techconfirm',
+        data
       );
       window.location.href = 'http://localhost:8080/idte/index.html';
     } catch (e) {
@@ -319,6 +338,18 @@ class TestPage extends React.Component {
                       type='text'
                       name='supplierCompany'
                       value={this.supplierCompany}
+                      onChange={this.handleChange}
+                    ></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span>*Email:</span>
+                    <input
+                      id='email'
+                      type='text'
+                      name='email'
+                      value={this.email}
                       onChange={this.handleChange}
                     ></input>
                   </td>

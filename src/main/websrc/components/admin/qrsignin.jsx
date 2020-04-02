@@ -13,10 +13,22 @@ class Webcam extends React.Component {
     super(props);
     this.state = {
       result: 'No result',
+      delay: 300
     };
 
     this.handleScan = this.handleScan.bind(this);
-    this.handleError = this.handleError.bind(this);
+  }
+
+  handleScan(data) {
+    if (data) {
+      this.setState({
+        result: data
+      });
+    }
+  }
+
+  handleError(err) {
+    console.error(err);
   }
 
   render() {
@@ -37,7 +49,7 @@ class Webcam extends React.Component {
       
         <div className='QR'>
           <QRReader
-            delay={300}
+            delay={this.state.delay}
             onError={this.handleError}
             onScan={this.handleScan}
             style={{width:'100%'}}

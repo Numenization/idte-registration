@@ -13,7 +13,7 @@ class Webcam extends React.Component {
     super(props);
     this.state = {
       result: 'No result',
-      delay: 300
+      delay: 300,
     };
 
     this.handleScan = this.handleScan.bind(this);
@@ -32,7 +32,7 @@ class Webcam extends React.Component {
   }
 
   render() {
-    
+
     return (
 
       <div className='container'>
@@ -52,7 +52,7 @@ class Webcam extends React.Component {
             delay={this.state.delay}
             onError={this.handleError}
             onScan={this.handleScan}
-            style={{width:'100%'}}
+            style={{width:'30%'}}
             />
             <p>{this.state.result}</p>
 

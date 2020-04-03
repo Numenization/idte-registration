@@ -1,20 +1,34 @@
 package com.idte.rest;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
 
 import javax.imageio.ImageIO;
 
+import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.WebcamPanel;
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.Result;
 import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
 
 public class QRCode
 {
@@ -46,7 +60,19 @@ public class QRCode
                 }
             }
         }
-        ImageIO.write(image, filePath, qrFile);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", baos);
+        baos.flush();
+        byte[] imageBytes = baos.toByteArray();
+
+        //write to file 
+        try {
+            OutputStream os = new FileOutputStream(qrFile);
+            os.write(imageBytes);
+            os.close();
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
 
     }
 
@@ -70,4 +96,52 @@ public class QRCode
         }
     }
     */
+
+    public static String ReadQRCodeWithScanner()
+    {
+        //Create Webcam object
+        Webcam webcam = Webcam.getDefault();
+        webcam.setViewSize(new Dimension(320,240));
+        WebcamPanel webcamPanel = new WebcamPanel(webcam);
+        webcamPanel.setMirrored(true);
+
+        BufferedImage image = null;
+        Result result = null;
+
+        //String value to store the value in the QR code
+        String qrCodeText;
+
+        do
+        {
+            if (webcam.isOpen())
+            {
+                if ((image = webcam.getImage()) == null)
+                {
+                    continue;
+                }
+
+                LuminanceSource source = new BufferedImageLuminanceSource(image);
+                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+                try
+                {
+                    result = new MultiFormatReader().decode(bitmap);
+                }
+                catch (NotFoundException e)
+                {
+                    //Fall thru, there is no QR code in the image
+                }
+
+            }
+
+            //This will return the qrCodeText value
+            if (result != null)
+            {
+                qrCodeText = result.getText();                
+                return qrCodeText;
+            }
+
+            
+        } while (true);
+    }
 }

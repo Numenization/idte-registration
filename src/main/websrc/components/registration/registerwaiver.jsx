@@ -7,6 +7,13 @@ import Footer from '../footer.jsx';
 import '../../css/styles.css';
 
 class WaiverPage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      continueDisabled: true
+    };
+  }
   render() {
     return (
       <div className='container'>
@@ -21,17 +28,22 @@ class WaiverPage extends React.Component {
 
         <div className='content'>
           <h1>Registration Digital Waiver</h1>
-          <p>
-            Hello, you are about to sign this form are you sure you want to do
-            this{' '}
-          </p>
-          <div className='registration-form'>
-            <button>
-              <a href='registerform.html'>
-                <font color='white'>Sign</font>
-              </a>
-            </button>
-          </div>
+          <p>User agreement goes here</p>
+          <input
+            type='checkbox'
+            id='checkbox'
+            onChange={e => {
+              this.setState({ continueDisabled: !e.target.checked });
+            }}
+          ></input>
+          <label htmlFor='checkbox'>I agree to the User Agreement above</label>
+          <a
+            id='link-button'
+            href='registerform.html'
+            disabled={this.state.continueDisabled}
+          >
+            Continue
+          </a>
         </div>
 
         <Footer />

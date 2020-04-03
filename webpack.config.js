@@ -69,6 +69,14 @@ module.exports = {
  techdb: [
       'babel-polyfill',
       './src/main/websrc/components/admin/techdb.jsx'
+ ],
+ qrsignin: [
+      'babel-polyfill',
+      './src/main/websrc/components/admin/qrsignin.jsx'
+    ],
+    thankyou: [
+      'babel-polyfill',
+      './src/main/websrc/components/information/thankyou.jsx'
     ]
   },
 
@@ -208,6 +216,16 @@ module.exports = {
       chunks: ['techdb'],
       template: './src/main/websrc/template.html',
       filename: 'admin/techdb.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['qrsignin'],
+      template: './src/main/websrc/template.html',
+      filename: 'admin/qrsignin.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['thankyou'],
+      template: './src/main/websrc/template.html',
+      filename: 'thankyou.html'
     })
   ],
   devServer: {

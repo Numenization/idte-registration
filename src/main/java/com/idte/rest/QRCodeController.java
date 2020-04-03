@@ -4,13 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.lang.model.util.Elements;
 
 import com.google.zxing.WriterException;
 import com.idte.rest.data.Attendee;
 import com.idte.rest.data.AttendeeRepository;
 
-import org.hibernate.boot.model.relational.Database;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,30 +28,36 @@ public class QRCodeController {
     public void createQRCOde(@RequestBody Map<String, String> json) throws WriterException, IOException {
         Attendee attendee = new Attendee();
         
-        String firstName = json.get("first name");
-        String lastName = json.get("last name");
+        String firstName = json.get("firstName");
+        String lastName = json.get("lastName");
         String email = json.get("email");
+        attendee.setFirstName(firstName);
+        attendee.setLastName(lastName);
+        attendee.setEmail(email);
         String qrCodeText;
-
         Example<Attendee> attendeeID = Example.of(attendee);
 
         Attendee event = attendees.findOne(attendeeID).orElse(null);
 
+
         //Using a conditional statement to make sure there is a matching set for first, last, and email
         //If there is, put the ID string into QR Code text
-        if (firstName == event.getFirstName() && lastName == event.getLastName() && email == event.getEmail())
+        if (event.getFirstName().equals(firstName) && event.getLastName().equals(lastName) && event.getEmail().equals(email))
         {
             qrCodeText = event.getId();
+            System.out.println(qrCodeText);
+            String filePath = "QRCode.png";
+            int size = 125;
+            File qrFile = new File(filePath);
+
+            QRCode.createQRImage(qrFile, qrCodeText, size, filePath);
         }
         else
         {
             qrCodeText = null;
+            System.out.println("ERROR: QR Code generation failed");
         }
 
-        String filePath = "QRCode.png";
-        int size = 125;
-        File qrFile = new File(filePath);
-
-        QRCode.createQRImage(qrFile, qrCodeText, size, filePath);
+        
     }
 }

@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Header from '../header.jsx';
 import NavBar from '../navbar.jsx';
 import Footer from '../footer.jsx';
 import '../../css/styles.css';
 
-class AttendeeCheckin extends React.Component {
+class ThankYou extends React.Component {
   render() {
+    const styles = {
+      textAlign: 'center'
+    };
     return (
       <div className='container'>
         <div className='background'>
@@ -20,13 +22,15 @@ class AttendeeCheckin extends React.Component {
         </div>
 
         <div className='content'>
-          <h1>Attendee Checkin</h1>
-          <div className='admin-buttons'>
-            <a href='qrsignin.html'> Scan QR Code</a>
-            <a href='attendeesearch.html'> Search Attendee</a>
-            <div className='submit'>
-              <a href='/idte/admin.html'>Submit</a>
-            </div>
+          <div style={styles}>
+            <h1>Thank You!</h1>
+            <p>
+              We have recieved your submission. You will recieve a confirmation
+              email shortly.
+            </p>
+            <a id='link-button' href='/idte/index.html'>
+              Return to Home
+            </a>
           </div>
         </div>
 
@@ -35,4 +39,5 @@ class AttendeeCheckin extends React.Component {
     );
   }
 }
-ReactDOM.render(<AttendeeCheckin />, document.getElementById('app'));
+
+ReactDOM.render(<ThankYou />, document.getElementById('app'));

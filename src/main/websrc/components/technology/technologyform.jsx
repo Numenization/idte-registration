@@ -76,18 +76,14 @@ class TestPage extends React.Component {
         this.addError(error);
       }
     }
-    let data =  {
+    let data = {
       to: this.state.email,
-      body: "Thank you for your submission",
-      subject: "Ford IDTE: Tech submission confirmation"
-    }
+      body: 'Thank you for your submission',
+      subject: 'Ford IDTE: Tech submission confirmation'
+    };
     try {
-      await this.req(
-        'POST',
-        '/idte/techconfirm',
-        data
-      );
-      window.location.href = 'http://localhost:8080/idte/index.html';
+      await this.req('POST', '/idte/techconfirm', data);
+      window.location.href = 'http://localhost:8080/idte/thankyou.html';
     } catch (e) {
       console.log(e.errors);
       for (const error of e.errors) {

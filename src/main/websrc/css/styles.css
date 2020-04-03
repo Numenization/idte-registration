@@ -237,9 +237,20 @@ input {
   position: relative;
 }
 
+#link-button[disabled] {
+  background-color: gray;
+  cursor: default;
+  pointer-events: none;
+}
+
 #link-button:hover {
   background-color: #24789f;
   cursor: pointer;
+}
+
+#link-button[disabled]:hover {
+  background-color: gray;
+  cursor: default;
 }
 
 #link-button:active {

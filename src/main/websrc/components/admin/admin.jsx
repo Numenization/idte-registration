@@ -28,6 +28,7 @@ class AdminPage extends React.Component {
             <a href='attendeecheckin.html'>Attendee Checkin</a>
             <a href='database.html'>Attendees</a>
             <a href='technologyCategories.html'>Technology Categories</a>
+            <a href='techdb.html'>Technologies</a>
             <a href='sendemail.html'>Send Email</a>
             <a href='/idte/logout'>Log out of Admin Account</a>
           </div>

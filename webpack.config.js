@@ -65,8 +65,13 @@ module.exports = {
     adminaccounts: [
       'babel-polyfill',
       './src/main/websrc/components/admin/accounts.jsx'
+    ],
+ techdb: [
+      'babel-polyfill',
+      './src/main/websrc/components/admin/techdb.jsx'
     ]
   },
+
   output: {
     path: path.resolve(__dirname, './src/main/webapp'),
     filename: '[name]-bundle.js',
@@ -198,6 +203,11 @@ module.exports = {
       chunks: ['adminaccounts'],
       template: './src/main/websrc/template.html',
       filename: 'admin/accounts.html'
+    }),
+    new HtmlWebpackPlugin({
+      chunks: ['techdb'],
+      template: './src/main/websrc/template.html',
+      filename: 'admin/techdb.html'
     })
   ],
   devServer: {

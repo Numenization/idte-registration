@@ -22,12 +22,75 @@ public class Event{
     protected String technologyEndDate;
     protected boolean registrationStatus;
     protected boolean technologyStatus;
-    protected String eventDates;
     protected boolean currentEvent = true;
     protected String lastModified;
     protected String lastModifiedBy;
+    protected String setUpOne;
+    protected String setUpTwo;
+    protected String setUpThree;
+    protected String dryRun;
+    protected String eventDayOne;
+    protected String eventDayTwo;
+    protected String eventDayThree;
+    protected String eventDayFour;
+    protected String eventDayFive;
     
-    
+    public void setSetUpOne(String day){
+      setUpOne = day;
+    }
+    public void setSetUpTwo(String day){
+      setUpTwo = day;
+    }
+    public void setSetUpThree(String day){
+      setUpThree = day;
+    }
+    public void setDryRun(String day){
+      dryRun = day;
+    }
+    public void setEventDayOne(String day){
+      eventDayOne = day;
+    }
+    public void setEventDayTwo(String day){
+      eventDayTwo = day;
+    }
+    public void setEventDayThree(String day){
+      eventDayThree = day;
+    }
+    public void setEventDayFour(String day){
+      eventDayFour = day;
+    }
+    public void setEventDayFive(String day){
+      eventDayFive = day;
+    }
+
+    public String getSetUpOne(){
+      return setUpOne;
+    }
+    public String getSetUpTwo(){
+      return setUpTwo;
+    }
+    public String getSetUpThree(){
+      return setUpThree;
+    }
+    public String getDryRun(){
+      return dryRun;
+    }
+    public String getEventDayOne(){
+      return eventDayOne;
+    }
+    public String getEventDayTwo(){
+      return eventDayTwo;
+    }
+    public String getEventDayThree(){
+      return eventDayThree;
+    }
+    public String getEventDayFour(){
+      return eventDayFour;
+    }
+    public String getEventDayFive(){
+      return eventDayFive;
+    }
+
     public String getEventID(){
       return eventID;
     }
@@ -52,17 +115,12 @@ public class Event{
   public boolean getCurrentEvent(){
     return currentEvent;
   }
-  public String getEventDates(){
-    return eventDates;
-  }
+ 
   public String getLastModifiedBy(){
     return lastModifiedBy;
   }
   public String getLastModified(){
     return lastModified;
-  }
-  public void setEventDates(String dates){
-    eventDates = dates;
   }
   public void setRegStatus(boolean status){
     registrationStatus = status;

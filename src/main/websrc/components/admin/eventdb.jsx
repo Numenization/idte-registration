@@ -56,7 +56,6 @@ render(){
                       <td width="95px"><b>Sub. End</b></td> 
                       <td width="60px"><b>Reg. Status</b></td> 
                       <td width="65px"><b>Tech. Status</b></td> 
-                      <td width="80px"><b>Dates</b></td> 
                       <td width="80px"><b>Current Event</b></td> 
                       <td width="180px"><b>Event ID</b></td>
                       <td width="115px"><b>Modified Time</b></td>
@@ -77,7 +76,6 @@ render(){
                       <td width="110px">{event.technologyEnd}</td>
                       <td width="80px">{event.registrationStatus.toString()}</td>
                       <td width="80px">{event.technologyStatus.toString()}</td>
-                      <td width="80px">{event.eventDates}</td>
                       <td width="80px">{event.currentEvent.toString()}</td> 
                       <td width="180px">{event.eventID}</td>
                       <td width="180px">{event.lastModified}</td>

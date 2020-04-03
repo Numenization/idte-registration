@@ -24,7 +24,10 @@ class ThankYou extends React.Component {
         <div className='content'>
           <div style={styles}>
             <h1>Thank You!</h1>
-            <p>We have recieved your submission.</p>
+            <p>
+              We have recieved your submission. You will recieve a confirmation
+              email shortly.
+            </p>
             <a id='link-button' href='/idte/index.html'>
               Return to Home
             </a>

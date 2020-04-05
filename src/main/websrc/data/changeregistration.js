@@ -153,6 +153,18 @@ static async getEventDates(opts = null) {
   }
   return res;
 }
+
+// nick use this one
+static async getDateDetails(opts = null) {
+  let url = "/idte/eventDateDetails"
+  let method = "GET";
+  let res = await ChangeRegistration.req(method, url, opts);
+  if (res.statusText) {
+    return res;
+  }
+  return res;
+}
+
 static async updateEvent(opts = null) {
   try {
     if (!opts) return;

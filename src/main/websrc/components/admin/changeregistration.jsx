@@ -91,6 +91,7 @@ class ChangeRegistration extends React.Component {
     document.getElementById('eventThree').innerText = listDates[6];
     document.getElementById('eventFour').innerText = listDates[7];
     document.getElementById('eventFive').innerText = listDates[8];
+    
   }
 
   async getRegStatus() {

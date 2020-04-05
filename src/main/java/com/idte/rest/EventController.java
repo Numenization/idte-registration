@@ -739,18 +739,19 @@ public class EventController {
     String eventDayThree = event.getEventDayThree();
     String eventDayFour = event.getEventDayFour();
     String eventDayFive = event.getEventDayFive();
-    String dates = String.join(",", 
-    "SetUp1: " + setUpOne, 
-    "SetUp2: " + setUpTwo,
-    "SetUp3: " + setUpThree,
-    "DryRun: " + dryRun,
-    "EventDay 1: " + eventDayOne,
-    "EventDay 2: " + eventDayTwo,
-    "EventDay 3: " + eventDayThree,
-    "EventDay 4: " + eventDayFour,
-    "EventDay 5: " + eventDayFive);
-    Map<String, String> map = new HashMap<String, String>();
-    map.put("status", dates);
+   
+    Map<String, Object> map = new HashMap<String, Object>();
+
+    map.put("setUp1", "SetUp1: " + setUpOne);
+    map.put("setUp2", "SetUp2: " + setUpTwo);
+    map.put("setUp3", "SetUp3: " + setUpThree);
+    map.put("dryRun", "DryRun: " + dryRun);
+    map.put("eventDay1", "EventDay1: " + eventDayOne);
+    map.put("eventDay2", "EventDay2: " + eventDayTwo);
+    map.put("eventDay3", "EventDay3: " + eventDayThree);
+    map.put("eventDay4", "EventDay4: " + eventDayFour);
+    map.put("eventDay5", "EventDay5: " + eventDayFive);
+    System.out.print(map);
     return map;
   }
   

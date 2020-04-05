@@ -153,19 +153,6 @@ class FormPage extends React.Component {
       }
     }
 
-    //Generate QR Code
-    try {
-      await this.req('POST', '/idte/MakeQRCode', {
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        email: this.state.email
-      });
-    } catch (e) {
-      for (const error of e.errors) {
-        this.addError(error);
-      }
-    }
-
     let outmessage =
       'Thank you for registering for the Ford IDTE event, ' +
       'attached below is your QRCode which will be used to identify you at check in.';

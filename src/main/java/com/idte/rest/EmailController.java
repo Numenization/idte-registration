@@ -135,7 +135,7 @@ public class EmailController {
 
     //Using a conditional statement to make sure there is a matching set for first, last, and email
     //If there is, put the ID string into QR Code text
-    if (event.getFirstName().equals(firstName) && event.getLastName().equals(lastName) && event.getEmail().equals(email))
+    if (event != null && event.getFirstName().equals(firstName) && event.getLastName().equals(lastName) && event.getEmail().equals(email))
     {
         qrCodeText = event.getId();
         String filePath = "\\qrimgs\\" + qrCodeText + ".png";

@@ -31,7 +31,6 @@ public class Supplier extends Attendee {
         newSupplier.city = supplier.city;
         newSupplier.company = supplier.company;
         newSupplier.comments = supplier.comments;
-        newSupplier.dateString = supplier.dateString;
 
         return newSupplier;
     }

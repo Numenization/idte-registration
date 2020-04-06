@@ -742,16 +742,16 @@ public class EventController {
    
     Map<String, Object> map = new HashMap<String, Object>();
 
-    map.put("setUp1", "SetUp1: " + setUpOne);
-    map.put("setUp2", "SetUp2: " + setUpTwo);
-    map.put("setUp3", "SetUp3: " + setUpThree);
-    map.put("dryRun", "DryRun: " + dryRun);
-    map.put("eventDay1", "EventDay1: " + eventDayOne);
-    map.put("eventDay2", "EventDay2: " + eventDayTwo);
-    map.put("eventDay3", "EventDay3: " + eventDayThree);
-    map.put("eventDay4", "EventDay4: " + eventDayFour);
-    map.put("eventDay5", "EventDay5: " + eventDayFive);
-    System.out.print(map);
+    map.put("setUp1", setUpOne);
+    map.put("setUp2", setUpTwo);
+    map.put("setUp3", setUpThree);
+    map.put("dryRun", dryRun);
+    map.put("eventDay1", eventDayOne);
+    map.put("eventDay2", eventDayTwo);
+    map.put("eventDay3", eventDayThree);
+    map.put("eventDay4", eventDayFour);
+    map.put("eventDay5", eventDayFive);
+
     return map;
   }
   

@@ -243,7 +243,6 @@ public class AttendeeController {
     String country = json.get("country");
     String city = json.get("city");
     String comments = json.get("comments");
-    String dateString = json.get("dateString");
 
     if (newEmail != null && !newEmail.equals(attendee.getEmail())) {
       attendee.setEmail(newEmail);
@@ -279,10 +278,6 @@ public class AttendeeController {
     }
     if (comments != null && !comments.equals(attendee.getComments())) {
       attendee.setComments(comments);
-      changes = true;
-    }
-    if (dateString != null && !dateString.equals(attendee.getDateString())) {
-      attendee.setDateString(dateString);
       changes = true;
     }
 
@@ -353,11 +348,29 @@ public class AttendeeController {
     String company = json.get("company");
     String city = json.get("city");
     String country = json.get("country");
-    String dateString = json.get("dateString");
 
-    if(email == null || firstName == null || lastName == null || dateString == null ||
+    String setup1 = json.get("setup1");
+    String setup2 = json.get("setup2");
+    String setup3 = json.get("setup3");
+    String dryRun = json.get("dryRun");
+    String event1 = json.get("event1");
+    String event2 = json.get("event2");
+    String event3 = json.get("event3");
+    String event4 = json.get("event4");
+    String event5 = json.get("event5");
+    String setup1Tech = json.get("setup1Tech");
+    String setup2Tech = json.get("setup2Tech");
+    String setup3Tech = json.get("setup3Tech");
+    String dryRunTech = json.get("dryRunTech");
+    String event1Tech = json.get("event1Tech");
+    String event2Tech = json.get("event2Tech");
+    String event3Tech = json.get("event3Tech");
+    String event4Tech = json.get("event4Tech");
+    String event5Tech = json.get("event5Tech");
+
+    if(email == null || firstName == null || lastName == null ||
       email.length() == 0 || firstName.length() == 0 ||
-      lastName.length() == 0 || dateString.length() == 0) {
+      lastName.length() == 0) {
       errors.add(new Error("Make sure all required fields are filled out!"));
       return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
@@ -372,7 +385,44 @@ public class AttendeeController {
       newAttendee.setEmail(email);
       newAttendee.setFirstName(firstName);
       newAttendee.setLastName(lastName);
-      newAttendee.setDateString(dateString);
+
+      if(setup1.length() > 0) 
+        newAttendee.setSetUpOne(setup1);
+      if(setup2.length() > 0) 
+        newAttendee.setSetUpTwo(setup2);
+      if(setup3.length() > 0) 
+        newAttendee.setSetUpThree(setup3);
+      if(dryRun.length() > 0) 
+        newAttendee.setDryRun(dryRun);
+      if(event1.length() > 0) 
+        newAttendee.setEventDayOne(event1);
+      if(event2.length() > 0) 
+        newAttendee.setEventDayOne(event2);
+      if(event3.length() > 0) 
+        newAttendee.setEventDayOne(event3);
+      if(event4.length() > 0) 
+        newAttendee.setEventDayOne(event4);
+      if(event5.length() > 0) 
+        newAttendee.setEventDayOne(event5);
+
+      if(setup1Tech.length() > 0) 
+        newAttendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
+      if(setup2Tech.length() > 0) 
+        newAttendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
+      if(setup3Tech.length() > 0) 
+        newAttendee.setSetUpThreeTech(Integer.parseInt(setup3Tech));
+      if(dryRunTech.length() > 0) 
+        newAttendee.setDryRunTech(Integer.parseInt(dryRunTech));
+      if(event1Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event1Tech));
+      if(event2Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event2Tech));
+      if(event3Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event3Tech));
+      if(event4Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event4Tech));
+      if(event5Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event5Tech));
 
       
       // set optional fields
@@ -403,7 +453,44 @@ public class AttendeeController {
       newAttendee.setEmail(email);
       newAttendee.setFirstName(firstName);
       newAttendee.setLastName(lastName);
-      newAttendee.setDateString(dateString);
+
+      if(setup1.length() > 0) 
+        newAttendee.setSetUpOne(setup1);
+      if(setup2.length() > 0) 
+        newAttendee.setSetUpTwo(setup2);
+      if(setup3.length() > 0) 
+        newAttendee.setSetUpThree(setup3);
+      if(dryRun.length() > 0) 
+        newAttendee.setDryRun(dryRun);
+      if(event1.length() > 0) 
+        newAttendee.setEventDayOne(event1);
+      if(event2.length() > 0) 
+        newAttendee.setEventDayOne(event2);
+      if(event3.length() > 0) 
+        newAttendee.setEventDayOne(event3);
+      if(event4.length() > 0) 
+        newAttendee.setEventDayOne(event4);
+      if(event5.length() > 0) 
+        newAttendee.setEventDayOne(event5);
+
+      if(setup1Tech.length() > 0) 
+        newAttendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
+      if(setup2Tech.length() > 0) 
+        newAttendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
+      if(setup3Tech.length() > 0) 
+        newAttendee.setSetUpThreeTech(Integer.parseInt(setup3Tech));
+      if(dryRunTech.length() > 0) 
+        newAttendee.setDryRunTech(Integer.parseInt(dryRunTech));
+      if(event1Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event1Tech));
+      if(event2Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event2Tech));
+      if(event3Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event3Tech));
+      if(event4Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event4Tech));
+      if(event5Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event5Tech));
 
       // set optional fields
       if(phone != null) {
@@ -432,7 +519,44 @@ public class AttendeeController {
       newAttendee.setEmail(email);
       newAttendee.setFirstName(firstName);
       newAttendee.setLastName(lastName);
-      newAttendee.setDateString(dateString);
+
+      if(setup1.length() > 0) 
+        newAttendee.setSetUpOne(setup1);
+      if(setup2.length() > 0) 
+        newAttendee.setSetUpTwo(setup2);
+      if(setup3.length() > 0) 
+        newAttendee.setSetUpThree(setup3);
+      if(dryRun.length() > 0) 
+        newAttendee.setDryRun(dryRun);
+      if(event1.length() > 0) 
+        newAttendee.setEventDayOne(event1);
+      if(event2.length() > 0) 
+        newAttendee.setEventDayOne(event2);
+      if(event3.length() > 0) 
+        newAttendee.setEventDayOne(event3);
+      if(event4.length() > 0) 
+        newAttendee.setEventDayOne(event4);
+      if(event5.length() > 0) 
+        newAttendee.setEventDayOne(event5);
+
+      if(setup1Tech.length() > 0) 
+        newAttendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
+      if(setup2Tech.length() > 0) 
+        newAttendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
+      if(setup3Tech.length() > 0) 
+        newAttendee.setSetUpThreeTech(Integer.parseInt(setup3Tech));
+      if(dryRunTech.length() > 0) 
+        newAttendee.setDryRunTech(Integer.parseInt(dryRunTech));
+      if(event1Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event1Tech));
+      if(event2Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event2Tech));
+      if(event3Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event3Tech));
+      if(event4Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event4Tech));
+      if(event5Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event5Tech));
 
       // set optional fields
       if(phone != null) {

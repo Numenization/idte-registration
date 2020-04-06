@@ -28,11 +28,40 @@ public class Attendee {
     protected String country;
     @NotNull
     protected String city;
-    protected String dateString;
     protected String dateCreated;
     protected String lastModified;
     protected String modifiedBy;
     protected String comments;
+
+    protected String setUpOne = "";
+    protected String setUpTwo = "";
+    protected String setUpThree = "";
+    protected String dryRun = "";
+    protected String eventDayOne = "";
+    protected String eventDayTwo = "";
+    protected String eventDayThree = "";
+    protected String eventDayFour = "";
+    protected String eventDayFive = "";
+
+    protected int setUpOneTech = 0;
+    protected int setUpTwoTech = 0;
+    protected int setUpThreeTech = 0;
+    protected int dryRunTech = 0;
+    protected int eventDayOneTech = 0;
+    protected int eventDayTwoTech = 0;
+    protected int eventDayThreeTech = 0;
+    protected int eventDayFourTech = 0;
+    protected int eventDayFiveTech = 0;
+
+    protected boolean setUpOneAttended = false;
+    protected boolean setUpTwoAttended = false;
+    protected boolean setUpThreeAttended = false;
+    protected boolean dryRunAttended = false;
+    protected boolean eventDayOneAttended = false;
+    protected boolean eventDayTwoAttended = false;
+    protected boolean eventDayThreeAttended = false;
+    protected boolean eventDayFourAttended = false;
+    protected boolean eventDayFiveAttended = false;
 
     public void createId() throws UnsupportedEncodingException, NoSuchAlgorithmException {
         try {
@@ -98,8 +127,112 @@ public class Attendee {
         this.comments = comments;
     }
 
-    public void setDateString(String dateString) {
-        this.dateString = dateString;
+    public void setSetUpOne(String setUpOne) {
+        this.setUpOne = setUpOne;
+    }
+
+    public void setSetUpTwo(String setUpTwo) {
+        this.setUpTwo = setUpTwo;
+    }
+
+    public void setSetUpThree(String setUpThree) {
+        this.setUpThree = setUpThree;
+    }
+
+    public void setDryRun(String dryRun) {
+        this.dryRun = dryRun;
+    }
+
+    public void setEventDayOne(String eventDayOne) {
+        this.eventDayOne = eventDayOne;
+    }
+
+    public void setEventDayTwo(String eventDayTwo) {
+        this.eventDayTwo = eventDayTwo;
+    }
+
+    public void setEventDayThree(String eventDayThree) {
+        this.eventDayThree = eventDayThree;
+    }
+
+    public void setEventDayFour(String eventDayFour) {
+        this.eventDayFour = eventDayFour;
+    }
+
+    public void setEventDayFive(String eventDayFive) {
+        this.eventDayFive = eventDayFive;
+    }
+
+    public void setSetUpOneTech(int setUpOne) {
+        this.setUpOneTech = setUpOne;
+    }
+
+    public void setSetUpTwoTech(int setUpTwo) {
+        this.setUpTwoTech = setUpTwo;
+    }
+
+    public void setSetUpThreeTech(int setUpThree) {
+        this.setUpThreeTech = setUpThree;
+    }
+
+    public void setDryRunTech(int dryRun) {
+        this.dryRunTech = dryRun;
+    }
+
+    public void setEventDayOneTech(int eventDayOne) {
+        this.eventDayOneTech = eventDayOne;
+    }
+
+    public void setEventDayTwoTech(int eventDayTwo) {
+        this.eventDayTwoTech = eventDayTwo;
+    }
+
+    public void setEventDayThreeTech(int eventDayThree) {
+        this.eventDayThreeTech = eventDayThree;
+    }
+
+    public void setEventDayFourTech(int eventDayFour) {
+        this.eventDayFourTech = eventDayFour;
+    }
+
+    public void setEventDayFiveTech(int eventDayFive) {
+        this.eventDayFiveTech = eventDayFive;
+    }
+
+    public void setSetUpOneAttended(boolean setUpOne) {
+        this.setUpOneAttended = setUpOne;
+    }
+
+    public void setSetUpTwoAttended(boolean setUpTwo) {
+        this.setUpTwoAttended = setUpTwo;
+    }
+
+    public void setSetUpThreeAttended(boolean setUpThree) {
+        this.setUpThreeAttended = setUpThree;
+    }
+
+    public void setDryRunAttended(boolean dryRun) {
+        this.dryRunAttended = dryRun;
+    }
+
+    public void setEventDayOneAttended(boolean eventDayOne) {
+        this.eventDayOneAttended = eventDayOne;
+    }
+
+    public void setEventDayTwoAttended(boolean eventDayTwo) {
+        this.eventDayTwoAttended = eventDayTwo;
+    }
+
+    public void setEventDayThreeAttended(boolean eventDayThree) {
+        this.eventDayThreeAttended = eventDayThree;
+    }
+
+    public void setEventDayFourAttended(boolean eventDayFour) {
+        this.eventDayFourAttended = eventDayFour;
+    }
+
+    public void setEventDayFiveAttended(boolean eventDayFive) {
+        this.eventDayFiveAttended = eventDayFive;
     }
 
     public String getId() {
@@ -154,7 +287,111 @@ public class Attendee {
         return comments;
     }
 
-    public String getDateString() {
-        return dateString;
+    public String getSetUpOne() {
+        return setUpOne;
+    }
+
+    public String getSetUpTwo() {
+        return setUpTwo;
+    }
+
+    public String getSetUpThree() {
+        return setUpThree;
+    }
+
+    public String getDryRun() {
+        return dryRun;
+    }
+
+    public String getEventDayOne() {
+        return eventDayOne;
+    }
+
+    public String getEventDayTwo() {
+        return eventDayTwo;
+    }
+
+    public String getEventDayThree() {
+        return eventDayThree;
+    }
+
+    public String getEventDayFour() {
+        return eventDayFour;
+    }
+
+    public String getEventDayFive() {
+        return eventDayFive;
+    }
+
+    public int getSetUpOneTech() {
+        return setUpOneTech;
+    }
+
+    public int getSetUpTwoTech() {
+        return setUpTwoTech;
+    }
+
+    public int getSetUpThreeTech() {
+        return setUpThreeTech;
+    }
+
+    public int getDryRunTech() {
+        return dryRunTech;
+    }
+
+    public int getEventDayOneTech() {
+        return eventDayOneTech;
+    }
+
+    public int getEventDayTwoTech() {
+        return eventDayTwoTech;
+    }
+
+    public int getEventDayThreeTech() {
+        return eventDayThreeTech;
+    }
+
+    public int getEventDayFourTech() {
+        return eventDayFourTech;
+    }
+
+    public int getEventDayFiveTech() {
+        return eventDayFiveTech;
+    }
+
+    public boolean getSetUpOneAttended() {
+        return setUpOneAttended;
+    }
+
+    public boolean getSetUpTwoAttended() {
+        return setUpTwoAttended;
+    }
+
+    public boolean getSetUpThreeAttended() {
+        return setUpThreeAttended;
+    }
+
+    public boolean getDryRunAttended() {
+        return dryRunAttended;
+    }
+
+    public boolean getEventDayOneAttended() {
+        return eventDayOneAttended;
+    }
+
+    public boolean getEventDayTwoAttended() {
+        return eventDayTwoAttended;
+    }
+
+    public boolean getEventDayThreeAttended() {
+        return eventDayThreeAttended;
+    }
+
+    public boolean getEventDayFourAttended() {
+        return eventDayFourAttended;
+    }
+
+    public boolean getEventDayFiveAttended() {
+        return eventDayFiveAttended;
     }
 }

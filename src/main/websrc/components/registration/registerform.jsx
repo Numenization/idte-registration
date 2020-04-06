@@ -6,6 +6,7 @@ import Footer from '../footer.jsx';
 import ErrorTag from '../general/error.jsx';
 import '../../css/styles.css';
 import '../../css/registerform.css';
+import { DateSelector, TechDropdown } from '../general/registerhelpers.jsx';
 class FormPage extends React.Component {
   constructor(props) {
     super(props);
@@ -392,10 +393,10 @@ class FormPage extends React.Component {
                     onChange={this.dateSelectorUpdate}
                   ></TechDropdown>
                 </div>
-                <div className='date-tech-selector-row' id='dryrun'>
+                <div className='date-tech-selector-row' id='dryRun'>
                   <input
                     type='checkbox'
-                    id='checkbox-setup1'
+                    id='checkbox-dryrun'
                     onChange={this.dateSelectorUpdate}
                   ></input>
                   <label
@@ -508,33 +509,6 @@ class FormPage extends React.Component {
 
         <Footer />
       </div>
-    );
-  }
-}
-
-class TechDropdown extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <select
-        id={this.props.id}
-        defaultValue='-- select a technology --'
-        onChange={this.props.onChange}
-      >
-        <option disabled value='-- select a technology --'>
-          -- select a technology --
-        </option>
-        {this.props.technologies.map((tech, k) => {
-          return (
-            <option key={k} value={tech}>
-              {tech}
-            </option>
-          );
-        })}
-      </select>
     );
   }
 }

@@ -219,14 +219,12 @@ public class AttendeeController {
     // their values
 
     // first we have to find a valid user given the email, if one exists
-    String email = json.get("email");
-    if (email == null) {
-      return new ResponseEntity<>(new Error("Missing email in PUT request"), HttpStatus.BAD_REQUEST);
+    if(json.get("email") == null || json.get("email").length() == 0) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-    Attendee testAttendee = new Attendee();
-    testAttendee.setEmail(email);
-    Example<Attendee> example = Example.of(testAttendee);
-    Attendee attendee = attendees.findOne(example).orElse(null);
+
+    Attendee attendee = attendees.findByEmail(json.get("email"));
+
     if (attendee == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -243,6 +241,25 @@ public class AttendeeController {
     String country = json.get("country");
     String city = json.get("city");
     String comments = json.get("comments");
+
+    String setup1 = json.get("setUpOne");
+    String setup2 = json.get("setUpTwo");
+    String setup3 = json.get("setUpThree");
+    String dryRun = json.get("dryRun");
+    String event1 = json.get("eventDayOne");
+    String event2 = json.get("eventDayTwo");
+    String event3 = json.get("eventDayThree");
+    String event4 = json.get("eventDayFour");
+    String event5 = json.get("eventDayFive");
+    String setup1Tech = json.get("setUpOneTech");
+    String setup2Tech = json.get("setUpTwoTech");
+    String setup3Tech = json.get("setUpThreeTech");
+    String dryRunTech = json.get("dryRunTech");
+    String event1Tech = json.get("eventDayOneTech");
+    String event2Tech = json.get("eventDayTwoTech");
+    String event3Tech = json.get("eventDayThreeTech");
+    String event4Tech = json.get("eventDayFourTech");
+    String event5Tech = json.get("eventDayFiveTech");
 
     if (newEmail != null && !newEmail.equals(attendee.getEmail())) {
       attendee.setEmail(newEmail);
@@ -281,6 +298,80 @@ public class AttendeeController {
       changes = true;
     }
 
+    if(setup1 != null && !setup1.equals(attendee.getSetUpOne())) {
+      attendee.setSetUpOne(setup1);
+      changes = true;
+    }
+    if(setup2 != null && !setup2.equals(attendee.getSetUpTwo())) {
+      attendee.setSetUpTwo(setup2);
+      changes = true;
+    }
+    if(setup3 != null && !setup3.equals(attendee.getSetUpThree())) {
+      attendee.setSetUpThree(setup3);
+      changes = true;
+    }
+    if(dryRun != null && !dryRun.equals(attendee.getDryRun())) {
+      attendee.setDryRun(dryRun);
+      changes = true;
+    }
+    if(event1 != null && !event1.equals(attendee.getEventDayOne())) {
+      attendee.setEventDayOne(event1);
+      changes = true;
+    }
+    if(event2 != null && !event2.equals(attendee.getEventDayTwo())) {
+      attendee.setEventDayTwo(event2);
+      changes = true;
+    }
+    if(event3 != null && !event3.equals(attendee.getEventDayThree())) {
+      attendee.setEventDayThree(event3);
+      changes = true;
+    }
+    if(event4 != null && !event4.equals(attendee.getEventDayFour())) {
+      attendee.setEventDayFour(event4);
+      changes = true;
+    }
+    if(event5 != null && !event5.equals(attendee.getEventDayFive())) {
+      attendee.setEventDayFive(event5);
+      changes = true;
+    }
+
+    if(setup1Tech != null && Integer.parseInt(setup1Tech) != attendee.getSetUpOneTech()) {
+      attendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
+      changes = true;
+    }
+    if(setup2Tech != null && Integer.parseInt(setup2Tech) != attendee.getSetUpTwoTech()) {
+      attendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
+      changes = true;
+    }
+    if(setup3Tech != null && Integer.parseInt(setup3Tech) != attendee.getSetUpThreeTech()) {
+      attendee.setSetUpThreeTech(Integer.parseInt(setup3Tech) );
+      changes = true;
+    }
+    if(dryRunTech != null && Integer.parseInt(dryRunTech) != attendee.getDryRunTech()) {
+      attendee.setDryRunTech(Integer.parseInt(dryRunTech));
+      changes = true;
+    }
+    if(event1Tech != null && Integer.parseInt(event1Tech) != attendee.getEventDayOneTech()) {
+      attendee.setEventDayOneTech(Integer.parseInt(event1Tech));
+      changes = true;
+    }
+    if(event2Tech != null && Integer.parseInt(event2Tech) != attendee.getEventDayTwoTech()) {
+      attendee.setEventDayTwoTech(Integer.parseInt(event2Tech));
+      changes = true;
+    }
+    if(event3Tech != null && Integer.parseInt(event3Tech) != attendee.getEventDayThreeTech()) {
+      attendee.setEventDayThreeTech(Integer.parseInt(event3Tech));
+      changes = true;
+    }
+    if(event4Tech != null && Integer.parseInt(event4Tech) != attendee.getEventDayFourTech()) {
+      attendee.setEventDayFourTech(Integer.parseInt(event4Tech));
+      changes = true;
+    }
+    if(event5Tech != null && Integer.parseInt(event5Tech) != attendee.getEventDayFiveTech()) {
+      attendee.setEventDayFiveTech(Integer.parseInt(event5Tech));
+      changes = true;
+    }
+
     // now try to update supplier specific fields
     String company = json.get("company");
 
@@ -315,12 +406,11 @@ public class AttendeeController {
   @DeleteMapping(path = "/admin/attendees")
   public Object delete(@RequestBody Map<String, String> json) {
     // try to find the requested user to delete
-    Attendee find = new Attendee();
-    if (json.get("email") != null) {
-      find.setEmail(json.get("email"));
+    if(json.get("email") == null || json.get("email").length() == 0) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-    Example<Attendee> example = Example.of(find);
-    Attendee attendee = attendees.findOne(example).orElse(null);
+
+    Attendee attendee = attendees.findByEmail(json.get("email"));
 
     // if we cant find it send 404
     if (attendee == null) {

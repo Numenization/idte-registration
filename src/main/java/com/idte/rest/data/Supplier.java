@@ -32,6 +32,26 @@ public class Supplier extends Attendee {
         newSupplier.company = supplier.company;
         newSupplier.comments = supplier.comments;
 
+        newSupplier.setUpOne = supplier.setUpOne != null ? supplier.setUpOne : "";
+        newSupplier.setUpTwo = supplier.setUpTwo != null ? supplier.setUpTwo : "";
+        newSupplier.setUpThree = supplier.setUpThree != null ? supplier.setUpThree : "";
+        newSupplier.dryRun = supplier.dryRun != null ? supplier.dryRun : "";
+        newSupplier.eventDayOne = supplier.eventDayOne != null ? supplier.eventDayOne : "";
+        newSupplier.eventDayTwo = supplier.eventDayTwo != null ? supplier.eventDayTwo : "";
+        newSupplier.eventDayThree = supplier.eventDayThree != null ? supplier.eventDayThree : "";
+        newSupplier.eventDayFour = supplier.eventDayFour != null ? supplier.eventDayFour : "";
+        newSupplier.eventDayFive = supplier.eventDayFive != null ? supplier.eventDayFive : "";
+
+        newSupplier.setUpOneTech = supplier.setUpOneTech;
+        newSupplier.setUpTwoTech = supplier.setUpTwoTech;
+        newSupplier.setUpThreeTech = supplier.setUpThreeTech;
+        newSupplier.dryRunTech = supplier.dryRunTech;
+        newSupplier.eventDayOneTech = supplier.eventDayOneTech;
+        newSupplier.eventDayTwoTech = supplier.eventDayTwoTech;
+        newSupplier.eventDayThreeTech = supplier.eventDayThreeTech;
+        newSupplier.eventDayFourTech = supplier.eventDayFourTech;
+        newSupplier.eventDayFiveTech = supplier.eventDayFiveTech;
+
         return newSupplier;
     }
 

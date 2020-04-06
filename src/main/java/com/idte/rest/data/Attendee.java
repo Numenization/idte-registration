@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
@@ -33,14 +34,32 @@ public class Attendee {
     protected String modifiedBy;
     protected String comments;
 
+    @NotNull
+    @Column(columnDefinition = "varchar(255) default ''")
     protected String setUpOne = "";
+    @NotNull
+    @Column(columnDefinition = "varchar(255) default ''")
     protected String setUpTwo = "";
+    @NotNull
+    @Column(columnDefinition = "varchar(255) default ''")
     protected String setUpThree = "";
+    @NotNull
+    @Column(columnDefinition = "varchar(255) default ''")
     protected String dryRun = "";
+    @NotNull
+    @Column(columnDefinition = "varchar(255) default ''")
     protected String eventDayOne = "";
+    @NotNull
+    @Column(columnDefinition = "varchar(255) default ''")
     protected String eventDayTwo = "";
+    @NotNull
+    @Column(columnDefinition = "varchar(255) default ''")
     protected String eventDayThree = "";
+    @NotNull
+    @Column(columnDefinition = "varchar(255) default ''")
     protected String eventDayFour = "";
+    @NotNull
+    @Column(columnDefinition = "varchar(255) default ''")
     protected String eventDayFive = "";
 
     protected int setUpOneTech = 0;

@@ -33,9 +33,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import javax.mail.MessagingException;
+
 @RestController
 @RequestMapping
 public class TechnologyController {
+  @Autowired
+  private JavaMailSender javaMailSender;
   @Autowired
   private TechnologyRepository technologies;
   @Autowired
@@ -91,6 +98,7 @@ public class TechnologyController {
     newTech.setSupplierCompany(json.get("supplierCompany"));
     newTech.setComments("");
     newTech.setModifiedBy("");
+    
 
     Technology uniqueTest = new Technology();
     uniqueTest.setTitle(newTech.getTitle());
@@ -322,6 +330,9 @@ public class TechnologyController {
     String director = json.get("director");
     String supplierCompany = json.get("supplierCompany");
     String source = json.get("source");
+    String subject = json.get("subject");
+    String body = json.get("body");
+    String email = json.get("email");
 
     newTech.setComments("");
     newTech.setModifiedBy("");
@@ -368,7 +379,13 @@ public class TechnologyController {
       return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // TODO: SEND CONFIRMATION EMAIL
+    // CONFIRMATION EMAIL
+    SimpleMailMessage msg = new SimpleMailMessage();
+
+    msg.setTo(email);
+    msg.setSubject(subject);
+    msg.setText(body);
+    javaMailSender.send(msg);
 
     return new ResponseEntity<>(HttpStatus.OK);
   }

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Header from '../header.jsx';
@@ -24,7 +23,7 @@ class TechDB extends React.Component {
       technologiesOnPage: [],
       sortBy: null,
       search: '',
-      technologies: []
+      technologies: [],
     };
 
     this.getTechnologies = this.getTechnologies.bind(this);
@@ -76,51 +75,51 @@ class TechDB extends React.Component {
     }
   }
   async req(method, url, opts = null) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       let xhr = new XMLHttpRequest();
       xhr.open(method, url);
       xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.onload = function() {
+      xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
           resolve(xhr.response ? JSON.parse(xhr.response) : null);
         } else {
           reject({
             status: this.status,
-            errors: xhr.response ? JSON.parse(xhr.response) : null
+            errors: xhr.response ? JSON.parse(xhr.response) : null,
           });
         }
       };
-      xhr.onerror = function() {
+      xhr.onerror = function () {
         reject({
           status: this.status,
-          statusText: xhr.statusText
+          statusText: xhr.statusText,
         });
       };
       xhr.send(JSON.stringify(opts));
-    }).catch(err => {
+    }).catch((err) => {
       throw err;
     });
   }
 
   clearTechValues() {
     var values = [
-     'id',
-     'category',
-     'comments',
-     'dateCreated',
-     'description',
-     'director',
-     'fordContact',
-     'fordPresenter',
-     'lastModified',
-     'modifiedBy',
-     'shippingCity',
-     'shippingCounrty',
-     'source',
-     'supplierCompany',
-     'title',
-     'type',
-     'categoryID'
+      'id',
+      'category',
+      'comments',
+      'dateCreated',
+      'description',
+      'director',
+      'fordContact',
+      'fordPresenter',
+      'lastModified',
+      'modifiedBy',
+      'shippingCity',
+      'shippingCounrty',
+      'source',
+      'supplierCompany',
+      'title',
+      'type',
+      'categoryID',
     ];
     for (let property of values) {
       this.setState({ [property]: undefined });
@@ -134,7 +133,7 @@ class TechDB extends React.Component {
       selectedTech: this.state.selectedTech,
       loading: this.state.loading,
       showEditModal: this.state.showEditModal,
-      showAddModal: this.state.showAddModal
+      showAddModal: this.state.showAddModal,
     });
   }
 
@@ -145,7 +144,7 @@ class TechDB extends React.Component {
       selectedTech: this.state.selectedTech,
       loading: val,
       showEditModal: this.state.showEditModal,
-      showAddModal: this.state.showAddModal
+      showAddModal: this.state.showAddModal,
     });
   }
 
@@ -156,7 +155,7 @@ class TechDB extends React.Component {
       selectedTech: this.state.selectedTech,
       loading: this.state.loading,
       showEditModal: this.state.showEditModal,
-      showAddModal: this.state.showAddModal
+      showAddModal: this.state.showAddModal,
     });
   }
 
@@ -172,7 +171,7 @@ class TechDB extends React.Component {
         selectedTech: value,
         loading: this.state.loading,
         showEditModal: this.state.showEditModal,
-        showAddModal: this.state.showAddModal
+        showAddModal: this.state.showAddModal,
       },
       cb
     );
@@ -192,7 +191,7 @@ class TechDB extends React.Component {
     //   if (attendee) attendeesToPutOnPage.push(attendee);
     // }
     this.setState({
-      page: val
+      page: val,
     });
     //this.setAttendeesOnPage(attendeesToPutOnPage);
   }
@@ -231,7 +230,7 @@ class TechDB extends React.Component {
       selectedTech: this.state.selectedTech,
       loading: this.state.loading,
       showEditModal: !this.state.showEditModal,
-      showAddModal: this.state.showAddModal
+      showAddModal: this.state.showAddModal,
     });
   }
 
@@ -243,13 +242,11 @@ class TechDB extends React.Component {
       selectedTech: this.state.selectedTech,
       loading: this.state.loading,
       showEditModal: this.state.showEditModal,
-      showAddModal: !this.state.showAddModal
+      showAddModal: !this.state.showAddModal,
     });
   }
 
   async getTechnologies() {
-    
-
     // set ourselves to loading and start
     this.setLoading(true);
 
@@ -267,25 +264,26 @@ class TechDB extends React.Component {
       return;
     }
 
-   // if (evaluators.statusText) {
+    // if (evaluators.statusText) {
     //  this.setError(evaluators.statusText);
-   //   this.setLoading(false);
-   //   return;
-  //  }
+    //   this.setLoading(false);
+    //   return;
+    //  }
 
     //Array.prototype.push.apply(evaluators, presenters);
     //Array.prototype.push.apply(suppliers, evaluators);
-  
+
     var numPages = 0;
 
     if (techs.length > this.state.rowsPerPage) {
       numPages = Math.ceil(techs.length / this.state.rowsPerPage);
     } else {
       numPage = 1;
-    }s
+    }
+    s;
 
     this.setNumPages(numPages);
-    
+
     this.setPage(0);
     this.setLoading(false);
   }
@@ -296,7 +294,6 @@ class TechDB extends React.Component {
     this.setLoading(true);
 
     var techs = await Technology.getAllSuppliers();
-    
 
     if (techs.statusText) {
       this.setError(techs.statusText);
@@ -305,20 +302,19 @@ class TechDB extends React.Component {
     }
 
     if (evaluators.statusText) {
-  
-    var numPages = 0;
+      var numPages = 0;
 
-    if (techs.length > this.state.rowsPerPage) {
-      numPages = Math.ceil(techs.length / this.state.rowsPerPage);
-    } else {
-      numPages = 1;
+      if (techs.length > this.state.rowsPerPage) {
+        numPages = Math.ceil(techs.length / this.state.rowsPerPage);
+      } else {
+        numPages = 1;
+      }
+
+      this.setNumPages(numPages);
+      this.setData(techs);
+      this.setPage(0);
+      this.setLoading(false);
     }
-
-    this.setNumPages(numPages);
-    this.setData(techs);
-    this.setPage(0);
-    this.setLoading(false);
-  }
   }
   pageButtonClick(e) {
     this.setPage(parseInt(e.target.id));
@@ -341,8 +337,7 @@ class TechDB extends React.Component {
   async postNewTech() {
     const selection = document.getElementById('technology');
     if (!selection) return;
-    Technology.createTechnologyObjectFromState(this.state)
-    
+    Technology.createTechnologyObjectFromState(this.state);
 
     this.getTechnologies();
     this.toggleAddModal();
@@ -357,13 +352,14 @@ class TechDB extends React.Component {
   }
 
   async deleteTechnology() {
-    var response = window.confirm('Are you sure you want to delete this technology?');
+    var response = window.confirm(
+      'Are you sure you want to delete this technology?'
+    );
     if (!response) return;
     await Technology.deleteTechnology({ email: this.state.email });
     this.getTechnologies();
     this.toggleEditModal();
   }
-
 
   async getTechnologies() {
     let res = await this.req('GET', '/idte/technologies');
@@ -372,7 +368,7 @@ class TechDB extends React.Component {
 
   async componentDidMount() {
     this.getTechnologies();
-   
+
     this.getTechnologies();
   }
 
@@ -614,7 +610,7 @@ class TechDB extends React.Component {
       6: 'modifiedBy',
       7: 'company',
       8: 'country',
-      9: 'city'
+      9: 'city',
     };
     var listToSort = this.state.technologies;
 
@@ -643,7 +639,7 @@ class TechDB extends React.Component {
       'Source',
       'Supplier Company',
       'Title',
-      'Category ID'
+      'Category ID',
     ];
 
     const dataColumns = [
@@ -662,19 +658,19 @@ class TechDB extends React.Component {
       'source',
       'supplierCompany',
       'title',
-      'categoryID'
+      'categoryID',
     ];
 
     const buttonWidth = {
       width: '30%',
       display: 'inline-block',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
     };
 
     const addModalInner = (
       <div>
         <h2>Create New Technology</h2>
-        <label id='technology'>New Technology: </label> 
+        <label id='technology'>New Technology: </label>
         <br />
         <table className='modal-two-col-table'>
           <tbody>
@@ -787,7 +783,7 @@ class TechDB extends React.Component {
             display: 'inline-block',
             boxSizing: 'border-box',
             fontSize: '1em',
-            margin: '0.5em 0'
+            margin: '0.5em 0',
           }}
           onClick={this.postNewTech}
         >
@@ -986,7 +982,7 @@ class TechDB extends React.Component {
             display: 'inline-block',
             boxSizing: 'border-box',
             fontSize: '1em',
-            margin: '0.5em 0'
+            margin: '0.5em 0',
           }}
         >
           Update Technology Fields
@@ -1000,7 +996,7 @@ class TechDB extends React.Component {
             boxSizing: 'border-box',
             fontSize: '1em',
             margin: '0.5em 0',
-            float: 'right'
+            float: 'right',
           }}
         >
           Delete Technology
@@ -1032,7 +1028,7 @@ class TechDB extends React.Component {
               <label htmlFor='sort-by-select'>Sort Table By: </label>
               <select
                 id='sort-by-select'
-                onChange={e => {
+                onChange={(e) => {
                   var sortBy = e.target.value;
                   this.setState({ sortBy: sortBy });
                 }}
@@ -1055,10 +1051,10 @@ class TechDB extends React.Component {
               <label htmlFor='search-input'>Search: </label>
               <input
                 type='text'
-                onChange={e => {
+                onChange={(e) => {
                   this.setState({ search: e.target.value });
                 }}
-                onKeyDown={e => {
+                onKeyDown={(e) => {
                   if (e.keyCode == 13) {
                     this.setState(
                       { search: e.target.value },
@@ -1073,7 +1069,7 @@ class TechDB extends React.Component {
               <label htmlFor='rows-per-page-select'>Entries per page: </label>
               <select
                 id='rows-per-page-select'
-                onChange={e => {
+                onChange={(e) => {
                   this.setRowsPerPage(parseInt(e.target.value));
                 }}
               >
@@ -1104,6 +1100,16 @@ class TechDB extends React.Component {
             Add entry to Technologies
           </button>
           <br />
+          <button
+            id='link-button'
+            style={buttonWidth}
+            onClick={async () => {
+              window.open('/idte/admin/technologyExcel.xlsx');
+            }}
+          >
+            Export to Excel Sheet
+          </button>
+          <br />
           <a id='link-button' href='admin.html' style={buttonWidth}>
             Back to Admin Page
           </a>
@@ -1129,10 +1135,4 @@ class TechDB extends React.Component {
   }
 }
 
-
-
-
-
-
-
-ReactDOM.render(<TechDB/>, document.getElementById('app'));
+ReactDOM.render(<TechDB />, document.getElementById('app'));

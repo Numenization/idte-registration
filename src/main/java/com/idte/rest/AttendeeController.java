@@ -1,5 +1,7 @@
 package com.idte.rest;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,6 +25,7 @@ import com.idte.rest.data.Evaluator;
 import com.idte.rest.data.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -34,6 +37,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 @RestController
 @RequestMapping
@@ -741,4 +748,238 @@ public class AttendeeController {
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
+  @GetMapping(path = "/admin/attendeeExcel.xlsx", produces = "application/excel")
+  public Object exportAttendeesExcel() {
+    XSSFWorkbook workbook = buildExcelDocument();
+    DateFormat dateFormat = new SimpleDateFormat("MMddyyyyHHmmss");
+    Date date = new Date();
+    String fileName = dateFormat.format(date) + "_attendees.xlsx";
+    try {
+      File dir = new File("excelExports");
+      if(!dir.exists()) {
+        dir.mkdir();
+      }
+      FileOutputStream out = new FileOutputStream(new File("excelExports/" + fileName));
+      workbook.write(out);
+      out.close();
+      workbook.close();
+      return new FileSystemResource("excelExports/" + fileName);
+    } catch(Exception e) {
+      e.printStackTrace();
+      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  protected XSSFWorkbook buildExcelDocument() {
+    XSSFWorkbook workbook = new XSSFWorkbook();
+    XSSFSheet sheet = workbook.createSheet("Attendees");
+
+    List<Supplier> supps = suppliers.findAll();
+    List<Presenter> presents = presenters.findAll();
+    List<Evaluator> evals = evaluators.findAll();
+
+    XSSFRow header = sheet.createRow(0);
+    header.createCell(0).setCellValue("Type");
+    header.createCell(1).setCellValue("Attendee ID");
+    header.createCell(2).setCellValue("Last Name");
+    header.createCell(3).setCellValue("First Name");
+    header.createCell(4).setCellValue("Email");
+    header.createCell(5).setCellValue("Nickname");
+    header.createCell(6).setCellValue("Phone Number");
+    header.createCell(7).setCellValue("Cell Number");
+    header.createCell(8).setCellValue("Country");
+    header.createCell(9).setCellValue("City");
+    header.createCell(10).setCellValue("Comments");
+    header.createCell(11).setCellValue("Company");
+    header.createCell(12).setCellValue("Date Created");
+    header.createCell(13).setCellValue("Date Last Modified");
+    header.createCell(14).setCellValue("Last Modified By");
+
+    header.createCell(15).setCellValue("Setup Day One Date");
+    header.createCell(16).setCellValue("Setup Day Two Date");
+    header.createCell(17).setCellValue("Setup Day Three Date");
+    header.createCell(18).setCellValue("Dry Run Date");
+    header.createCell(19).setCellValue("Event Day One Date");
+    header.createCell(20).setCellValue("Event Day Two Date");
+    header.createCell(21).setCellValue("Event Day Three Date");
+    header.createCell(22).setCellValue("Event Day Four Date");
+    header.createCell(23).setCellValue("Event Day Five Date");
+
+    header.createCell(24).setCellValue("Setup Day One Technology");
+    header.createCell(25).setCellValue("Setup Day Two Technology");
+    header.createCell(26).setCellValue("Setup Day Three Technology");
+    header.createCell(27).setCellValue("Dry Run Technology");
+    header.createCell(28).setCellValue("Event Day One Technology");
+    header.createCell(29).setCellValue("Event Day Two Technology");
+    header.createCell(30).setCellValue("Event Day Three Technology");
+    header.createCell(31).setCellValue("Event Day Four Technology");
+    header.createCell(32).setCellValue("Event Day Five Technology");
+
+    header.createCell(33).setCellValue("Setup Day One Attendance");
+    header.createCell(34).setCellValue("Setup Day Two Attendance");
+    header.createCell(35).setCellValue("Setup Day Three Attendance");
+    header.createCell(36).setCellValue("Dry Run Attendance");
+    header.createCell(37).setCellValue("Event Day One Attendance");
+    header.createCell(38).setCellValue("Event Day Two Attendance");
+    header.createCell(39).setCellValue("Event Day Three Attendance");
+    header.createCell(40).setCellValue("Event Day Four Attendance");
+    header.createCell(41).setCellValue("Event Day Five Attendance");
+
+    int rowNum = 0;
+
+    for(Supplier s: supps) {
+      XSSFRow row = sheet.createRow(++rowNum);
+      row.createCell(0).setCellValue("Supplier");
+      row.createCell(1).setCellValue(s.getId());
+      row.createCell(2).setCellValue(s.getLastName());
+      row.createCell(3).setCellValue(s.getFirstName());
+      row.createCell(4).setCellValue(s.getEmail());
+      row.createCell(5).setCellValue(s.getNickname());
+      row.createCell(6).setCellValue(s.getPhoneNumber());
+      row.createCell(7).setCellValue(s.getCellNumber());
+      row.createCell(8).setCellValue(s.getCountry());
+      row.createCell(9).setCellValue(s.getCity());
+      row.createCell(10).setCellValue(s.getComments());
+      row.createCell(11).setCellValue(s.getCompany());
+      row.createCell(12).setCellValue(s.getDateCreated());
+      row.createCell(13).setCellValue(s.getLastModified());
+      row.createCell(14).setCellValue(s.getModifiedBy());
+  
+      row.createCell(15).setCellValue(s.getSetUpOne());
+      row.createCell(16).setCellValue(s.getSetUpTwo());
+      row.createCell(17).setCellValue(s.getSetUpThree());
+      row.createCell(18).setCellValue(s.getDryRun());
+      row.createCell(19).setCellValue(s.getEventDayOne());
+      row.createCell(20).setCellValue(s.getEventDayTwo());
+      row.createCell(21).setCellValue(s.getEventDayThree());
+      row.createCell(22).setCellValue(s.getEventDayFour());
+      row.createCell(23).setCellValue(s.getEventDayFive());
+  
+      row.createCell(24).setCellValue(s.getSetUpOneTech());
+      row.createCell(25).setCellValue(s.getSetUpTwoTech());
+      row.createCell(26).setCellValue(s.getSetUpThreeTech());
+      row.createCell(27).setCellValue(s.getDryRunTech());
+      row.createCell(28).setCellValue(s.getEventDayOneTech());
+      row.createCell(29).setCellValue(s.getEventDayTwoTech());
+      row.createCell(30).setCellValue(s.getEventDayThreeTech());
+      row.createCell(31).setCellValue(s.getEventDayFourTech());
+      row.createCell(32).setCellValue(s.getEventDayFiveTech());
+  
+      row.createCell(33).setCellValue(s.getSetUpOneAttended());
+      row.createCell(34).setCellValue(s.getSetUpTwoAttended());
+      row.createCell(35).setCellValue(s.getSetUpThreeAttended());
+      row.createCell(36).setCellValue(s.getDryRunAttended());
+      row.createCell(37).setCellValue(s.getEventDayOneAttended());
+      row.createCell(38).setCellValue(s.getEventDayTwoAttended());
+      row.createCell(39).setCellValue(s.getEventDayThreeAttended());
+      row.createCell(40).setCellValue(s.getEventDayFourAttended());
+      row.createCell(41).setCellValue(s.getEventDayFiveAttended());
+    }
+
+    for(Presenter s: presents) {
+      XSSFRow row = sheet.createRow(++rowNum);
+      row.createCell(0).setCellValue("Presenter");
+      row.createCell(1).setCellValue(s.getId());
+      row.createCell(2).setCellValue(s.getLastName());
+      row.createCell(3).setCellValue(s.getFirstName());
+      row.createCell(4).setCellValue(s.getEmail());
+      row.createCell(5).setCellValue(s.getNickname());
+      row.createCell(6).setCellValue(s.getPhoneNumber());
+      row.createCell(7).setCellValue(s.getCellNumber());
+      row.createCell(8).setCellValue(s.getCountry());
+      row.createCell(9).setCellValue(s.getCity());
+      row.createCell(10).setCellValue(s.getComments());
+      row.createCell(11).setCellValue(" ");
+      row.createCell(12).setCellValue(s.getDateCreated());
+      row.createCell(13).setCellValue(s.getLastModified());
+      row.createCell(14).setCellValue(s.getModifiedBy());
+  
+      row.createCell(15).setCellValue(s.getSetUpOne());
+      row.createCell(16).setCellValue(s.getSetUpTwo());
+      row.createCell(17).setCellValue(s.getSetUpThree());
+      row.createCell(18).setCellValue(s.getDryRun());
+      row.createCell(19).setCellValue(s.getEventDayOne());
+      row.createCell(20).setCellValue(s.getEventDayTwo());
+      row.createCell(21).setCellValue(s.getEventDayThree());
+      row.createCell(22).setCellValue(s.getEventDayFour());
+      row.createCell(23).setCellValue(s.getEventDayFive());
+  
+      row.createCell(24).setCellValue(s.getSetUpOneTech());
+      row.createCell(25).setCellValue(s.getSetUpTwoTech());
+      row.createCell(26).setCellValue(s.getSetUpThreeTech());
+      row.createCell(27).setCellValue(s.getDryRunTech());
+      row.createCell(28).setCellValue(s.getEventDayOneTech());
+      row.createCell(29).setCellValue(s.getEventDayTwoTech());
+      row.createCell(30).setCellValue(s.getEventDayThreeTech());
+      row.createCell(31).setCellValue(s.getEventDayFourTech());
+      row.createCell(32).setCellValue(s.getEventDayFiveTech());
+  
+      row.createCell(33).setCellValue(s.getSetUpOneAttended());
+      row.createCell(34).setCellValue(s.getSetUpTwoAttended());
+      row.createCell(35).setCellValue(s.getSetUpThreeAttended());
+      row.createCell(36).setCellValue(s.getDryRunAttended());
+      row.createCell(37).setCellValue(s.getEventDayOneAttended());
+      row.createCell(38).setCellValue(s.getEventDayTwoAttended());
+      row.createCell(39).setCellValue(s.getEventDayThreeAttended());
+      row.createCell(40).setCellValue(s.getEventDayFourAttended());
+      row.createCell(41).setCellValue(s.getEventDayFiveAttended());
+    }
+
+    for(Evaluator s: evals) {
+      XSSFRow row = sheet.createRow(++rowNum);
+      row.createCell(0).setCellValue("Evaluator");
+      row.createCell(1).setCellValue(s.getId());
+      row.createCell(2).setCellValue(s.getLastName());
+      row.createCell(3).setCellValue(s.getFirstName());
+      row.createCell(4).setCellValue(s.getEmail());
+      row.createCell(5).setCellValue(s.getNickname());
+      row.createCell(6).setCellValue(s.getPhoneNumber());
+      row.createCell(7).setCellValue(s.getCellNumber());
+      row.createCell(8).setCellValue(s.getCountry());
+      row.createCell(9).setCellValue(s.getCity());
+      row.createCell(10).setCellValue(s.getComments());
+      row.createCell(11).setCellValue(" ");
+      row.createCell(12).setCellValue(s.getDateCreated());
+      row.createCell(13).setCellValue(s.getLastModified());
+      row.createCell(14).setCellValue(s.getModifiedBy());
+  
+      row.createCell(15).setCellValue(s.getSetUpOne());
+      row.createCell(16).setCellValue(s.getSetUpTwo());
+      row.createCell(17).setCellValue(s.getSetUpThree());
+      row.createCell(18).setCellValue(s.getDryRun());
+      row.createCell(19).setCellValue(s.getEventDayOne());
+      row.createCell(20).setCellValue(s.getEventDayTwo());
+      row.createCell(21).setCellValue(s.getEventDayThree());
+      row.createCell(22).setCellValue(s.getEventDayFour());
+      row.createCell(23).setCellValue(s.getEventDayFive());
+  
+      row.createCell(24).setCellValue(s.getSetUpOneTech());
+      row.createCell(25).setCellValue(s.getSetUpTwoTech());
+      row.createCell(26).setCellValue(s.getSetUpThreeTech());
+      row.createCell(27).setCellValue(s.getDryRunTech());
+      row.createCell(28).setCellValue(s.getEventDayOneTech());
+      row.createCell(29).setCellValue(s.getEventDayTwoTech());
+      row.createCell(30).setCellValue(s.getEventDayThreeTech());
+      row.createCell(31).setCellValue(s.getEventDayFourTech());
+      row.createCell(32).setCellValue(s.getEventDayFiveTech());
+  
+      row.createCell(33).setCellValue(s.getSetUpOneAttended());
+      row.createCell(34).setCellValue(s.getSetUpTwoAttended());
+      row.createCell(35).setCellValue(s.getSetUpThreeAttended());
+      row.createCell(36).setCellValue(s.getDryRunAttended());
+      row.createCell(37).setCellValue(s.getEventDayOneAttended());
+      row.createCell(38).setCellValue(s.getEventDayTwoAttended());
+      row.createCell(39).setCellValue(s.getEventDayThreeAttended());
+      row.createCell(40).setCellValue(s.getEventDayFourAttended());
+      row.createCell(41).setCellValue(s.getEventDayFiveAttended());
+    }
+
+    try {
+      return workbook;
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
 }

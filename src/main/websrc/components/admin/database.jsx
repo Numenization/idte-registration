@@ -1225,6 +1225,16 @@ class DatabasePage extends React.Component {
             Add entry to Attendees
           </button>
           <br />
+          <button
+            id='link-button'
+            style={buttonWidth}
+            onClick={async () => {
+              window.open('/idte/admin/attendeeExcel.xlsx');
+            }}
+          >
+            Export to Excel Sheet
+          </button>
+          <br />
           <a id='link-button' href='admin.html' style={buttonWidth}>
             Back to Admin Page
           </a>

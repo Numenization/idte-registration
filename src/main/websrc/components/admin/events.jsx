@@ -8,87 +8,105 @@ import '../../css/styles.css';
 import Event from '../../data/event.js';
 import change from '../../data/changeregistration.js';
 
-
 class Events extends React.Component {
-  
-constructor(props){
-  super(props);
-  this.state = {
-      registrationStart: "",
-      registrationEnd: "",
-      techSubStart: "",
-      techSubEnd: "",
-      setUpOne: "",
-      setUpTwo: "",
-      setUpThree: "",
-      dryRun: "",
-      eventDayOne: "",
-      eventDayTwo: "",
-      eventDayThree: "",
-      eventDayFour: "",
-      eventDayFive: ""
-
-  };
-  this.postAnEvent = this.postAnEvent.bind(this);
-  this.handleChange = this.handleChange.bind(this);
-}
-  async postAnEvent(){
+  constructor(props) {
+    super(props);
+    this.state = {
+      registrationStart: '',
+      registrationEnd: '',
+      techSubStart: '',
+      techSubEnd: '',
+      setUpOne: '',
+      setUpTwo: '',
+      setUpThree: '',
+      dryRun: '',
+      eventDayOne: '',
+      eventDayTwo: '',
+      eventDayThree: '',
+      eventDayFour: '',
+      eventDayFive: '',
+    };
+    this.postAnEvent = this.postAnEvent.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+  async postAnEvent() {
     const opts = null;
     await change.replaceCurrent(opts);
-    await Event.postEvent(
-        Event.createEventObjectFromState(this.state)
-        
-    );
+    await Event.postEvent(Event.createEventObjectFromState(this.state));
+    window.location.href = '/idte/admin/changeregistration.html';
   }
-  
 
-
-  
   handleChange() {
     const target = event.target;
     const value = target.value;
     const name = target.name;
 
     this.setState({
-    [name]: value
+      [name]: value,
     });
-}
-    render(){
-        return(
-            <div className='container'>
-            <div className='background'>
-              <img src={require('../../images/main.jpg')}></img>
-            </div>
-    
-            <div className='top'>
-              <Header />
-              <NavBar />
-            </div>
-    
-            <div className='content'>
-              <h1>Event Details</h1>
-              <p>Creating an event will replace the last active event. </p>
-   <div>
-    <table align="center">
-  <tbody>
-    <tr>
-      <td>Registration Start Date:</td>
-      <td><input name = 'registrationStart' type='date' value={this.registrationStart} onChange={this.handleChange}></input></td>
-    </tr>
-    <tr>
-      <td>Registration End Date</td>
-      <td><input name='registrationEnd' type='date' value={this.registrationEnd} onChange={this.handleChange}></input></td>
-    </tr>
-    <tr>
-      <td>Tech. Submission Start Date</td>
-      <td><input name='techSubStart' type='date' value={this.techSubStart} onChange={this.handleChange}></input></td>
-    </tr>
-    <tr>
-      <td>Tech. Submission End Date</td>
-      <td><input name='techSubEnd' type='date' value={this.techSubEnd} onChange={this.handleChange}></input></td>
-    </tr>
+  }
+  render() {
+    return (
+      <div className='container'>
+        <div className='background'>
+          <img src={require('../../images/main.jpg')}></img>
+        </div>
 
-  
+        <div className='top'>
+          <Header />
+          <NavBar />
+        </div>
+
+        <div className='content'>
+          <h1>Event Details</h1>
+          <p>Creating an event will replace the last active event. </p>
+          <div>
+            <table align='center'>
+              <tbody>
+                <tr>
+                  <td>Registration Start Date:</td>
+                  <td>
+                    <input
+                      name='registrationStart'
+                      type='date'
+                      value={this.registrationStart}
+                      onChange={this.handleChange}
+                    ></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Registration End Date</td>
+                  <td>
+                    <input
+                      name='registrationEnd'
+                      type='date'
+                      value={this.registrationEnd}
+                      onChange={this.handleChange}
+                    ></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tech. Submission Start Date</td>
+                  <td>
+                    <input
+                      name='techSubStart'
+                      type='date'
+                      value={this.techSubStart}
+                      onChange={this.handleChange}
+                    ></input>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Tech. Submission End Date</td>
+                  <td>
+                    <input
+                      name='techSubEnd'
+                      type='date'
+                      value={this.techSubEnd}
+                      onChange={this.handleChange}
+                    ></input>
+                  </td>
+                </tr>
     <tr><h2>Event Dates</h2></tr>
     <tr> 
       <td>Setup Day 1:</td>
@@ -129,7 +147,7 @@ constructor(props){
   </tbody>
 </table>
     </div>
-    
+    <div>
      <div  align= "center">
             <button onClick= {this.postAnEvent,
             alert("Event Created")
@@ -141,12 +159,15 @@ constructor(props){
     
             <Footer />
           </div>
-        );
-        
 
-
-        }
-        
+          <div align='center'>
+            <button onClick={this.postAnEvent}>Create Event</button>
+          </div>
+      
+        <Footer />
+      </div>
+    );
+  }
 }
 
 ReactDOM.render(<Events />, document.getElementById('app'));

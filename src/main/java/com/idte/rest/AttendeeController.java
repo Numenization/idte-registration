@@ -1,5 +1,7 @@
 package com.idte.rest;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,6 +25,7 @@ import com.idte.rest.data.Evaluator;
 import com.idte.rest.data.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -34,6 +37,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 @RestController
 @RequestMapping
@@ -219,14 +226,12 @@ public class AttendeeController {
     // their values
 
     // first we have to find a valid user given the email, if one exists
-    String email = json.get("email");
-    if (email == null) {
-      return new ResponseEntity<>(new Error("Missing email in PUT request"), HttpStatus.BAD_REQUEST);
+    if(json.get("email") == null || json.get("email").length() == 0) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-    Attendee testAttendee = new Attendee();
-    testAttendee.setEmail(email);
-    Example<Attendee> example = Example.of(testAttendee);
-    Attendee attendee = attendees.findOne(example).orElse(null);
+
+    Attendee attendee = attendees.findByEmail(json.get("email"));
+
     if (attendee == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -243,7 +248,25 @@ public class AttendeeController {
     String country = json.get("country");
     String city = json.get("city");
     String comments = json.get("comments");
-    String dateString = json.get("dateString");
+
+    String setup1 = json.get("setUpOne");
+    String setup2 = json.get("setUpTwo");
+    String setup3 = json.get("setUpThree");
+    String dryRun = json.get("dryRun");
+    String event1 = json.get("eventDayOne");
+    String event2 = json.get("eventDayTwo");
+    String event3 = json.get("eventDayThree");
+    String event4 = json.get("eventDayFour");
+    String event5 = json.get("eventDayFive");
+    String setup1Tech = json.get("setUpOneTech");
+    String setup2Tech = json.get("setUpTwoTech");
+    String setup3Tech = json.get("setUpThreeTech");
+    String dryRunTech = json.get("dryRunTech");
+    String event1Tech = json.get("eventDayOneTech");
+    String event2Tech = json.get("eventDayTwoTech");
+    String event3Tech = json.get("eventDayThreeTech");
+    String event4Tech = json.get("eventDayFourTech");
+    String event5Tech = json.get("eventDayFiveTech");
 
     if (newEmail != null && !newEmail.equals(attendee.getEmail())) {
       attendee.setEmail(newEmail);
@@ -281,8 +304,78 @@ public class AttendeeController {
       attendee.setComments(comments);
       changes = true;
     }
-    if (dateString != null && !dateString.equals(attendee.getDateString())) {
-      attendee.setDateString(dateString);
+
+    if(setup1 != null && !setup1.equals(attendee.getSetUpOne())) {
+      attendee.setSetUpOne(setup1);
+      changes = true;
+    }
+    if(setup2 != null && !setup2.equals(attendee.getSetUpTwo())) {
+      attendee.setSetUpTwo(setup2);
+      changes = true;
+    }
+    if(setup3 != null && !setup3.equals(attendee.getSetUpThree())) {
+      attendee.setSetUpThree(setup3);
+      changes = true;
+    }
+    if(dryRun != null && !dryRun.equals(attendee.getDryRun())) {
+      attendee.setDryRun(dryRun);
+      changes = true;
+    }
+    if(event1 != null && !event1.equals(attendee.getEventDayOne())) {
+      attendee.setEventDayOne(event1);
+      changes = true;
+    }
+    if(event2 != null && !event2.equals(attendee.getEventDayTwo())) {
+      attendee.setEventDayTwo(event2);
+      changes = true;
+    }
+    if(event3 != null && !event3.equals(attendee.getEventDayThree())) {
+      attendee.setEventDayThree(event3);
+      changes = true;
+    }
+    if(event4 != null && !event4.equals(attendee.getEventDayFour())) {
+      attendee.setEventDayFour(event4);
+      changes = true;
+    }
+    if(event5 != null && !event5.equals(attendee.getEventDayFive())) {
+      attendee.setEventDayFive(event5);
+      changes = true;
+    }
+
+    if(setup1Tech != null && Integer.parseInt(setup1Tech) != attendee.getSetUpOneTech()) {
+      attendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
+      changes = true;
+    }
+    if(setup2Tech != null && Integer.parseInt(setup2Tech) != attendee.getSetUpTwoTech()) {
+      attendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
+      changes = true;
+    }
+    if(setup3Tech != null && Integer.parseInt(setup3Tech) != attendee.getSetUpThreeTech()) {
+      attendee.setSetUpThreeTech(Integer.parseInt(setup3Tech) );
+      changes = true;
+    }
+    if(dryRunTech != null && Integer.parseInt(dryRunTech) != attendee.getDryRunTech()) {
+      attendee.setDryRunTech(Integer.parseInt(dryRunTech));
+      changes = true;
+    }
+    if(event1Tech != null && Integer.parseInt(event1Tech) != attendee.getEventDayOneTech()) {
+      attendee.setEventDayOneTech(Integer.parseInt(event1Tech));
+      changes = true;
+    }
+    if(event2Tech != null && Integer.parseInt(event2Tech) != attendee.getEventDayTwoTech()) {
+      attendee.setEventDayTwoTech(Integer.parseInt(event2Tech));
+      changes = true;
+    }
+    if(event3Tech != null && Integer.parseInt(event3Tech) != attendee.getEventDayThreeTech()) {
+      attendee.setEventDayThreeTech(Integer.parseInt(event3Tech));
+      changes = true;
+    }
+    if(event4Tech != null && Integer.parseInt(event4Tech) != attendee.getEventDayFourTech()) {
+      attendee.setEventDayFourTech(Integer.parseInt(event4Tech));
+      changes = true;
+    }
+    if(event5Tech != null && Integer.parseInt(event5Tech) != attendee.getEventDayFiveTech()) {
+      attendee.setEventDayFiveTech(Integer.parseInt(event5Tech));
       changes = true;
     }
 
@@ -320,12 +413,11 @@ public class AttendeeController {
   @DeleteMapping(path = "/admin/attendees")
   public Object delete(@RequestBody Map<String, String> json) {
     // try to find the requested user to delete
-    Attendee find = new Attendee();
-    if (json.get("email") != null) {
-      find.setEmail(json.get("email"));
+    if(json.get("email") == null || json.get("email").length() == 0) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-    Example<Attendee> example = Example.of(find);
-    Attendee attendee = attendees.findOne(example).orElse(null);
+
+    Attendee attendee = attendees.findByEmail(json.get("email"));
 
     // if we cant find it send 404
     if (attendee == null) {
@@ -353,11 +445,29 @@ public class AttendeeController {
     String company = json.get("company");
     String city = json.get("city");
     String country = json.get("country");
-    String dateString = json.get("dateString");
 
-    if(email == null || firstName == null || lastName == null || dateString == null ||
+    String setup1 = json.get("setup1");
+    String setup2 = json.get("setup2");
+    String setup3 = json.get("setup3");
+    String dryRun = json.get("dryRun");
+    String event1 = json.get("event1");
+    String event2 = json.get("event2");
+    String event3 = json.get("event3");
+    String event4 = json.get("event4");
+    String event5 = json.get("event5");
+    String setup1Tech = json.get("setup1Tech");
+    String setup2Tech = json.get("setup2Tech");
+    String setup3Tech = json.get("setup3Tech");
+    String dryRunTech = json.get("dryRunTech");
+    String event1Tech = json.get("event1Tech");
+    String event2Tech = json.get("event2Tech");
+    String event3Tech = json.get("event3Tech");
+    String event4Tech = json.get("event4Tech");
+    String event5Tech = json.get("event5Tech");
+
+    if(email == null || firstName == null || lastName == null ||
       email.length() == 0 || firstName.length() == 0 ||
-      lastName.length() == 0 || dateString.length() == 0) {
+      lastName.length() == 0) {
       errors.add(new Error("Make sure all required fields are filled out!"));
       return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
@@ -372,7 +482,44 @@ public class AttendeeController {
       newAttendee.setEmail(email);
       newAttendee.setFirstName(firstName);
       newAttendee.setLastName(lastName);
-      newAttendee.setDateString(dateString);
+
+      if(setup1.length() > 0) 
+        newAttendee.setSetUpOne(setup1);
+      if(setup2.length() > 0) 
+        newAttendee.setSetUpTwo(setup2);
+      if(setup3.length() > 0) 
+        newAttendee.setSetUpThree(setup3);
+      if(dryRun.length() > 0) 
+        newAttendee.setDryRun(dryRun);
+      if(event1.length() > 0) 
+        newAttendee.setEventDayOne(event1);
+      if(event2.length() > 0) 
+        newAttendee.setEventDayOne(event2);
+      if(event3.length() > 0) 
+        newAttendee.setEventDayOne(event3);
+      if(event4.length() > 0) 
+        newAttendee.setEventDayOne(event4);
+      if(event5.length() > 0) 
+        newAttendee.setEventDayOne(event5);
+
+      if(setup1Tech.length() > 0) 
+        newAttendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
+      if(setup2Tech.length() > 0) 
+        newAttendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
+      if(setup3Tech.length() > 0) 
+        newAttendee.setSetUpThreeTech(Integer.parseInt(setup3Tech));
+      if(dryRunTech.length() > 0) 
+        newAttendee.setDryRunTech(Integer.parseInt(dryRunTech));
+      if(event1Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event1Tech));
+      if(event2Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event2Tech));
+      if(event3Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event3Tech));
+      if(event4Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event4Tech));
+      if(event5Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event5Tech));
 
       
       // set optional fields
@@ -403,7 +550,44 @@ public class AttendeeController {
       newAttendee.setEmail(email);
       newAttendee.setFirstName(firstName);
       newAttendee.setLastName(lastName);
-      newAttendee.setDateString(dateString);
+
+      if(setup1.length() > 0) 
+        newAttendee.setSetUpOne(setup1);
+      if(setup2.length() > 0) 
+        newAttendee.setSetUpTwo(setup2);
+      if(setup3.length() > 0) 
+        newAttendee.setSetUpThree(setup3);
+      if(dryRun.length() > 0) 
+        newAttendee.setDryRun(dryRun);
+      if(event1.length() > 0) 
+        newAttendee.setEventDayOne(event1);
+      if(event2.length() > 0) 
+        newAttendee.setEventDayOne(event2);
+      if(event3.length() > 0) 
+        newAttendee.setEventDayOne(event3);
+      if(event4.length() > 0) 
+        newAttendee.setEventDayOne(event4);
+      if(event5.length() > 0) 
+        newAttendee.setEventDayOne(event5);
+
+      if(setup1Tech.length() > 0) 
+        newAttendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
+      if(setup2Tech.length() > 0) 
+        newAttendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
+      if(setup3Tech.length() > 0) 
+        newAttendee.setSetUpThreeTech(Integer.parseInt(setup3Tech));
+      if(dryRunTech.length() > 0) 
+        newAttendee.setDryRunTech(Integer.parseInt(dryRunTech));
+      if(event1Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event1Tech));
+      if(event2Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event2Tech));
+      if(event3Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event3Tech));
+      if(event4Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event4Tech));
+      if(event5Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event5Tech));
 
       // set optional fields
       if(phone != null) {
@@ -432,7 +616,44 @@ public class AttendeeController {
       newAttendee.setEmail(email);
       newAttendee.setFirstName(firstName);
       newAttendee.setLastName(lastName);
-      newAttendee.setDateString(dateString);
+
+      if(setup1.length() > 0) 
+        newAttendee.setSetUpOne(setup1);
+      if(setup2.length() > 0) 
+        newAttendee.setSetUpTwo(setup2);
+      if(setup3.length() > 0) 
+        newAttendee.setSetUpThree(setup3);
+      if(dryRun.length() > 0) 
+        newAttendee.setDryRun(dryRun);
+      if(event1.length() > 0) 
+        newAttendee.setEventDayOne(event1);
+      if(event2.length() > 0) 
+        newAttendee.setEventDayOne(event2);
+      if(event3.length() > 0) 
+        newAttendee.setEventDayOne(event3);
+      if(event4.length() > 0) 
+        newAttendee.setEventDayOne(event4);
+      if(event5.length() > 0) 
+        newAttendee.setEventDayOne(event5);
+
+      if(setup1Tech.length() > 0) 
+        newAttendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
+      if(setup2Tech.length() > 0) 
+        newAttendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
+      if(setup3Tech.length() > 0) 
+        newAttendee.setSetUpThreeTech(Integer.parseInt(setup3Tech));
+      if(dryRunTech.length() > 0) 
+        newAttendee.setDryRunTech(Integer.parseInt(dryRunTech));
+      if(event1Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event1Tech));
+      if(event2Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event2Tech));
+      if(event3Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event3Tech));
+      if(event4Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event4Tech));
+      if(event5Tech.length() > 0) 
+        newAttendee.setEventDayOneTech(Integer.parseInt(event5Tech));
 
       // set optional fields
       if(phone != null) {
@@ -527,4 +748,238 @@ public class AttendeeController {
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 
+  @GetMapping(path = "/admin/attendeeExcel.xlsx", produces = "application/excel")
+  public Object exportAttendeesExcel() {
+    XSSFWorkbook workbook = buildExcelDocument();
+    DateFormat dateFormat = new SimpleDateFormat("MMddyyyyHHmmss");
+    Date date = new Date();
+    String fileName = dateFormat.format(date) + "_attendees.xlsx";
+    try {
+      File dir = new File("excelExports");
+      if(!dir.exists()) {
+        dir.mkdir();
+      }
+      FileOutputStream out = new FileOutputStream(new File("excelExports/" + fileName));
+      workbook.write(out);
+      out.close();
+      workbook.close();
+      return new FileSystemResource("excelExports/" + fileName);
+    } catch(Exception e) {
+      e.printStackTrace();
+      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  protected XSSFWorkbook buildExcelDocument() {
+    XSSFWorkbook workbook = new XSSFWorkbook();
+    XSSFSheet sheet = workbook.createSheet("Attendees");
+
+    List<Supplier> supps = suppliers.findAll();
+    List<Presenter> presents = presenters.findAll();
+    List<Evaluator> evals = evaluators.findAll();
+
+    XSSFRow header = sheet.createRow(0);
+    header.createCell(0).setCellValue("Type");
+    header.createCell(1).setCellValue("Attendee ID");
+    header.createCell(2).setCellValue("Last Name");
+    header.createCell(3).setCellValue("First Name");
+    header.createCell(4).setCellValue("Email");
+    header.createCell(5).setCellValue("Nickname");
+    header.createCell(6).setCellValue("Phone Number");
+    header.createCell(7).setCellValue("Cell Number");
+    header.createCell(8).setCellValue("Country");
+    header.createCell(9).setCellValue("City");
+    header.createCell(10).setCellValue("Comments");
+    header.createCell(11).setCellValue("Company");
+    header.createCell(12).setCellValue("Date Created");
+    header.createCell(13).setCellValue("Date Last Modified");
+    header.createCell(14).setCellValue("Last Modified By");
+
+    header.createCell(15).setCellValue("Setup Day One Date");
+    header.createCell(16).setCellValue("Setup Day Two Date");
+    header.createCell(17).setCellValue("Setup Day Three Date");
+    header.createCell(18).setCellValue("Dry Run Date");
+    header.createCell(19).setCellValue("Event Day One Date");
+    header.createCell(20).setCellValue("Event Day Two Date");
+    header.createCell(21).setCellValue("Event Day Three Date");
+    header.createCell(22).setCellValue("Event Day Four Date");
+    header.createCell(23).setCellValue("Event Day Five Date");
+
+    header.createCell(24).setCellValue("Setup Day One Technology");
+    header.createCell(25).setCellValue("Setup Day Two Technology");
+    header.createCell(26).setCellValue("Setup Day Three Technology");
+    header.createCell(27).setCellValue("Dry Run Technology");
+    header.createCell(28).setCellValue("Event Day One Technology");
+    header.createCell(29).setCellValue("Event Day Two Technology");
+    header.createCell(30).setCellValue("Event Day Three Technology");
+    header.createCell(31).setCellValue("Event Day Four Technology");
+    header.createCell(32).setCellValue("Event Day Five Technology");
+
+    header.createCell(33).setCellValue("Setup Day One Attendance");
+    header.createCell(34).setCellValue("Setup Day Two Attendance");
+    header.createCell(35).setCellValue("Setup Day Three Attendance");
+    header.createCell(36).setCellValue("Dry Run Attendance");
+    header.createCell(37).setCellValue("Event Day One Attendance");
+    header.createCell(38).setCellValue("Event Day Two Attendance");
+    header.createCell(39).setCellValue("Event Day Three Attendance");
+    header.createCell(40).setCellValue("Event Day Four Attendance");
+    header.createCell(41).setCellValue("Event Day Five Attendance");
+
+    int rowNum = 0;
+
+    for(Supplier s: supps) {
+      XSSFRow row = sheet.createRow(++rowNum);
+      row.createCell(0).setCellValue("Supplier");
+      row.createCell(1).setCellValue(s.getId());
+      row.createCell(2).setCellValue(s.getLastName());
+      row.createCell(3).setCellValue(s.getFirstName());
+      row.createCell(4).setCellValue(s.getEmail());
+      row.createCell(5).setCellValue(s.getNickname());
+      row.createCell(6).setCellValue(s.getPhoneNumber());
+      row.createCell(7).setCellValue(s.getCellNumber());
+      row.createCell(8).setCellValue(s.getCountry());
+      row.createCell(9).setCellValue(s.getCity());
+      row.createCell(10).setCellValue(s.getComments());
+      row.createCell(11).setCellValue(s.getCompany());
+      row.createCell(12).setCellValue(s.getDateCreated());
+      row.createCell(13).setCellValue(s.getLastModified());
+      row.createCell(14).setCellValue(s.getModifiedBy());
+  
+      row.createCell(15).setCellValue(s.getSetUpOne());
+      row.createCell(16).setCellValue(s.getSetUpTwo());
+      row.createCell(17).setCellValue(s.getSetUpThree());
+      row.createCell(18).setCellValue(s.getDryRun());
+      row.createCell(19).setCellValue(s.getEventDayOne());
+      row.createCell(20).setCellValue(s.getEventDayTwo());
+      row.createCell(21).setCellValue(s.getEventDayThree());
+      row.createCell(22).setCellValue(s.getEventDayFour());
+      row.createCell(23).setCellValue(s.getEventDayFive());
+  
+      row.createCell(24).setCellValue(s.getSetUpOneTech());
+      row.createCell(25).setCellValue(s.getSetUpTwoTech());
+      row.createCell(26).setCellValue(s.getSetUpThreeTech());
+      row.createCell(27).setCellValue(s.getDryRunTech());
+      row.createCell(28).setCellValue(s.getEventDayOneTech());
+      row.createCell(29).setCellValue(s.getEventDayTwoTech());
+      row.createCell(30).setCellValue(s.getEventDayThreeTech());
+      row.createCell(31).setCellValue(s.getEventDayFourTech());
+      row.createCell(32).setCellValue(s.getEventDayFiveTech());
+  
+      row.createCell(33).setCellValue(s.getSetUpOneAttended());
+      row.createCell(34).setCellValue(s.getSetUpTwoAttended());
+      row.createCell(35).setCellValue(s.getSetUpThreeAttended());
+      row.createCell(36).setCellValue(s.getDryRunAttended());
+      row.createCell(37).setCellValue(s.getEventDayOneAttended());
+      row.createCell(38).setCellValue(s.getEventDayTwoAttended());
+      row.createCell(39).setCellValue(s.getEventDayThreeAttended());
+      row.createCell(40).setCellValue(s.getEventDayFourAttended());
+      row.createCell(41).setCellValue(s.getEventDayFiveAttended());
+    }
+
+    for(Presenter s: presents) {
+      XSSFRow row = sheet.createRow(++rowNum);
+      row.createCell(0).setCellValue("Presenter");
+      row.createCell(1).setCellValue(s.getId());
+      row.createCell(2).setCellValue(s.getLastName());
+      row.createCell(3).setCellValue(s.getFirstName());
+      row.createCell(4).setCellValue(s.getEmail());
+      row.createCell(5).setCellValue(s.getNickname());
+      row.createCell(6).setCellValue(s.getPhoneNumber());
+      row.createCell(7).setCellValue(s.getCellNumber());
+      row.createCell(8).setCellValue(s.getCountry());
+      row.createCell(9).setCellValue(s.getCity());
+      row.createCell(10).setCellValue(s.getComments());
+      row.createCell(11).setCellValue(" ");
+      row.createCell(12).setCellValue(s.getDateCreated());
+      row.createCell(13).setCellValue(s.getLastModified());
+      row.createCell(14).setCellValue(s.getModifiedBy());
+  
+      row.createCell(15).setCellValue(s.getSetUpOne());
+      row.createCell(16).setCellValue(s.getSetUpTwo());
+      row.createCell(17).setCellValue(s.getSetUpThree());
+      row.createCell(18).setCellValue(s.getDryRun());
+      row.createCell(19).setCellValue(s.getEventDayOne());
+      row.createCell(20).setCellValue(s.getEventDayTwo());
+      row.createCell(21).setCellValue(s.getEventDayThree());
+      row.createCell(22).setCellValue(s.getEventDayFour());
+      row.createCell(23).setCellValue(s.getEventDayFive());
+  
+      row.createCell(24).setCellValue(s.getSetUpOneTech());
+      row.createCell(25).setCellValue(s.getSetUpTwoTech());
+      row.createCell(26).setCellValue(s.getSetUpThreeTech());
+      row.createCell(27).setCellValue(s.getDryRunTech());
+      row.createCell(28).setCellValue(s.getEventDayOneTech());
+      row.createCell(29).setCellValue(s.getEventDayTwoTech());
+      row.createCell(30).setCellValue(s.getEventDayThreeTech());
+      row.createCell(31).setCellValue(s.getEventDayFourTech());
+      row.createCell(32).setCellValue(s.getEventDayFiveTech());
+  
+      row.createCell(33).setCellValue(s.getSetUpOneAttended());
+      row.createCell(34).setCellValue(s.getSetUpTwoAttended());
+      row.createCell(35).setCellValue(s.getSetUpThreeAttended());
+      row.createCell(36).setCellValue(s.getDryRunAttended());
+      row.createCell(37).setCellValue(s.getEventDayOneAttended());
+      row.createCell(38).setCellValue(s.getEventDayTwoAttended());
+      row.createCell(39).setCellValue(s.getEventDayThreeAttended());
+      row.createCell(40).setCellValue(s.getEventDayFourAttended());
+      row.createCell(41).setCellValue(s.getEventDayFiveAttended());
+    }
+
+    for(Evaluator s: evals) {
+      XSSFRow row = sheet.createRow(++rowNum);
+      row.createCell(0).setCellValue("Evaluator");
+      row.createCell(1).setCellValue(s.getId());
+      row.createCell(2).setCellValue(s.getLastName());
+      row.createCell(3).setCellValue(s.getFirstName());
+      row.createCell(4).setCellValue(s.getEmail());
+      row.createCell(5).setCellValue(s.getNickname());
+      row.createCell(6).setCellValue(s.getPhoneNumber());
+      row.createCell(7).setCellValue(s.getCellNumber());
+      row.createCell(8).setCellValue(s.getCountry());
+      row.createCell(9).setCellValue(s.getCity());
+      row.createCell(10).setCellValue(s.getComments());
+      row.createCell(11).setCellValue(" ");
+      row.createCell(12).setCellValue(s.getDateCreated());
+      row.createCell(13).setCellValue(s.getLastModified());
+      row.createCell(14).setCellValue(s.getModifiedBy());
+  
+      row.createCell(15).setCellValue(s.getSetUpOne());
+      row.createCell(16).setCellValue(s.getSetUpTwo());
+      row.createCell(17).setCellValue(s.getSetUpThree());
+      row.createCell(18).setCellValue(s.getDryRun());
+      row.createCell(19).setCellValue(s.getEventDayOne());
+      row.createCell(20).setCellValue(s.getEventDayTwo());
+      row.createCell(21).setCellValue(s.getEventDayThree());
+      row.createCell(22).setCellValue(s.getEventDayFour());
+      row.createCell(23).setCellValue(s.getEventDayFive());
+  
+      row.createCell(24).setCellValue(s.getSetUpOneTech());
+      row.createCell(25).setCellValue(s.getSetUpTwoTech());
+      row.createCell(26).setCellValue(s.getSetUpThreeTech());
+      row.createCell(27).setCellValue(s.getDryRunTech());
+      row.createCell(28).setCellValue(s.getEventDayOneTech());
+      row.createCell(29).setCellValue(s.getEventDayTwoTech());
+      row.createCell(30).setCellValue(s.getEventDayThreeTech());
+      row.createCell(31).setCellValue(s.getEventDayFourTech());
+      row.createCell(32).setCellValue(s.getEventDayFiveTech());
+  
+      row.createCell(33).setCellValue(s.getSetUpOneAttended());
+      row.createCell(34).setCellValue(s.getSetUpTwoAttended());
+      row.createCell(35).setCellValue(s.getSetUpThreeAttended());
+      row.createCell(36).setCellValue(s.getDryRunAttended());
+      row.createCell(37).setCellValue(s.getEventDayOneAttended());
+      row.createCell(38).setCellValue(s.getEventDayTwoAttended());
+      row.createCell(39).setCellValue(s.getEventDayThreeAttended());
+      row.createCell(40).setCellValue(s.getEventDayFourAttended());
+      row.createCell(41).setCellValue(s.getEventDayFiveAttended());
+    }
+
+    try {
+      return workbook;
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
 }

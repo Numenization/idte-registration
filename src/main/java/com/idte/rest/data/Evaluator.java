@@ -17,7 +17,26 @@ public class Evaluator extends Attendee {
         newEvaluator.country = evaluator.country;
         newEvaluator.city = evaluator.city;
         newEvaluator.comments = evaluator.comments;
-        newEvaluator.dateString = evaluator.dateString;
+
+        newEvaluator.setUpOne = evaluator.setUpOne != null ? evaluator.setUpOne : "";
+        newEvaluator.setUpTwo = evaluator.setUpTwo != null ? evaluator.setUpTwo : "";
+        newEvaluator.setUpThree = evaluator.setUpThree != null ? evaluator.setUpThree : "";
+        newEvaluator.dryRun = evaluator.dryRun != null ? evaluator.dryRun : "";
+        newEvaluator.eventDayOne = evaluator.eventDayOne != null ? evaluator.eventDayOne : "";
+        newEvaluator.eventDayTwo = evaluator.eventDayTwo != null ? evaluator.eventDayTwo : "";
+        newEvaluator.eventDayThree = evaluator.eventDayThree != null ? evaluator.eventDayThree : "";
+        newEvaluator.eventDayFour = evaluator.eventDayFour != null ? evaluator.eventDayFour : "";
+        newEvaluator.eventDayFive = evaluator.eventDayFive != null ? evaluator.eventDayFive : "";
+    
+        newEvaluator.setUpOneTech = evaluator.setUpOneTech;
+        newEvaluator.setUpTwoTech = evaluator.setUpTwoTech;
+        newEvaluator.setUpThreeTech = evaluator.setUpThreeTech;
+        newEvaluator.dryRunTech = evaluator.dryRunTech;
+        newEvaluator.eventDayOneTech = evaluator.eventDayOneTech;
+        newEvaluator.eventDayTwoTech = evaluator.eventDayTwoTech;
+        newEvaluator.eventDayThreeTech = evaluator.eventDayThreeTech;
+        newEvaluator.eventDayFourTech = evaluator.eventDayFourTech;
+        newEvaluator.eventDayFiveTech = evaluator.eventDayFiveTech;
 
         return newEvaluator;
     }

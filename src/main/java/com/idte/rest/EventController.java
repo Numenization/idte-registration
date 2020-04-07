@@ -5,12 +5,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import com.idte.rest.data.Event;
 import com.idte.rest.data.EventRepository;
 
 import org.springframework.data.domain.Example;
-import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
@@ -80,6 +80,14 @@ public class EventController {
      ));
      */
     try {
+      // set all other events currentEvent to false
+      List<Event> eventList = events.findAll();
+      for(Event ev: eventList) {
+        ev.setCurrentEvent("false");
+        events.save(ev);
+      }
+
+      // save new event (which will be current event)
       return new ResponseEntity<>(events.save(event), HttpStatus.CREATED);
     } catch (Exception e) {
       return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -742,16 +750,16 @@ public class EventController {
    
     Map<String, Object> map = new HashMap<String, Object>();
 
-    map.put("setUp1", "SetUp1: " + setUpOne);
-    map.put("setUp2", "SetUp2: " + setUpTwo);
-    map.put("setUp3", "SetUp3: " + setUpThree);
-    map.put("dryRun", "DryRun: " + dryRun);
-    map.put("eventDay1", "EventDay1: " + eventDayOne);
-    map.put("eventDay2", "EventDay2: " + eventDayTwo);
-    map.put("eventDay3", "EventDay3: " + eventDayThree);
-    map.put("eventDay4", "EventDay4: " + eventDayFour);
-    map.put("eventDay5", "EventDay5: " + eventDayFive);
-    System.out.print(map);
+    map.put("setUp1", setUpOne);
+    map.put("setUp2", setUpTwo);
+    map.put("setUp3", setUpThree);
+    map.put("dryRun", dryRun);
+    map.put("eventDay1", eventDayOne);
+    map.put("eventDay2", eventDayTwo);
+    map.put("eventDay3", eventDayThree);
+    map.put("eventDay4", eventDayFour);
+    map.put("eventDay5", eventDayFive);
+
     return map;
   }
   

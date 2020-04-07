@@ -7,6 +7,7 @@ import { Table, TableRow } from '../general/table.jsx';
 import '../../css/styles.css';
 import Modal from '../general/modal.jsx';
 import Attendee from '../../data/attendee.js';
+import { DateSelector, TechDropdown } from '../general/registerhelpers.jsx';
 import '../../css/registerform.css';
 
 class DatabasePage extends React.Component {
@@ -26,7 +27,7 @@ class DatabasePage extends React.Component {
       sortBy: null,
       search: '',
       eventDates: [],
-      technologies: []
+      technologies: [],
     };
 
     this.getAttendees = this.getAttendees.bind(this);
@@ -57,33 +58,54 @@ class DatabasePage extends React.Component {
     this.getTechnologies = this.getTechnologies.bind(this);
     this.req = this.req.bind(this);
     this.updateDateString = this.updateDateString.bind(this);
+    this.dateSelectorUpdate = this.dateSelectorUpdate.bind(this);
   }
 
   async req(method, url, opts = null) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       let xhr = new XMLHttpRequest();
       xhr.open(method, url);
       xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.onload = function() {
+      xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
           resolve(xhr.response ? JSON.parse(xhr.response) : null);
         } else {
           reject({
             status: this.status,
-            errors: xhr.response ? JSON.parse(xhr.response) : null
+            errors: xhr.response ? JSON.parse(xhr.response) : null,
           });
         }
       };
-      xhr.onerror = function() {
+      xhr.onerror = function () {
         reject({
           status: this.status,
-          statusText: xhr.statusText
+          statusText: xhr.statusText,
         });
       };
       xhr.send(JSON.stringify(opts));
-    }).catch(err => {
+    }).catch((err) => {
       throw err;
     });
+  }
+
+  dateSelectorUpdate(e) {
+    const div = e.target.parentNode;
+    const checkbox = div.childNodes[0];
+    const label = div.childNodes[1];
+    const dropdown = div.childNodes[2];
+    const name = div.id;
+    let techName = name + 'Tech';
+    let date = label.id;
+    let checked = checkbox.checked;
+
+    if (!checked) {
+      dropdown.value = '-- select a technology --';
+      date = '';
+    }
+    let techId = dropdown.value;
+    if (techId == '-- select a technology --') techId = 0;
+
+    this.setState({ [name]: date, [techName]: techId });
   }
 
   clearUserValues() {
@@ -104,10 +126,36 @@ class DatabasePage extends React.Component {
       'dateCreated',
       'modifiedBy',
       'type',
-      'dateString'
+      'setUpOne',
+      'setUpTwo',
+      'setUpThree',
+      'dryRun',
+      'eventDayOne',
+      'eventDayTwo',
+      'eventDayThree',
+      'eventDayFour',
+      'eventDayFive',
+      'setUpOneTech',
+      'setUpTwoTech',
+      'setUpThreeTech',
+      'dryRunTech',
+      'eventDayOneTech',
+      'eventDayTwoTech',
+      'eventDayThreeTech',
+      'eventDayFourTech',
+      'eventDayFiveTech',
+      'setUpOneAttended',
+      'setUpTwoAttended',
+      'setUpThreeAttended',
+      'dryRunAttended',
+      'eventDayOneAttended',
+      'eventDayTwoAttended',
+      'eventDayThreeAttended',
+      'eventDayFourAttended',
+      'eventDayFiveAttended',
     ];
     for (let property of values) {
-      this.setState({ [property]: undefined });
+      this.setState({ [property]: '' });
     }
   }
 
@@ -118,7 +166,7 @@ class DatabasePage extends React.Component {
       selectedUser: this.state.selectedUser,
       loading: this.state.loading,
       showEditModal: this.state.showEditModal,
-      showAddModal: this.state.showAddModal
+      showAddModal: this.state.showAddModal,
     });
   }
 
@@ -129,7 +177,7 @@ class DatabasePage extends React.Component {
       selectedUser: this.state.selectedUser,
       loading: val,
       showEditModal: this.state.showEditModal,
-      showAddModal: this.state.showAddModal
+      showAddModal: this.state.showAddModal,
     });
   }
 
@@ -140,7 +188,7 @@ class DatabasePage extends React.Component {
       selectedUser: this.state.selectedUser,
       loading: this.state.loading,
       showEditModal: this.state.showEditModal,
-      showAddModal: this.state.showAddModal
+      showAddModal: this.state.showAddModal,
     });
   }
 
@@ -156,7 +204,7 @@ class DatabasePage extends React.Component {
         selectedUser: value,
         loading: this.state.loading,
         showEditModal: this.state.showEditModal,
-        showAddModal: this.state.showAddModal
+        showAddModal: this.state.showAddModal,
       },
       cb
     );
@@ -176,7 +224,7 @@ class DatabasePage extends React.Component {
     //   if (attendee) attendeesToPutOnPage.push(attendee);
     // }
     this.setState({
-      page: val
+      page: val,
     });
     //this.setAttendeesOnPage(attendeesToPutOnPage);
   }
@@ -215,7 +263,7 @@ class DatabasePage extends React.Component {
       selectedUser: this.state.selectedUser,
       loading: this.state.loading,
       showEditModal: !this.state.showEditModal,
-      showAddModal: this.state.showAddModal
+      showAddModal: this.state.showAddModal,
     });
   }
 
@@ -227,7 +275,7 @@ class DatabasePage extends React.Component {
       selectedUser: this.state.selectedUser,
       loading: this.state.loading,
       showEditModal: this.state.showEditModal,
-      showAddModal: !this.state.showAddModal
+      showAddModal: !this.state.showAddModal,
     });
   }
 
@@ -371,8 +419,8 @@ class DatabasePage extends React.Component {
   }
 
   async getEventDates() {
-    let res = await this.req('GET', '/idte/eventDates');
-    this.setState({ eventDates: res.status.split(',') });
+    let res = await this.req('GET', '/idte/eventDateDetails');
+    this.setState({ eventDates: res });
   }
 
   async getTechnologies() {
@@ -624,7 +672,7 @@ class DatabasePage extends React.Component {
       6: 'modifiedBy',
       7: 'company',
       8: 'country',
-      9: 'city'
+      9: 'city',
     };
     var listToSort = this.state.attendees;
 
@@ -644,7 +692,7 @@ class DatabasePage extends React.Component {
       'Email',
       'Date Created',
       'Last Modified',
-      'Modified By'
+      'Modified By',
     ];
 
     const dataColumns = [
@@ -654,13 +702,13 @@ class DatabasePage extends React.Component {
       'email',
       'dateCreated',
       'lastModified',
-      'modifiedBy'
+      'modifiedBy',
     ];
 
     const buttonWidth = {
       width: '30%',
       display: 'inline-block',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
     };
 
     const addModalInner = (
@@ -759,34 +807,69 @@ class DatabasePage extends React.Component {
             </tr>
           </tbody>
         </table>
-        {this.state.eventDates.map((date, i) => {
-          return (
-            <div className='date-tech-selector-row' key={i} id={date}>
-              <input
-                type='checkbox'
-                id='checkbox'
-                onChange={this.updateDateString}
-              ></input>
-              <label>{date}</label>
-              <select
-                defaultValue='-- select a technology --'
-                id='dropdown'
-                onChange={this.updateDateString}
-              >
-                <option disabled value='-- select a technology --'>
-                  -- select a technology --
-                </option>
-                {this.state.technologies.map((tech, k) => {
-                  return (
-                    <option key={k} value={tech}>
-                      {tech}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-          );
-        })}
+        <DateSelector
+          id='setUpOne'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Setup Day 1:' + this.state.eventDates.setUp1}
+          date={this.state.eventDates.setUp1}
+        ></DateSelector>
+        <DateSelector
+          id='setUpTwo'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Setup Day 2:' + this.state.eventDates.setUp2}
+          date={this.state.eventDates.setUp2}
+        ></DateSelector>
+        <DateSelector
+          id='setUpThree'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Setup Day 3:' + this.state.eventDates.setUp3}
+          date={this.state.eventDates.setUp3}
+        ></DateSelector>
+        <DateSelector
+          id='dryRun'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Dry Run Day:' + this.state.eventDates.dryRun}
+          date={this.state.eventDates.dryRun}
+        ></DateSelector>
+        <DateSelector
+          id='eventDayOne'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Event Day 1:' + this.state.eventDates.eventDay1}
+          date={this.state.eventDates.eventDay1}
+        ></DateSelector>
+        <DateSelector
+          id='eventDayTwo'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Event Day 2:' + this.state.eventDates.eventDay2}
+          date={this.state.eventDates.eventDay2}
+        ></DateSelector>
+        <DateSelector
+          id='eventDayThree'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Event Day 3:' + this.state.eventDates.eventDay3}
+          date={this.state.eventDates.eventDay3}
+        ></DateSelector>
+        <DateSelector
+          id='eventDayFour'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Event Day 4:' + this.state.eventDates.eventDay4}
+          date={this.state.eventDates.eventDay4}
+        ></DateSelector>
+        <DateSelector
+          id='eventDayFive'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Event Day 5:' + this.state.eventDates.eventDay5}
+          date={this.state.eventDates.eventDay5}
+        ></DateSelector>
         <span>Comments:</span>
         <br />
         <textarea
@@ -804,7 +887,7 @@ class DatabasePage extends React.Component {
             display: 'inline-block',
             boxSizing: 'border-box',
             fontSize: '1em',
-            margin: '0.5em 0'
+            margin: '0.5em 0',
           }}
           onClick={this.postNewUser}
         >
@@ -918,68 +1001,87 @@ class DatabasePage extends React.Component {
             </tr>
           </tbody>
         </table>
-        {this.state.eventDates.map((date, i) => {
-          const dateString = this.state.dateString;
-          if (!dateString) return;
-
-          const dateStrings = dateString.split(',');
-          let dates = [];
-          let techs = [];
-
-          for (let str of dateStrings) {
-            let dateStr = str.split(':')[0];
-            let techOnDate = str.split(':')[1];
-
-            dates.push(dateStr);
-            techs.push(techOnDate);
-          }
-
-          let checked = (
-            <input
-              type='checkbox'
-              id='checkbox'
-              onChange={this.updateDateString}
-            ></input>
-          );
-          let tech = '-- select a technology --';
-
-          for (let i = 0; i < dates.length; i++) {
-            if (dates[i] == date) {
-              checked = (
-                <input
-                  type='checkbox'
-                  id='checkbox'
-                  defaultChecked
-                  onChange={this.updateDateString}
-                ></input>
-              );
-              tech = techs[i];
-            }
-          }
-
-          return (
-            <div className='date-tech-selector-row' key={i} id={date}>
-              {checked}
-              <label>{date}</label>
-              <select
-                defaultValue={tech}
-                id='dropdown'
-                onChange={this.updateDateString}
-              >
-                <option disabled value='-- select a technology --'>
-                  -- select a technology --
-                </option>
-                {this.state.technologies.map((tech, k) => {
-                  return (
-                    <option key={k} value={tech}>
-                      {tech}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-          );
-        })}
+        <DateSelector
+          id='setUpOne'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Setup Day 1:' + this.state.eventDates.setUp1}
+          checked={this.state.setUpOne.length > 0 ? true : false}
+          date={this.state.eventDates.setUp1}
+          selected={this.state.setUpOneTech}
+        ></DateSelector>
+        <DateSelector
+          id='setUpTwo'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Setup Day 2:' + this.state.eventDates.setUp2}
+          checked={this.state.setUpTwo.length > 0 ? true : false}
+          date={this.state.eventDates.setUp2}
+          selected={this.state.setUpTwoTech}
+        ></DateSelector>
+        <DateSelector
+          id='setUpThree'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Setup Day 3:' + this.state.eventDates.setUp3}
+          checked={this.state.setUpThree.length > 0 ? true : false}
+          date={this.state.eventDates.setUp3}
+          selected={this.state.setUpThreeTech}
+        ></DateSelector>
+        <DateSelector
+          id='dryRun'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Dry Run Day:' + this.state.eventDates.dryRun}
+          checked={this.state.dryRun.length > 0 ? true : false}
+          date={this.state.eventDates.dryRun}
+          selected={this.state.dryRunTech}
+        ></DateSelector>
+        <DateSelector
+          id='eventDayOne'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Event Day 1:' + this.state.eventDates.eventDay1}
+          checked={this.state.eventDayOne.length > 0 ? true : false}
+          date={this.state.eventDates.eventDay1}
+          selected={this.state.eventDayOneTech}
+        ></DateSelector>
+        <DateSelector
+          id='eventDayTwo'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Event Day 2:' + this.state.eventDates.eventDay2}
+          checked={this.state.eventDayTwo.length > 0 ? true : false}
+          date={this.state.eventDates.eventDay2}
+          selected={this.state.eventDayTwoTech}
+        ></DateSelector>
+        <DateSelector
+          id='eventDayThree'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Event Day 3:' + this.state.eventDates.eventDay3}
+          checked={this.state.eventDayThree.length > 0 ? true : false}
+          date={this.state.eventDates.eventDay3}
+          selected={this.state.eventDayThreeTech}
+        ></DateSelector>
+        <DateSelector
+          id='eventDayFour'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Event Day 4:' + this.state.eventDates.eventDay4}
+          checked={this.state.eventDayFour.length > 0 ? true : false}
+          date={this.state.eventDates.eventDay4}
+          selected={this.state.eventDayFourTech}
+        ></DateSelector>
+        <DateSelector
+          id='eventDayFive'
+          onChange={this.dateSelectorUpdate}
+          technologies={this.state.technologies}
+          text={'Event Day 5:' + this.state.eventDates.eventDay5}
+          checked={this.state.eventDayFive.length > 0 ? true : false}
+          date={this.state.eventDates.eventDay5}
+          selected={this.state.eventDayFiveTech}
+        ></DateSelector>
         <span>Comments:</span>
         <br />
         <textarea
@@ -1005,7 +1107,7 @@ class DatabasePage extends React.Component {
             display: 'inline-block',
             boxSizing: 'border-box',
             fontSize: '1em',
-            margin: '0.5em 0'
+            margin: '0.5em 0',
           }}
         >
           Update Attendee Fields
@@ -1019,7 +1121,7 @@ class DatabasePage extends React.Component {
             boxSizing: 'border-box',
             fontSize: '1em',
             margin: '0.5em 0',
-            float: 'right'
+            float: 'right',
           }}
         >
           Delete Attendee
@@ -1051,7 +1153,7 @@ class DatabasePage extends React.Component {
               <label htmlFor='sort-by-select'>Sort Table By: </label>
               <select
                 id='sort-by-select'
-                onChange={e => {
+                onChange={(e) => {
                   var sortBy = e.target.value;
                   this.setState({ sortBy: sortBy });
                 }}
@@ -1074,10 +1176,10 @@ class DatabasePage extends React.Component {
               <label htmlFor='search-input'>Search: </label>
               <input
                 type='text'
-                onChange={e => {
+                onChange={(e) => {
                   this.setState({ search: e.target.value });
                 }}
-                onKeyDown={e => {
+                onKeyDown={(e) => {
                   if (e.keyCode == 13) {
                     this.setState(
                       { search: e.target.value },
@@ -1092,7 +1194,7 @@ class DatabasePage extends React.Component {
               <label htmlFor='rows-per-page-select'>Entries per page: </label>
               <select
                 id='rows-per-page-select'
-                onChange={e => {
+                onChange={(e) => {
                   this.setRowsPerPage(parseInt(e.target.value));
                 }}
               >
@@ -1121,6 +1223,16 @@ class DatabasePage extends React.Component {
             onClick={this.toggleAddModal}
           >
             Add entry to Attendees
+          </button>
+          <br />
+          <button
+            id='link-button'
+            style={buttonWidth}
+            onClick={async () => {
+              window.open('/idte/admin/attendeeExcel.xlsx');
+            }}
+          >
+            Export to Excel Sheet
           </button>
           <br />
           <a id='link-button' href='admin.html' style={buttonWidth}>

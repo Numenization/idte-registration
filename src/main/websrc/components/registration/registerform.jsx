@@ -6,6 +6,7 @@ import Footer from '../footer.jsx';
 import ErrorTag from '../general/error.jsx';
 import '../../css/styles.css';
 import '../../css/registerform.css';
+import { DateSelector, TechDropdown } from '../general/registerhelpers.jsx';
 class FormPage extends React.Component {
   constructor(props) {
     super(props);
@@ -20,10 +21,28 @@ class FormPage extends React.Component {
       company: '',
       city: '',
       country: '',
+      setup1: '',
+      setup2: '',
+      setup3: '',
+      dryRun: '',
+      event1: '',
+      event2: '',
+      event3: '',
+      event4: '',
+      event5: '',
+      setup1Tech: '',
+      setup2Tech: '',
+      setup3Tech: '',
+      dryRunTech: '',
+      event1Tech: '',
+      event2Tech: '',
+      event3Tech: '',
+      event4Tech: '',
+      event5Tech: '',
       errors: [],
       eventDates: [],
       technologies: [],
-      showDropdowns: []
+      showDropdowns: [],
     };
     this.getRegStatus = this.getRegStatus.bind(this);
     this.req = this.req.bind(this);
@@ -34,19 +53,20 @@ class FormPage extends React.Component {
     this.register = this.register.bind(this);
     this.getEventDates = this.getEventDates.bind(this);
     this.getTechnologies = this.getTechnologies.bind(this);
+    this.dateSelectorUpdate = this.dateSelectorUpdate.bind(this);
   }
 
   async getRegStatus() {
     let res = await this.req('GET', '/idte/getRegistrationStatus');
     this.setState({
-      type: res.type
+      type: res.type,
     });
     document.getElementById('mytype').innerText = this.state.type;
   }
 
   async getEventDates() {
-    let res = await this.req('GET', '/idte/eventDates');
-    this.setState({ eventDates: res.status.split(',') });
+    let res = await this.req('GET', '/idte/eventDateDetails');
+    this.setState({ eventDates: res });
   }
 
   async getTechnologies() {
@@ -66,8 +86,23 @@ class FormPage extends React.Component {
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
+  }
+
+  dateSelectorUpdate(e) {
+    const div = e.target.parentNode;
+    const checkbox = div.childNodes[0];
+    const label = div.childNodes[1];
+    const dropdown = div.childNodes[2];
+    const name = div.id;
+    const techName = name + 'Tech';
+    let date = label.id;
+    let techId = dropdown.value;
+    let checked = checkbox.checked;
+    if (techId == '-- select a technology --') techId = '';
+    if (!checked) date = '';
+    this.setState({ [name]: date, [techName]: techId });
   }
 
   closeError(e) {
@@ -102,37 +137,6 @@ class FormPage extends React.Component {
       this.removeError(0);
     }
 
-    let dateString = '';
-    let dateSelectRows = document.getElementsByClassName(
-      'date-tech-selector-row'
-    );
-
-    for (let element of dateSelectRows) {
-      if (!element.childNodes) continue;
-
-      let checkbox = element.childNodes[0];
-      let select = element.childNodes[2];
-
-      if (!checkbox.checked) continue;
-      if (select.value != '-- select a technology --') {
-        dateString = dateString + ',' + element.id + ':' + select.value;
-      } else {
-        this.addError({
-          message: 'Select a technology for ' + element.id + '!'
-        });
-        return;
-      }
-    }
-
-    if (dateString.length == 0) {
-      this.addError({
-        message: 'Select some dates to attend!'
-      });
-      return;
-    }
-
-    dateString = dateString.substring(1);
-
     try {
       await this.req('POST', '/idte/attendees', {
         type: this.state.type,
@@ -145,20 +149,24 @@ class FormPage extends React.Component {
         company: this.state.company,
         city: this.state.city,
         country: this.state.country,
-        dateString: dateString
-      });
-    } catch (e) {
-      for (const error of e.errors) {
-        this.addError(error);
-      }
-    }
-
-    //Generate QR Code
-    try {
-      await this.req('POST', '/idte/MakeQRCode', {
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        email: this.state.email
+        setup1: this.state.setup1,
+        setup2: this.state.setup2,
+        setup3: this.state.setup3,
+        dryRun: this.state.dryRun,
+        event1: this.state.event1,
+        event2: this.state.event2,
+        event3: this.state.event3,
+        event4: this.state.event4,
+        event5: this.state.event5,
+        setup1Tech: this.state.setup1Tech,
+        setup2Tech: this.state.setup2Tech,
+        setup3Tech: this.state.setup3Tech,
+        dryRunTech: this.state.dryRunTech,
+        event1Tech: this.state.event1Tech,
+        event2Tech: this.state.event2Tech,
+        event3Tech: this.state.event3Tech,
+        event4Tech: this.state.event4Tech,
+        event5Tech: this.state.event5Tech,
       });
     } catch (e) {
       for (const error of e.errors) {
@@ -173,15 +181,15 @@ class FormPage extends React.Component {
     // TODO: show that this is working somehow
     //Send email
     try {
-      await this.req('POST', '/idte/emailqr', {
+      this.req('POST', '/idte/emailqr', {
         subject: 'Ford IDTE: Registration Confirmation',
         body: outmessage,
         to: this.state.email,
         firstName: this.state.firstName,
         lastName: this.state.lastName,
-        email: this.state.email
+        email: this.state.email,
       });
-      window.location.href = 'http://localhost:8080/idte/thankyou.html';
+      window.location.href = '/idte/thankyou.html';
     } catch (e) {
       for (const error of e.errors) {
         this.addError(error);
@@ -190,28 +198,28 @@ class FormPage extends React.Component {
   }
 
   async req(method, url, opts = null) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       let xhr = new XMLHttpRequest();
       xhr.open(method, url);
       xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.onload = function() {
+      xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
           resolve(xhr.response ? JSON.parse(xhr.response) : null);
         } else {
           reject({
             status: this.status,
-            errors: xhr.response ? JSON.parse(xhr.response) : null
+            errors: xhr.response ? JSON.parse(xhr.response) : null,
           });
         }
       };
-      xhr.onerror = function() {
+      xhr.onerror = function () {
         reject({
           status: this.status,
-          statusText: xhr.statusText
+          statusText: xhr.statusText,
         });
       };
       xhr.send(JSON.stringify(opts));
-    }).catch(err => {
+    }).catch((err) => {
       throw err;
     });
   }
@@ -331,29 +339,168 @@ class FormPage extends React.Component {
                   coorespond with the type of activity to be performed on that
                   day (setup, dry run, presentations, etc..)
                 </p>
-                {this.state.eventDates.map((date, i) => {
-                  return (
-                    <div className='date-tech-selector-row' key={i} id={date}>
-                      <input type='checkbox' id='checkbox'></input>
-                      <label>{date}</label>
-                      <select
-                        defaultValue='-- select a technology --'
-                        id='dropdown'
-                      >
-                        <option disabled value='-- select a technology --'>
-                          -- select a technology --
-                        </option>
-                        {this.state.technologies.map((tech, k) => {
-                          return (
-                            <option key={k} value={tech}>
-                              {tech}
-                            </option>
-                          );
-                        })}
-                      </select>
-                    </div>
-                  );
-                })}
+                <div className='date-tech-selector-row' id='setup1'>
+                  <input
+                    type='checkbox'
+                    id='checkbox-setup1'
+                    onChange={this.dateSelectorUpdate}
+                  ></input>
+                  <label
+                    htmlFor='checkbox-setup1'
+                    id={this.state.eventDates.setUp1}
+                  >
+                    Setup Day 1: {this.state.eventDates.setUp1}
+                  </label>
+                  <TechDropdown
+                    id='dropdown-setup1'
+                    technologies={this.state.technologies}
+                    onChange={this.dateSelectorUpdate}
+                  ></TechDropdown>
+                </div>
+                <div className='date-tech-selector-row' id='setup2'>
+                  <input
+                    type='checkbox'
+                    id='checkbox-setup2'
+                    onChange={this.dateSelectorUpdate}
+                  ></input>
+                  <label
+                    htmlFor='checkbox-setup2'
+                    id={this.state.eventDates.setUp2}
+                  >
+                    Setup Day 2: {this.state.eventDates.setUp2}
+                  </label>
+                  <TechDropdown
+                    id='dropdown-setup2'
+                    technologies={this.state.technologies}
+                    onChange={this.dateSelectorUpdate}
+                  ></TechDropdown>
+                </div>
+                <div className='date-tech-selector-row' id='setup3'>
+                  <input
+                    type='checkbox'
+                    id='checkbox-setup3'
+                    onChange={this.dateSelectorUpdate}
+                  ></input>
+                  <label
+                    htmlFor='checkbox-setup3'
+                    id={this.state.eventDates.setUp3}
+                  >
+                    Setup Day 3: {this.state.eventDates.setUp3}
+                  </label>
+                  <TechDropdown
+                    id='dropdown-setup3'
+                    technologies={this.state.technologies}
+                    onChange={this.dateSelectorUpdate}
+                  ></TechDropdown>
+                </div>
+                <div className='date-tech-selector-row' id='dryRun'>
+                  <input
+                    type='checkbox'
+                    id='checkbox-dryrun'
+                    onChange={this.dateSelectorUpdate}
+                  ></input>
+                  <label
+                    htmlFor='checkbox-dryrun'
+                    id={this.state.eventDates.dryRun}
+                  >
+                    Dry Run Day: {this.state.eventDates.dryRun}
+                  </label>
+                  <TechDropdown
+                    id='dropdown-dryrun'
+                    technologies={this.state.technologies}
+                    onChange={this.dateSelectorUpdate}
+                  ></TechDropdown>
+                </div>
+                <div className='date-tech-selector-row' id='event1'>
+                  <input
+                    type='checkbox'
+                    id='checkbox-event1'
+                    onChange={this.dateSelectorUpdate}
+                  ></input>
+                  <label
+                    htmlFor='checkbox-event1'
+                    id={this.state.eventDates.eventDay1}
+                  >
+                    Event Day 1: {this.state.eventDates.eventDay1}
+                  </label>
+                  <TechDropdown
+                    id='dropdown-event1'
+                    technologies={this.state.technologies}
+                    onChange={this.dateSelectorUpdate}
+                  ></TechDropdown>
+                </div>
+                <div className='date-tech-selector-row' id='event2'>
+                  <input
+                    type='checkbox'
+                    id='checkbox-event2'
+                    onChange={this.dateSelectorUpdate}
+                  ></input>
+                  <label
+                    htmlFor='checkbox-event2'
+                    id={this.state.eventDates.eventDay2}
+                  >
+                    Event Day 2: {this.state.eventDates.eventDay2}
+                  </label>
+                  <TechDropdown
+                    id='dropdown-event1'
+                    technologies={this.state.technologies}
+                    onChange={this.dateSelectorUpdate}
+                  ></TechDropdown>
+                </div>
+                <div className='date-tech-selector-row' id='event3'>
+                  <input
+                    type='checkbox'
+                    id='checkbox-event3'
+                    onChange={this.dateSelectorUpdate}
+                  ></input>
+                  <label
+                    htmlFor='checkbox-event3'
+                    id={this.state.eventDates.eventDay3}
+                  >
+                    Event Day 3: {this.state.eventDates.eventDay3}
+                  </label>
+                  <TechDropdown
+                    id='dropdown-event1'
+                    technologies={this.state.technologies}
+                    onChange={this.dateSelectorUpdate}
+                  ></TechDropdown>
+                </div>
+                <div className='date-tech-selector-row' id='event4'>
+                  <input
+                    type='checkbox'
+                    id='checkbox-event4'
+                    onChange={this.dateSelectorUpdate}
+                  ></input>
+                  <label
+                    htmlFor='checkbox-event4'
+                    id={this.state.eventDates.eventDay4}
+                  >
+                    Event Day 4: {this.state.eventDates.eventDay4}
+                  </label>
+                  <TechDropdown
+                    id='dropdown-event1'
+                    technologies={this.state.technologies}
+                    onChange={this.dateSelectorUpdate}
+                  ></TechDropdown>
+                </div>
+                <div className='date-tech-selector-row' id='event5'>
+                  <input
+                    type='checkbox'
+                    id='checkbox-event5'
+                    onChange={this.dateSelectorUpdate}
+                  ></input>
+                  <label
+                    htmlFor='checkbox-event5'
+                    id={this.state.eventDates.eventDay5}
+                  >
+                    Event Day 5: {this.state.eventDates.eventDay5}
+                  </label>
+                  <TechDropdown
+                    id='dropdown-event1'
+                    technologies={this.state.technologies}
+                    onChange={this.dateSelectorUpdate}
+                  ></TechDropdown>
+                </div>
               </div>
             </form>
             <button onClick={this.register}>Submit Registration</button>

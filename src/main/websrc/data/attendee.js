@@ -12,7 +12,24 @@ class Attendee {
       country: state.country,
       comments: state.comments,
       city: state.city,
-      dateString: state.dateString
+      setUpOne: state.setUpOne,
+      setUpTwo: state.setUpTwo,
+      setUpThree: state.setUpThree,
+      dryRun: state.dryRun,
+      eventDayOne: state.eventDayOne,
+      eventDayTwo: state.eventDayTwo,
+      eventDayThree: state.eventDayThree,
+      eventDayFour: state.eventDayFour,
+      eventDayFive: state.eventDayFive,
+      setUpOneTech: state.setUpOneTech,
+      setUpTwoTech: state.setUpTwoTech,
+      setUpThreeTech: state.setUpThreeTech,
+      dryRunTech: state.dryRunTech,
+      eventDayOneTech: state.eventDayOneTech,
+      eventDayTwoTech: state.eventDayTwoTech,
+      eventDayThreeTech: state.eventDayThreeTech,
+      eventDayFourTech: state.eventDayFourTech,
+      eventDayFiveTech: state.eventDayFiveTech,
     };
 
     for (let [key, val] of Object.entries(attendee)) {
@@ -118,7 +135,7 @@ class Attendee {
     if (res.statusText) {
       return res;
     }
-    res.forEach(attendee => {
+    res.forEach((attendee) => {
       attendee.type = 'Supplier';
     });
     return res;
@@ -131,7 +148,7 @@ class Attendee {
     if (res.statusText) {
       return res;
     }
-    res.forEach(attendee => {
+    res.forEach((attendee) => {
       attendee.type = 'Evaluator';
     });
     return res;
@@ -144,35 +161,35 @@ class Attendee {
     if (res.statusText) {
       return res;
     }
-    res.forEach(attendee => {
+    res.forEach((attendee) => {
       attendee.type = 'Presenter';
     });
     return res;
   }
 
   static async req(method, url, opts = null) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       let xhr = new XMLHttpRequest();
       xhr.open(method, url);
       xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.onload = function() {
+      xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
           resolve(JSON.parse(xhr.response ? xhr.response : null));
         } else {
           reject({
             status: this.status,
-            errors: JSON.parse(xhr.response)
+            errors: JSON.parse(xhr.response),
           });
         }
       };
-      xhr.onerror = function() {
+      xhr.onerror = function () {
         reject({
           status: this.status,
-          statusText: xhr.statusText
+          statusText: xhr.statusText,
         });
       };
       xhr.send(JSON.stringify(opts));
-    }).catch(err => {
+    }).catch((err) => {
       throw err;
     });
   }

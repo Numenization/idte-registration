@@ -1,5 +1,7 @@
 package com.idte.rest;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,7 +17,11 @@ import com.idte.rest.data.TechnologyCategory;
 import com.idte.rest.data.TechnologyCategoryRepository;
 import com.idte.rest.data.TechnologyRepository;
 
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -365,5 +371,82 @@ public class TechnologyController {
     // TODO: SEND CONFIRMATION EMAIL
 
     return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @GetMapping(path = "/admin/technologyExcel.xlsx", produces = "application/excel")
+  public Object exportAttendeesExcel() {
+    XSSFWorkbook workbook = buildExcelDocument();
+    DateFormat dateFormat = new SimpleDateFormat("MMddyyyyHHmmss");
+    Date date = new Date();
+    String fileName = dateFormat.format(date) + "technologies.xlsx";
+    try {
+      File dir = new File("excelExports");
+      if(!dir.exists()) {
+        dir.mkdir();
+      }
+      FileOutputStream out = new FileOutputStream(new File("excelExports/" + fileName));
+      workbook.write(out);
+      out.close();
+      workbook.close();
+      return new FileSystemResource("excelExports/" + fileName);
+    } catch(Exception e) {
+      e.printStackTrace();
+      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  protected XSSFWorkbook buildExcelDocument() {
+    XSSFWorkbook workbook = new XSSFWorkbook();
+    XSSFSheet sheet = workbook.createSheet("Technologies");
+
+    List<Technology> techs = technologies.findAll();
+
+    XSSFRow header = sheet.createRow(0);
+    header.createCell(0).setCellValue("Technology ID");
+    header.createCell(1).setCellValue("Title");
+    header.createCell(2).setCellValue("Description");
+    header.createCell(3).setCellValue("Category");
+    header.createCell(4).setCellValue("Type");
+    header.createCell(5).setCellValue("Shipping City");
+    header.createCell(6).setCellValue("Shipping Country");
+    header.createCell(7).setCellValue("Supplier Company");
+    header.createCell(8).setCellValue("Source");
+    header.createCell(9).setCellValue("Ford Contact");
+    header.createCell(10).setCellValue("Ford Presenter");
+    header.createCell(11).setCellValue("Director");
+    header.createCell(12).setCellValue("Comments");
+    header.createCell(13).setCellValue("Date Created");
+    header.createCell(14).setCellValue("Date Last Modified");
+    header.createCell(15).setCellValue("Last Modified By");
+
+    int rowNum = 0;
+
+    for(Technology tech: techs) {
+      XSSFRow row = sheet.createRow(++rowNum);
+      row.createCell(0).setCellValue(tech.getId());
+      row.createCell(1).setCellValue(tech.getTitle());
+      row.createCell(2).setCellValue(tech.getDescription());
+      row.createCell(3).setCellValue(tech.getCategory());
+      row.createCell(4).setCellValue(tech.getType());
+      row.createCell(5).setCellValue(tech.getShippingCity());
+      row.createCell(6).setCellValue(tech.getShippingCountry());
+      row.createCell(7).setCellValue(tech.getSupplierCompany());
+      row.createCell(8).setCellValue(tech.getSource());
+      row.createCell(9).setCellValue(tech.getFordContact());
+      row.createCell(10).setCellValue(tech.getFordPresenter());
+      row.createCell(11).setCellValue(tech.getDirector());
+      row.createCell(12).setCellValue(tech.getComments());
+      row.createCell(13).setCellValue(tech.getDateCreated());
+      row.createCell(14).setCellValue(tech.getLastModified());
+      row.createCell(15).setCellValue(tech.getModifiedBy());
+    }
+
+    try {
+      return workbook;
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 }

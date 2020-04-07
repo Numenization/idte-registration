@@ -131,7 +131,10 @@ constructor(props){
     </div>
     
      <div  align= "center">
-            <button onClick= {this.postAnEvent} >Create Event</button>
+            <button onClick= {this.postAnEvent,
+            alert("Event Created")
+            
+            } >Create Event</button>
             </div>
             
             </div>

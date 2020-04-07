@@ -24,7 +24,8 @@ class TechDB extends React.Component {
       technologiesOnPage: [],
       sortBy: null,
       search: '',
-      technologies: []
+      technologies: [],
+      categories: []
     };
 
     this.getTechnologies = this.getTechnologies.bind(this);
@@ -55,6 +56,7 @@ class TechDB extends React.Component {
     this.req = this.req.bind(this);
     this.updateDateString = this.updateDateString.bind(this);
     this.postATech = this.postATech.bind(this);
+    this.getTechCategories = this.getTechCategories.bind(this);
   }
   async postATech() {
     for (let i = 0; i < this.state.errors.length; i++) {
@@ -256,25 +258,16 @@ class TechDB extends React.Component {
     const opts =
       this.state.search.length > 0 ? { search: this.state.search } : null;
 
-    // call the backend for attendee data
-    //var suppliers = await Technology.getAllSuppliers(opts);
-    //var evaluators = await Technology.getAllEvaluators(opts);
-    //var presenters = await Technology.getAllPresenters(opts);
+    
     var techs = await Technology.getTechnologies(opts);
     if (techs.statusText) {
       this.setError(techs.statusText);
       this.setLoading(false);
       return;
     }
-
-   // if (evaluators.statusText) {
-    //  this.setError(evaluators.statusText);
-   //   this.setLoading(false);
-   //   return;
-  //  }
-
-    //Array.prototype.push.apply(evaluators, presenters);
-    //Array.prototype.push.apply(suppliers, evaluators);
+ 
+    Array.push(tech);
+   
   
     var numPages = 0;
 
@@ -295,7 +288,7 @@ class TechDB extends React.Component {
 
     this.setLoading(true);
 
-    var techs = await Technology.getAllSuppliers();
+    var techs = await Technology.findAllTechnologies();
     
 
     if (techs.statusText) {
@@ -341,7 +334,9 @@ class TechDB extends React.Component {
   async postNewTech() {
     const selection = document.getElementById('technology');
     if (!selection) return;
-    Technology.createTechnologyObjectFromState(this.state)
+    await Technology.postTechnology(
+      Technology.createTechnologyObjectFromState(this.state)
+    );
     
 
     this.getTechnologies();
@@ -364,6 +359,19 @@ class TechDB extends React.Component {
     this.toggleEditModal();
   }
 
+  async getTechCategories() {
+    const opts = null;
+    this.setState({ loading: true });
+    var categories = await Technology.getCategories(opts);
+    if (categories.statusText) {
+      this.setState({ error: categories.statusText, loading: false });
+    }
+    this.setState({ categories: categories, loading: false });
+  }
+
+  async componentDidMount() {
+    this.getTechCategories();
+  }
 
   async getTechnologies() {
     let res = await this.req('GET', '/idte/technologies');
@@ -623,6 +631,8 @@ class TechDB extends React.Component {
   }
 
   render() {
+    
+    const categories = this.state.categories;
     if (this.state.error) {
       console.log(this.state.error);
     }
@@ -671,7 +681,7 @@ class TechDB extends React.Component {
       boxSizing: 'border-box'
     };
 
-    const addModalInner = (
+    const addModalInner = (   
       <div>
         <h2>Create New Technology</h2>
         <label id='technology'>New Technology: </label> 
@@ -688,13 +698,30 @@ class TechDB extends React.Component {
                 ></input>
               </td>
               <td>
-                <span>Category: </span>
-                <input
-                  type='text'
-                  name='category'
-                  onChange={this.updateField}
-                ></input>
-              </td>
+                    <span>Technology Category:</span>
+                    <select
+                      id='category'
+                      name='category'
+                      onChange={e => {
+                        this.setState({ category: e.target.value });
+                      }}
+                    >
+                      <option disabled selected value>
+                        -- select a category --
+                      </option>
+                      {categories.map((category, i) => {
+                        return (
+                          <option
+                            key={i}
+                            id={category.id}
+                            value={this.category}
+                          >
+                            {category.category}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </td>
             </tr>
             <tr>
               <td>

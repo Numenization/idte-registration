@@ -137,6 +137,10 @@ class FormPage extends React.Component {
       this.removeError(0);
     }
 
+    let outmessage =
+    'Thank you for registering for the Ford IDTE event, ' +
+    'attached below is your QRCode which will be used to identify you at check in.';
+
     try {
       await this.req('POST', '/idte/attendees', {
         type: this.state.type,
@@ -167,27 +171,8 @@ class FormPage extends React.Component {
         event3Tech: this.state.event3Tech,
         event4Tech: this.state.event4Tech,
         event5Tech: this.state.event5Tech,
-      });
-    } catch (e) {
-      for (const error of e.errors) {
-        this.addError(error);
-      }
-    }
-
-    let outmessage =
-      'Thank you for registering for the Ford IDTE event, ' +
-      'attached below is your QRCode which will be used to identify you at check in.';
-
-    // TODO: show that this is working somehow
-    //Send email
-    try {
-      this.req('POST', '/idte/emailqr', {
         subject: 'Ford IDTE: Registration Confirmation',
-        body: outmessage,
-        to: this.state.email,
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        email: this.state.email,
+        body: outmessage
       });
       window.location.href = '/idte/thankyou.html';
     } catch (e) {
@@ -195,6 +180,26 @@ class FormPage extends React.Component {
         this.addError(error);
       }
     }
+
+    
+
+    // // TODO: show that this is working somehow
+    // //Send email
+    // try {
+    //   this.req('POST', '/idte/emailqr', {
+    //     subject: 'Ford IDTE: Registration Confirmation',
+    //     body: outmessage,
+    //     to: this.state.email,
+    //     firstName: this.state.firstName,
+    //     lastName: this.state.lastName,
+    //     email: this.state.email,
+    //   });
+    //   window.location.href = '/idte/thankyou.html';
+    // } catch (e) {
+    //   for (const error of e.errors) {
+    //     this.addError(error);
+    //   }
+    // }
   }
 
   async req(method, url, opts = null) {

@@ -34,3 +34,4 @@ build/
 .vscode/
 
 /src/main/webapp/
+/excelExports/

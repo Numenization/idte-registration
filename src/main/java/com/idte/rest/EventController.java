@@ -10,7 +10,6 @@ import com.idte.rest.data.Event;
 import com.idte.rest.data.EventRepository;
 
 import org.springframework.data.domain.Example;
-import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 

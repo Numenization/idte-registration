@@ -11,7 +11,6 @@ import com.google.zxing.WriterException;
 import com.idte.rest.data.Attendee;
 import com.idte.rest.data.AttendeeRepository;
 
-import org.hibernate.annotations.SourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

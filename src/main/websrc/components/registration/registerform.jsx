@@ -181,7 +181,7 @@ class FormPage extends React.Component {
     // TODO: show that this is working somehow
     //Send email
     try {
-      await this.req('POST', '/idte/emailqr', {
+      this.req('POST', '/idte/emailqr', {
         subject: 'Ford IDTE: Registration Confirmation',
         body: outmessage,
         to: this.state.email,
@@ -189,7 +189,7 @@ class FormPage extends React.Component {
         lastName: this.state.lastName,
         email: this.state.email,
       });
-      window.location.href = 'http://localhost:8080/idte/thankyou.html';
+      window.location.href = '/idte/thankyou.html';
     } catch (e) {
       for (const error of e.errors) {
         this.addError(error);

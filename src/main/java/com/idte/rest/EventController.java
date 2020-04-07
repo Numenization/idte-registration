@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import com.idte.rest.data.Event;
 import com.idte.rest.data.EventRepository;
@@ -79,6 +80,14 @@ public class EventController {
      ));
      */
     try {
+      // set all other events currentEvent to false
+      List<Event> eventList = events.findAll();
+      for(Event ev: eventList) {
+        ev.setCurrentEvent("false");
+        events.save(ev);
+      }
+
+      // save new event (which will be current event)
       return new ResponseEntity<>(events.save(event), HttpStatus.CREATED);
     } catch (Exception e) {
       return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);

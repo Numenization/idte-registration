@@ -6,6 +6,7 @@ import Footer from '../footer.jsx';
 import '../../css/styles.css';
 import Technology from '../../data/technologies.js';
 import Event from '../../data/changeregistration.js';
+import ErrorTag from '../general/error.jsx';
 class TestPage extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +25,7 @@ class TestPage extends React.Component {
       categories: [],
       loading: false,
       errors: [],
-      email: ''
+      email: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.postATech = this.postATech.bind(this);
@@ -79,7 +80,7 @@ class TestPage extends React.Component {
     let data = {
       to: this.state.email,
       body: 'Thank you for your submission',
-      subject: 'Ford IDTE: Tech submission confirmation'
+      subject: 'Ford IDTE: Tech submission confirmation',
     };
     try {
       await this.req('POST', '/idte/techconfirm', data);
@@ -99,7 +100,7 @@ class TestPage extends React.Component {
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
@@ -131,28 +132,28 @@ class TestPage extends React.Component {
   }
 
   async req(method, url, opts = null) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       let xhr = new XMLHttpRequest();
       xhr.open(method, url);
       xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.onload = function() {
+      xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
           resolve(xhr.response ? JSON.parse(xhr.response) : null);
         } else {
           reject({
             status: this.status,
-            errors: xhr.response ? JSON.parse(xhr.response) : null
+            errors: xhr.response ? JSON.parse(xhr.response) : null,
           });
         }
       };
-      xhr.onerror = function() {
+      xhr.onerror = function () {
         reject({
           status: this.status,
-          statusText: xhr.statusText
+          statusText: xhr.statusText,
         });
       };
       xhr.send(JSON.stringify(opts));
-    }).catch(err => {
+    }).catch((err) => {
       throw err;
     });
   }
@@ -162,7 +163,7 @@ class TestPage extends React.Component {
     return (
       <div
         className='container'
-        onLoad={async e => {
+        onLoad={async (e) => {
           await this.getTechStatus();
         }}
       >
@@ -211,7 +212,7 @@ class TestPage extends React.Component {
                     <select
                       id='category'
                       name='category'
-                      onChange={e => {
+                      onChange={(e) => {
                         this.setState({ category: e.target.value });
                       }}
                     >

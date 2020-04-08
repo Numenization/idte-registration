@@ -107,118 +107,63 @@ class Events extends React.Component {
                     ></input>
                   </td>
                 </tr>
-
-                <tr>
-                  <h2>Event Dates</h2>
-                </tr>
-                <tr>
-                  <td>Setup Day 1:</td>
-                  <td>
-                    <input
-                      name='setUpOne'
-                      type='date'
-                      value={this.setUpOne}
-                      onChange={this.handleChange}
-                    ></input>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Setup Day 2:</td>
-                  <td>
-                    <input
-                      name='setUpTwo'
-                      type='date'
-                      value={this.setupTwo}
-                      onChange={this.handleChange}
-                    ></input>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Setup Day 3:</td>
-                  <td>
-                    <input
-                      name='setUpThree'
-                      type='date'
-                      value={this.setUpThree}
-                      onChange={this.handleChange}
-                    ></input>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Dry Run:</td>
-                  <td>
-                    <input
-                      name='dryRun'
-                      type='date'
-                      value={this.dryRun}
-                      onChange={this.handleChange}
-                    ></input>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Event Day 1</td>
-                  <td>
-                    <input
-                      name='eventDayOne'
-                      type='date'
-                      value={this.eventDayOne}
-                      onChange={this.handleChange}
-                    ></input>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Event Day 2</td>
-                  <td>
-                    <input
-                      name='eventDayTwo'
-                      type='date'
-                      value={this.eventDayTwo}
-                      onChange={this.handleChange}
-                    ></input>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Event Day 3</td>
-                  <td>
-                    <input
-                      name='eventDayThree'
-                      type='date'
-                      value={this.eventDayThree}
-                      onChange={this.handleChange}
-                    ></input>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Event Day 4</td>
-                  <td>
-                    <input
-                      name='eventDayFour'
-                      type='date'
-                      value={this.eventDayFour}
-                      onChange={this.handleChange}
-                    ></input>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Event Day 5</td>
-                  <td>
-                    <input
-                      name='eventDayFive'
-                      type='date'
-                      value={this.eventDayFive}
-                      onChange={this.handleChange}
-                    ></input>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+    <tr><h2>Event Dates</h2></tr>
+    <tr> 
+      <td>Setup Day 1:</td>
+      <td><input name='setUpOne' type='date' value={this.setUpOne} onChange={this.handleChange}></input></td>
+    </tr>
+    <tr>
+      <td>Setup Day 2:</td>
+      <td><input name='setUpTwo' type='date' value={this.setupTwo} onChange={this.handleChange}></input></td>
+    </tr>
+    <tr>
+      <td>Setup Day 3:</td>
+      <td><input name='setUpThree' type='date' value={this.setUpThree} onChange={this.handleChange}></input></td>
+    </tr>
+    <tr>
+      <td>Dry Run:</td>
+      <td><input name='dryRun' type='date' value={this.dryRun} onChange={this.handleChange}></input></td>
+    </tr>
+    <tr>
+      <td>Event Day 1</td>
+      <td><input name='eventDayOne' type='date' value={this.eventDayOne} onChange={this.handleChange}></input></td>
+    </tr>
+    <tr>
+      <td>Event Day 2</td>
+      <td><input name='eventDayTwo' type='date' value={this.eventDayTwo} onChange={this.handleChange}></input></td>
+    </tr>
+    <tr>
+      <td>Event Day 3</td>
+      <td><input name='eventDayThree' type='date' value={this.eventDayThree} onChange={this.handleChange}></input></td>
+    </tr>
+    <tr>
+      <td>Event Day 4</td>
+      <td><input name='eventDayFour' type='date' value={this.eventDayFour} onChange={this.handleChange}></input></td>
+    </tr>
+    <tr>
+      <td>Event Day 5</td>
+      <td><input name='eventDayFive' type='date' value={this.eventDayFive} onChange={this.handleChange}></input></td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+    <div>
+     <div  align= "center">
+            <button onClick= {this.postAnEvent,
+            alert("Event Created")
+            
+            } >Create Event</button>
+            </div>
+            
+            </div>
+    
+            <Footer />
           </div>
 
           <div align='center'>
             <button onClick={this.postAnEvent}>Create Event</button>
           </div>
-        </div>
-
+      
         <Footer />
       </div>
     );

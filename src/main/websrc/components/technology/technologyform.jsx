@@ -26,6 +26,9 @@ class TestPage extends React.Component {
       loading: false,
       errors: [],
       email: '',
+      to: '',
+      body: '',
+      subject: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.postATech = this.postATech.bind(this);
@@ -64,26 +67,13 @@ class TestPage extends React.Component {
     for (let i = 0; i < this.state.errors.length; i++) {
       this.removeError(0);
     }
+    let tech = Technology.createTechnologyObjectFromState(this.state)
     try {
       await this.req(
         'POST',
         '/idte/technologies',
-        Technology.createTechnologyObjectFromState(this.state)
+        tech
       );
-    } catch (e) {
-      console.log(e.errors);
-      for (const error of e.errors) {
-        console.log(error);
-        this.addError(error);
-      }
-    }
-    let data = {
-      to: this.state.email,
-      body: 'Thank you for your submission',
-      subject: 'Ford IDTE: Tech submission confirmation',
-    };
-    try {
-      await this.req('POST', '/idte/techconfirm', data);
       window.location.href = 'http://localhost:8080/idte/thankyou.html';
     } catch (e) {
       console.log(e.errors);

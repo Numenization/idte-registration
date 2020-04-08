@@ -2,6 +2,7 @@ package com.idte.rest;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
 import java.text.DateFormat;
@@ -26,6 +27,8 @@ import com.idte.rest.data.Error;
 import com.idte.rest.data.Evaluator;
 import com.idte.rest.data.Supplier;
 
+import com.google.zxing.WriterException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Example;
@@ -40,13 +43,24 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.util.Base64Utils;
+
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import javax.mail.internet.MimeMessage;
+import javax.mail.MessagingException;
+
 @RestController
 @RequestMapping
 public class AttendeeController {
+  @Autowired
+  private JavaMailSender javaMailSender;
   @Autowired
   private AttendeeRepository attendees;
   @Autowired
@@ -228,7 +242,7 @@ public class AttendeeController {
     // their values
 
     // first we have to find a valid user given the email, if one exists
-    if(json.get("email") == null || json.get("email").length() == 0) {
+    if (json.get("email") == null || json.get("email").length() == 0) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
@@ -307,76 +321,76 @@ public class AttendeeController {
       changes = true;
     }
 
-    if(setup1 != null && !setup1.equals(attendee.getSetUpOne())) {
+    if (setup1 != null && !setup1.equals(attendee.getSetUpOne())) {
       attendee.setSetUpOne(setup1);
       changes = true;
     }
-    if(setup2 != null && !setup2.equals(attendee.getSetUpTwo())) {
+    if (setup2 != null && !setup2.equals(attendee.getSetUpTwo())) {
       attendee.setSetUpTwo(setup2);
       changes = true;
     }
-    if(setup3 != null && !setup3.equals(attendee.getSetUpThree())) {
+    if (setup3 != null && !setup3.equals(attendee.getSetUpThree())) {
       attendee.setSetUpThree(setup3);
       changes = true;
     }
-    if(dryRun != null && !dryRun.equals(attendee.getDryRun())) {
+    if (dryRun != null && !dryRun.equals(attendee.getDryRun())) {
       attendee.setDryRun(dryRun);
       changes = true;
     }
-    if(event1 != null && !event1.equals(attendee.getEventDayOne())) {
+    if (event1 != null && !event1.equals(attendee.getEventDayOne())) {
       attendee.setEventDayOne(event1);
       changes = true;
     }
-    if(event2 != null && !event2.equals(attendee.getEventDayTwo())) {
+    if (event2 != null && !event2.equals(attendee.getEventDayTwo())) {
       attendee.setEventDayTwo(event2);
       changes = true;
     }
-    if(event3 != null && !event3.equals(attendee.getEventDayThree())) {
+    if (event3 != null && !event3.equals(attendee.getEventDayThree())) {
       attendee.setEventDayThree(event3);
       changes = true;
     }
-    if(event4 != null && !event4.equals(attendee.getEventDayFour())) {
+    if (event4 != null && !event4.equals(attendee.getEventDayFour())) {
       attendee.setEventDayFour(event4);
       changes = true;
     }
-    if(event5 != null && !event5.equals(attendee.getEventDayFive())) {
+    if (event5 != null && !event5.equals(attendee.getEventDayFive())) {
       attendee.setEventDayFive(event5);
       changes = true;
     }
 
-    if(setup1Tech != null && Integer.parseInt(setup1Tech) != attendee.getSetUpOneTech()) {
+    if (setup1Tech != null && Integer.parseInt(setup1Tech) != attendee.getSetUpOneTech()) {
       attendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
       changes = true;
     }
-    if(setup2Tech != null && Integer.parseInt(setup2Tech) != attendee.getSetUpTwoTech()) {
+    if (setup2Tech != null && Integer.parseInt(setup2Tech) != attendee.getSetUpTwoTech()) {
       attendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
       changes = true;
     }
-    if(setup3Tech != null && Integer.parseInt(setup3Tech) != attendee.getSetUpThreeTech()) {
-      attendee.setSetUpThreeTech(Integer.parseInt(setup3Tech) );
+    if (setup3Tech != null && Integer.parseInt(setup3Tech) != attendee.getSetUpThreeTech()) {
+      attendee.setSetUpThreeTech(Integer.parseInt(setup3Tech));
       changes = true;
     }
-    if(dryRunTech != null && Integer.parseInt(dryRunTech) != attendee.getDryRunTech()) {
+    if (dryRunTech != null && Integer.parseInt(dryRunTech) != attendee.getDryRunTech()) {
       attendee.setDryRunTech(Integer.parseInt(dryRunTech));
       changes = true;
     }
-    if(event1Tech != null && Integer.parseInt(event1Tech) != attendee.getEventDayOneTech()) {
+    if (event1Tech != null && Integer.parseInt(event1Tech) != attendee.getEventDayOneTech()) {
       attendee.setEventDayOneTech(Integer.parseInt(event1Tech));
       changes = true;
     }
-    if(event2Tech != null && Integer.parseInt(event2Tech) != attendee.getEventDayTwoTech()) {
+    if (event2Tech != null && Integer.parseInt(event2Tech) != attendee.getEventDayTwoTech()) {
       attendee.setEventDayTwoTech(Integer.parseInt(event2Tech));
       changes = true;
     }
-    if(event3Tech != null && Integer.parseInt(event3Tech) != attendee.getEventDayThreeTech()) {
+    if (event3Tech != null && Integer.parseInt(event3Tech) != attendee.getEventDayThreeTech()) {
       attendee.setEventDayThreeTech(Integer.parseInt(event3Tech));
       changes = true;
     }
-    if(event4Tech != null && Integer.parseInt(event4Tech) != attendee.getEventDayFourTech()) {
+    if (event4Tech != null && Integer.parseInt(event4Tech) != attendee.getEventDayFourTech()) {
       attendee.setEventDayFourTech(Integer.parseInt(event4Tech));
       changes = true;
     }
-    if(event5Tech != null && Integer.parseInt(event5Tech) != attendee.getEventDayFiveTech()) {
+    if (event5Tech != null && Integer.parseInt(event5Tech) != attendee.getEventDayFiveTech()) {
       attendee.setEventDayFiveTech(Integer.parseInt(event5Tech));
       changes = true;
     }
@@ -415,7 +429,7 @@ public class AttendeeController {
   @DeleteMapping(path = "/admin/attendees")
   public Object delete(@RequestBody Map<String, String> json) {
     // try to find the requested user to delete
-    if(json.get("email") == null || json.get("email").length() == 0) {
+    if (json.get("email") == null || json.get("email").length() == 0) {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
@@ -712,7 +726,66 @@ public class AttendeeController {
       return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // TODO: SEND CONFIRMATION EMAIL
+    // EMAIL CONFIRMATION
+    //QR CODE STUFF
+    String to = email;
+    String subject = json.get("subject");
+    String body = json.get("body");
+    String qrCodeText;
+
+    //make directory
+    File imgfolder = new File("\\qrimgs");
+    if (!imgfolder.exists()) {
+      if(imgfolder.mkdir()) {
+        System.out.println("Directory is created!");
+      } else {
+        System.out.println("Failed to create directory!");
+      }
+    }
+
+    //Using a conditional statement to make sure there is a matching set for first, last, and email
+    //If there is, put the ID string into QR Code text
+    if (newAttendee != null && newAttendee.getFirstName().equals(firstName) && newAttendee.getLastName().equals(lastName) && newAttendee.getEmail().equals(email))
+    {
+        qrCodeText = newAttendee.getId();
+        String filePath = "\\qrimgs\\" + qrCodeText + ".png";
+        int size = 125;
+        File qrFile = new File(filePath);
+        System.out.println(filePath);
+        try {
+          QRCode.createQRImage(qrFile, qrCodeText, size, filePath);
+        }
+        catch(WriterException w) {
+          return new ResponseEntity<>(w, HttpStatus.CONFLICT);
+        }
+        catch(IOException e) {
+          return new ResponseEntity<>(e, HttpStatus.CONFLICT);
+        }
+    }
+    else
+    {
+        qrCodeText = null;
+        System.out.println("ERROR: QR Code generation failed");
+    }
+
+    // EMAIL STUFF
+
+    File file = new File("\\qrimgs\\" + newAttendee.getId() + ".png");
+    System.out.println(file.getAbsolutePath());
+    MimeMessage msg = javaMailSender.createMimeMessage();
+
+    try {
+      MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+      helper.addAttachment("QRCode.png", file);
+
+      helper.setTo(to);
+      helper.setSubject(subject);
+      helper.setText(body);
+      javaMailSender.send(msg);
+    }
+    catch(MessagingException m) {
+      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    }
 
     return new ResponseEntity<>(HttpStatus.CREATED);
   }

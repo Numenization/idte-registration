@@ -445,6 +445,51 @@ public class AttendeeController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  //Handle attendee checkin for valid or invalid entry
+  @PostMapping(path = "/checkin", consumes = "application/json", produces = "application/json")
+  public Object attendeeCheckin(@RequestBody Map<String, String> json)
+  {
+  
+   // Attendee attendee = new Attendee();
+
+    String attendeeID = json.get("attendeeID");
+    String eventDayOne = json.get("eventDayOne");
+    String eventDayTwo = json.get("eventDayTwo");
+    String eventDayThree = json.get("eventDayThree");
+    String eventDayFour = json.get("eventDayFour");
+    String eventDayFive = json.get("eventDayFive");
+
+    Attendee attendee = attendees.findById(attendeeID).orElse(null);
+    if (attendee == null)
+    {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    //Look at each event day.  If it is valid then have it be valid in the database
+    if (attendee.getEventDayOne().equals(eventDayOne))
+    {
+        return attendee.getEventDayOneAttended();
+    }
+    if (attendee.getEventDayTwo().equals(eventDayTwo))
+    {
+        return attendee.getEventDayTwoAttended();
+    }
+    if (attendee.getEventDayThree().equals(eventDayThree))
+    {
+        return attendee.getEventDayThreeAttended();
+    }
+    if (attendee.getEventDayFour().equals(eventDayFour))
+    {
+        return attendee.getEventDayFourAttended();
+    }
+    if (attendee.getEventDayFive().equals(eventDayFive))
+    {
+        return attendee.getEventDayFiveAttended();
+    }
+
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
   @PostMapping(path = "/attendees", consumes = "application/json", produces = "application/json")
   public Object submitRegistration(@RequestBody Map<String, String> json) {
     // TODO: Set dates to attend and associated technologies on those dates, except for evaluators who only need dates

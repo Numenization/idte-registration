@@ -2,7 +2,6 @@ package com.idte.rest;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
 import java.text.DateFormat;
@@ -27,8 +26,6 @@ import com.idte.rest.data.Error;
 import com.idte.rest.data.Evaluator;
 import com.idte.rest.data.Supplier;
 
-import com.google.zxing.WriterException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Example;
@@ -44,17 +41,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.util.Base64Utils;
-
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
+
 import javax.mail.internet.MimeMessage;
-import javax.mail.MessagingException;
 
 @RestController
 @RequestMapping
@@ -771,68 +766,38 @@ public class AttendeeController {
       return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // EMAIL CONFIRMATION
-    //QR CODE STUFF
-    String to = email;
-    String subject = json.get("subject");
-    String body = json.get("body");
-    String qrCodeText;
+    new Thread(() -> {sendEmail(email, newAttendee.getId());}, "Email-Thread").start();
 
-    //make directory
-    File imgfolder = new File("\\qrimgs");
+    return new ResponseEntity<>(HttpStatus.CREATED);
+  }
+
+  @Async
+  public void sendEmail(String address, String id) {
+    File imgfolder = new File("qrimgs");
     if (!imgfolder.exists()) {
-      if(imgfolder.mkdir()) {
-        System.out.println("Directory is created!");
-      } else {
-        System.out.println("Failed to create directory!");
-      }
+      imgfolder.mkdir();
     }
-
-    //Using a conditional statement to make sure there is a matching set for first, last, and email
-    //If there is, put the ID string into QR Code text
-    if (newAttendee != null && newAttendee.getFirstName().equals(firstName) && newAttendee.getLastName().equals(lastName) && newAttendee.getEmail().equals(email))
-    {
-        qrCodeText = newAttendee.getId();
-        String filePath = "\\qrimgs\\" + qrCodeText + ".png";
-        int size = 125;
-        File qrFile = new File(filePath);
-        System.out.println(filePath);
-        try {
-          QRCode.createQRImage(qrFile, qrCodeText, size, filePath);
-        }
-        catch(WriterException w) {
-          return new ResponseEntity<>(w, HttpStatus.CONFLICT);
-        }
-        catch(IOException e) {
-          return new ResponseEntity<>(e, HttpStatus.CONFLICT);
-        }
-    }
-    else
-    {
-        qrCodeText = null;
-        System.out.println("ERROR: QR Code generation failed");
-    }
-
-    // EMAIL STUFF
-
-    File file = new File("\\qrimgs\\" + newAttendee.getId() + ".png");
-    System.out.println(file.getAbsolutePath());
+  
     MimeMessage msg = javaMailSender.createMimeMessage();
 
     try {
+      String filePath = "qrimgs/" + id + ".png";
+      File file = new File(filePath);
+      if(!file.exists()) {
+        QRCode.createQRImage(file, id, 125, filePath);
+      }
+
       MimeMessageHelper helper = new MimeMessageHelper(msg, true);
       helper.addAttachment("QRCode.png", file);
 
-      helper.setTo(to);
-      helper.setSubject(subject);
-      helper.setText(body);
+      helper.setTo(address);
+      helper.setSubject("Ford IDTE: Registration Confirmation");
+      helper.setText("Thank you for registering for the Ford IDTE event, attached below is your QRCode which will be used to identify you at check in.");
       javaMailSender.send(msg);
     }
-    catch(MessagingException m) {
-      return new ResponseEntity<>(HttpStatus.CONFLICT);
+    catch(Exception m) {
+      m.printStackTrace();
     }
-
-    return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   // get registration type from user for use on registration page.

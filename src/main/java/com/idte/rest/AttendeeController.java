@@ -446,7 +446,7 @@ public class AttendeeController {
   }
 
   //Handle attendee checkin for valid or invalid entry
-  @PostMapping(path = "/attendees", consumes = "application/json", produces = "application/json")
+  @PostMapping(path = "/checkin", consumes = "application/json", produces = "application/json")
   public Object attendeeCheckin(@RequestBody Map<String, String> json)
   {
   

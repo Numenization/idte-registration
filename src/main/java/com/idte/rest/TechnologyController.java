@@ -380,12 +380,12 @@ public class TechnologyController {
     }
 
     // CONFIRMATION EMAIL
-    SimpleMailMessage msg = new SimpleMailMessage();
+    // SimpleMailMessage msg = new SimpleMailMessage();
 
-    msg.setTo(email);
-    msg.setSubject(subject);
-    msg.setText(body);
-    javaMailSender.send(msg);
+    // msg.setTo(email);
+    // msg.setSubject(subject);
+    // msg.setText(body);
+    // javaMailSender.send(msg);
 
     return new ResponseEntity<>(HttpStatus.OK);
   }

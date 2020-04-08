@@ -103,45 +103,51 @@ class BadgePage extends React.Component {
 
   render() {
     return (
-      <div className='page'>
+      <div className='body'>
         {this.state.pages.map((page, i) => {
           return (
-            <div className='container' key={i}>
-              {page.map((attendee, j) => {
-                const company = attendee.company
-                  ? attendee.company
-                  : 'Ford Motor Company';
+            <div className='container'>
+              <div className='page' key={i}>
+                {page.map((attendee, j) => {
+                  const company = attendee.company
+                    ? attendee.company
+                    : 'Ford Motor Company';
 
-                let typeClass = 'supplier-title';
-                if (attendee.type == 'Presenter') typeClass = 'presenter-title';
-                if (attendee.type == 'Evaluator') typeClass = 'evaluator-title';
-                const nameClass = attendee.nickname ? 'name' : 'nickname';
-                return (
-                  <div className='badge' key={j}>
-                    <img
-                      className='logo'
-                      src={require('../../images/ford_badge.png')}
-                    ></img>
-                    <img
-                      className='banner'
-                      src={require('../../images/IDTE.png')}
-                    ></img>
-                    <span className='nickname'>{attendee.nickname}</span>
-                    <span className={nameClass}>
-                      {attendee.firstName} {attendee.lastName}
-                    </span>
-                    <span className='company'>{company}</span>
-                    <span className='location'>
-                      {attendee.city}, {attendee.country}
-                    </span>
-                    <img className='qrCode' src={attendee.qrCode}></img>
-                    <span className='dates-of-attendance'>9 10 11 12 13 </span>
-                    <span className={typeClass}>
-                      {attendee.type.toUpperCase()}
-                    </span>
-                  </div>
-                );
-              })}
+                  let typeClass = 'supplier-title';
+                  if (attendee.type == 'Presenter')
+                    typeClass = 'presenter-title';
+                  if (attendee.type == 'Evaluator')
+                    typeClass = 'evaluator-title';
+                  const nameClass = attendee.nickname ? 'name' : 'nickname';
+                  return (
+                    <div className='badge' key={j}>
+                      <img
+                        className='logo'
+                        src={require('../../images/ford_badge.png')}
+                      ></img>
+                      <img
+                        className='banner'
+                        src={require('../../images/IDTE.png')}
+                      ></img>
+                      <span className='nickname'>{attendee.nickname}</span>
+                      <span className={nameClass}>
+                        {attendee.firstName} {attendee.lastName}
+                      </span>
+                      <span className='company'>{company}</span>
+                      <span className='location'>
+                        {attendee.city}, {attendee.country}
+                      </span>
+                      <img className='qrCode' src={attendee.qrCode}></img>
+                      <span className='dates-of-attendance'>
+                        9 10 11 12 13{' '}
+                      </span>
+                      <span className={typeClass}>
+                        {attendee.type.toUpperCase()}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           );
         })}

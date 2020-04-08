@@ -101,8 +101,6 @@ public class AdminController {
       Role adminRole = roleRepository.findByName("ROLE_ADMIN");
       newAdmin.setRoles(Arrays.asList(adminRole));
   
-      // TODO: SUPERADMINS?
-  
       newAdmin.setUsername(name);
       newAdmin.setEmail(email);
       newAdmin.setPassword(passwordEncoder.encode(pass));

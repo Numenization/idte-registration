@@ -67,12 +67,6 @@ class TestPage extends React.Component {
     for (let i = 0; i < this.state.errors.length; i++) {
       this.removeError(0);
     }
-    
-    let data = {
-      to: this.state.email,
-      body: 'Thank you for your submission',
-      subject: 'Ford IDTE: Tech submission confirmation'
-    }
     let tech = Technology.createTechnologyObjectFromState(this.state)
     try {
       await this.req(

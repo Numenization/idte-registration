@@ -330,8 +330,6 @@ public class TechnologyController {
     String director = json.get("director");
     String supplierCompany = json.get("supplierCompany");
     String source = json.get("source");
-    String subject = json.get("subject");
-    String body = json.get("body");
     String email = json.get("email");
 
     newTech.setComments("");
@@ -380,12 +378,12 @@ public class TechnologyController {
     }
 
     // CONFIRMATION EMAIL
-    // SimpleMailMessage msg = new SimpleMailMessage();
+    SimpleMailMessage msg = new SimpleMailMessage();
 
-    // msg.setTo(email);
-    // msg.setSubject(subject);
-    // msg.setText(body);
-    // javaMailSender.send(msg);
+    msg.setTo(email);
+    msg.setSubject("Ford IDTE: Tech submission confirmation");
+    msg.setText("Thank you for your submission");
+    javaMailSender.send(msg);
 
     return new ResponseEntity<>(HttpStatus.OK);
   }

@@ -12,7 +12,8 @@ class Technology {
       fordContact: state.fordContact,
       fordPresenter: state.fordPresenter,
       director: state.director,
-      supplierCompany: state.supplierCompany
+      supplierCompany: state.supplierCompany,
+      email: state.email
     };
 
     for (let [key, val] of Object.entries(technology)) {

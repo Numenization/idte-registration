@@ -3,11 +3,13 @@ package com.idte.rest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +34,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -884,6 +887,44 @@ public class AttendeeController {
     } catch(Exception e) {
       e.printStackTrace();
       return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @PostMapping(path = "/admin/attendeeQR", produces = MediaType.IMAGE_PNG_VALUE)
+  public Object getQRCode(@RequestBody Map<String, String> json) {
+    String id = json.get("id");
+    if(id == null) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    Attendee attendee = attendees.findById(id).orElse(null);
+    if(attendee == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    File dir = new File("qrimgs");
+    if(!dir.exists()) {
+      dir.mkdir();
+    }
+
+    String filePath = "qrimgs/" + attendee.getId() + ".png";
+    try {
+      File file = new File(filePath);
+      if(!file.exists()) {
+        QRCode.createQRImage(file, attendee.getId(), 125, filePath);
+      }
+      FileSystemResource resource = new FileSystemResource(file);
+      InputStream in = resource.getInputStream();
+      byte[] imageBytes = new byte[(int)file.length()];
+      in.read(imageBytes, 0, imageBytes.length);
+      in.close();
+
+      String base64 = Base64.getEncoder().encodeToString(imageBytes);
+      return base64;
+    }
+    catch(Exception e) {
+      e.printStackTrace();
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

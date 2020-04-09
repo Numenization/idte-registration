@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 
 @RestController
 @RequestMapping
@@ -124,6 +125,7 @@ public class TechnologyController {
   public Object updateTechnology(Principal principal, @RequestBody Map<String, String> json) {
     int testId = -1;
     try {
+      System.out.println(json.get("id"));
       testId = Integer.parseInt(json.get("id"));
     }
     catch(Exception e) {
@@ -376,14 +378,20 @@ public class TechnologyController {
     }
 
     // CONFIRMATION EMAIL
+
+    new Thread(() -> {sendEmail(email);}, "Email-Thread").start();
+
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @Async
+  public void sendEmail(String email) {
     SimpleMailMessage msg = new SimpleMailMessage();
 
     msg.setTo(email);
     msg.setSubject("Ford IDTE: Tech submission confirmation");
     msg.setText("Thank you for your submission");
     javaMailSender.send(msg);
-
-    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @GetMapping(path = "/admin/technologyExcel.xlsx", produces = "application/excel")

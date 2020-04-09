@@ -40,7 +40,23 @@ class Technology {
       );
     }
   }
-
+  static async updateTechnology(opts = null) {
+    try {
+      if (!opts) return;
+      let res = await Technology.req('PUT', '/idte/admin/technologies', opts);
+      return res;
+    } catch (e) {
+      console.log(e.request);
+      alert(
+        'Error: ' +
+          e.status +
+          '\n' +
+          e.statusText +
+          '\n' +
+          'Make sure all required fields are filled with valid values'
+      );
+    }
+  }
   static async getCategories(opts = null) {
     let url = '/idte/technologyCategories/all';
     let method = 'GET';
@@ -58,6 +74,28 @@ class Technology {
       let res = await Technology.req(
         'POST',
         '/idte/admin/technologyCategories',
+        opts
+      );
+      return res;
+    } catch (e) {
+      console.log(e.request);
+      alert(
+        'Error: ' +
+          e.status +
+          '\n' +
+          e.statusText +
+          '\n' +
+          'Make sure all required fields are filled with valid values'
+      );
+    }
+  }
+
+  static async deleteTechnology(opts = null) {
+    try {
+      if (!opts) return;
+      let res = await Technology.req(
+        'DELETE',
+        '/idte/admin/technologies',
         opts
       );
       return res;

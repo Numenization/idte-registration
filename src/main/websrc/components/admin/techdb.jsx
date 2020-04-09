@@ -27,7 +27,7 @@ class TechDB extends React.Component {
       categories: []
     };
 
-    this.getTechnologies = this.getTechnologies.bind(this);
+    this.getTechs = this.getTechs.bind(this);
     this.toggleEditModal = this.toggleEditModal.bind(this);
     this.toggleAddModal = this.toggleAddModal.bind(this);
     this.rowClick = this.rowClick.bind(this);
@@ -43,7 +43,7 @@ class TechDB extends React.Component {
     this.clearTechValues = this.clearTechValues.bind(this);
     this.postNewTech = this.postNewTech.bind(this);
     this.pageButtonClick = this.pageButtonClick.bind(this);
-    this.updateExistingUser = this.updateExistingUser.bind(this);
+    this.updateExistingTechnology= this.updateExistingTechnology.bind(this);
     this.deleteTechnology = this.deleteTechnology.bind(this);
     this.getRows = this.getRows.bind(this);
     this.nextPage = this.nextPage.bind(this);
@@ -116,7 +116,7 @@ class TechDB extends React.Component {
       'lastModified',
       'modifiedBy',
       'shippingCity',
-      'shippingCounrty',
+      'shippingCountry',
       'source',
       'supplierCompany',
       'title',
@@ -248,6 +248,7 @@ class TechDB extends React.Component {
     });
   }
 
+  
   async getTechnologies() {
     // set ourselves to loading and start
     this.setLoading(true);
@@ -256,41 +257,32 @@ class TechDB extends React.Component {
       this.state.search.length > 0 ? { search: this.state.search } : null;
 
     
-    var techs = await Technology.getTechnologies(opts);
+    var techs = await this.getTechs();
     if (techs.statusText) {
       this.setError(techs.statusText);
       this.setLoading(false);
       return;
     }
- 
-    Array.push(tech);
-   
-  
-
-    // if (evaluators.statusText) {
-    //  this.setError(evaluators.statusText);
-    //   this.setLoading(false);
-    //   return;
-    //  }
-
-    //Array.prototype.push.apply(evaluators, presenters);
-    //Array.prototype.push.apply(suppliers, evaluators);
 
     var numPages = 0;
 
     if (techs.length > this.state.rowsPerPage) {
       numPages = Math.ceil(techs.length / this.state.rowsPerPage);
+      
     } else {
-      numPage = 1;
+      numPages = 1;
     }
-    s;
-
     this.setNumPages(numPages);
-
+    this.setData(techs);
     this.setPage(0);
     this.setLoading(false);
   }
 
+async getTechs() {
+  let res = await this.req('GET', '/idte/technologies/all');
+  this.setState({ technologies: res });
+  return res;
+}
   async searchTechnologies() {
     if (this.state.search.length == 0) return;
 
@@ -350,10 +342,26 @@ class TechDB extends React.Component {
     this.toggleAddModal();
   }
 
-  async updateExistingUser() {
+  async updateExistingTechnology() {
     await Technology.updateTechnology(
-      Technology.createTechnologyObjectFromState(this.state)
-    );
+     {id: this.state.id,
+      type: this.state.type,
+      category: this.state.category,
+      comments: this.state.comments,
+      dateCreated: this.state.dateCreated,
+      description: this.state.description,
+      director: this.state.director,
+      fordContact: this.state.fordContact,
+      fordPresenter: this.state.fordPresenter,
+      lastModified: this.state.lastModified,
+      modifiedBy: this.state.modifiedBy,
+      shippingCity: this.state.shippingCity,
+      shippingCountry: this.state.shippingCountry,
+      source: this.state.source,
+      supplierCompany: this.state.supplierCompany,
+      title: this.state.title,
+      categoryID: this.state.categoryID
+    });
     this.getTechnologies();
     this.toggleEditModal();
   }
@@ -363,7 +371,7 @@ class TechDB extends React.Component {
       'Are you sure you want to delete this technology?'
     );
     if (!response) return;
-    await Technology.deleteTechnology({ email: this.state.email });
+    await Technology.deleteTechnology({ id: this.state.id });
     this.getTechnologies();
     this.toggleEditModal();
   }
@@ -379,32 +387,24 @@ class TechDB extends React.Component {
   }
 
   async componentDidMount() {
+    this.getTechnologies();
     this.getTechCategories();
   }
 
-  async getTechnologies() {
-    let res = await this.req('GET', '/idte/technologies');
-    this.setState({ technologies: res.status });
-  }
-
-  async componentDidMount() {
-    this.getTechnologies();
-
-    this.getTechnologies();
-  }
 
   getRows(dataColumns) {
     if (!this.state.technologies) return null;
 
     var sortedTechnologies = this.sortTechnologies(this.state.sortBy);
     var val = this.state.page;
-
+ 
     if (val < 0 || val > this.state.numPages - 1) return;
     var n = val * this.state.rowsPerPage;
     var m = n + this.state.rowsPerPage;
     var technologiesToPutOnPage = [];
     for (var i = n; i < m; i++) {
       var technology = sortedTechnologies[i];
+     
       if (technology) technologiesToPutOnPage.push(technology);
     }
 
@@ -624,19 +624,20 @@ class TechDB extends React.Component {
     const dict = {
       0: 'id',
       1: 'category',
-      2: 'comments',
-      3: 'type',
-      4: 'dateCreated',
-      5: 'lastModified',
-      6: 'modifiedBy',
-      7: 'company',
-      8: 'country',
-      9: 'city',
+      2: 'type',
+      3: 'dateCreated',
+      4: 'lastModified',
+      5: 'modifiedBy',
+      6: 'company',
+      7: 'country',
+      8: 'city',
     };
+    
     var listToSort = this.state.technologies;
 
     listToSort.sort((a, b) => (a[dict[sortBy]] > b[dict[sortBy]] ? 1 : -1));
     return listToSort;
+    
   }
 
   render() {
@@ -649,7 +650,6 @@ class TechDB extends React.Component {
     const tableColumns = [
       'Type',
       'Category',
-      'Comments',
       'Date Created',
       'Description',
       'Director',
@@ -662,13 +662,11 @@ class TechDB extends React.Component {
       'Source',
       'Supplier Company',
       'Title',
-      'Category ID',
     ];
 
     const dataColumns = [
       'type',
       'category',
-      'comments',
       'dateCreated',
       'description',
       'director',
@@ -681,7 +679,6 @@ class TechDB extends React.Component {
       'source',
       'supplierCompany',
       'title',
-      'categoryID',
     ];
 
     const buttonWidth = {
@@ -806,6 +803,15 @@ class TechDB extends React.Component {
             </tr>
           </tbody>
         </table>
+        <span>Description:</span>
+        <br />
+        <textarea
+          rows='4'
+          cols='50'
+          name='description'
+          style={{ resize: 'none', width: '100%' }}
+          onChange={this.updateField}
+        ></textarea>
         <span>Comments:</span>
         <br />
         <textarea
@@ -838,165 +844,125 @@ class TechDB extends React.Component {
         <h2>Edit Technology</h2>
         <span>Technology ID: {selectedTech.id}</span>
         <br />
-        <span>Technology Type: {selectedTech.type}</span>
-        <br />
         <table className='modal-two-col-table'>
           <tbody>
             <tr>
               <td>
-                <span>First Name: </span>
+                <span>Type: </span>
                 <input
                   type='text'
-                  defaultValue={selectedTech.firstName}
-                  name='firstName'
+                  defaultValue={selectedTech.type}
+                  name='type'
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
-                <span>Last Name: </span>
+                <span>Technology Category: </span>
+                <select
+                      id='category'
+                      defaultValue = {selectedTech.category}
+                      name='category'
+                      onChange={e => {
+                        this.setState({ category: e.target.value });
+                      }}
+                    >
+                      {categories.map((category, i) => {
+                        return (
+                          <option
+                            key={i}
+                            id={category.id}
+                            value={this.category}
+                          >
+                            {category.category}
+                          </option>
+                        );
+                      })}
+                    </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span>Director: </span>
                 <input
                   type='text'
-                  defaultValue={selectedTech.lastName}
-                  name='lastName'
+                  defaultValue={selectedTech.director}
+                  name='director'
+                  onChange={this.updateField}
+                ></input>
+              </td>
+              <td>
+                <span>Ford Contact: </span>
+                <input
+                  type='text'
+                  defaultValue={selectedTech.fordContact}
+                  name='fordContact'
                   onChange={this.updateField}
                 ></input>
               </td>
             </tr>
             <tr>
               <td>
-                <span>Nickname: </span>
+                <span>Ford Presenter: </span>
                 <input
                   type='text'
-                  defaultValue={selectedTech.nickname}
-                  name='nickname'
+                  defaultValue={selectedTech.fordPresenter}
+                  name='fordPresenter'
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
-                <span>Email: </span>
+                <span>Shipping City: </span>
                 <input
                   type='text'
-                  defaultValue={selectedTech.email}
-                  name='email'
-                  onChange={this.updateField}
-                ></input>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <span>Phone Number: </span>
-                <input
-                  type='text'
-                  defaultValue={selectedTech.phoneNumber}
-                  name='phoneNumber'
-                  onChange={this.updateField}
-                ></input>
-              </td>
-              <td>
-                <span>Cell Number: </span>
-                <input
-                  type='text'
-                  defaultValue={selectedTech.cellNumber}
-                  name='cellNumber'
+                  defaultValue={selectedTech.shippingCity}
+                  name='shippingCity'
                   onChange={this.updateField}
                 ></input>
               </td>
             </tr>
             <tr>
               <td>
-                <span>Country: </span>
+                <span>Shipping Country: </span>
                 <input
                   type='text'
-                  defaultValue={selectedTech.country}
-                  name='country'
+                  defaultValue={selectedTech.shippingCountry}
+                  name='shippingCountry'
                   onChange={this.updateField}
                 ></input>
               </td>
               <td>
-                <span>City: </span>
+                <span>Source: </span>
                 <input
                   type='text'
-                  defaultValue={selectedTech.city}
+                  defaultValue={selectedTech.source}
                   onChange={this.updateField}
-                  name='city'
+                  name='source'
                 ></input>
               </td>
             </tr>
             <tr>
               <td>
-                <span>Company*: </span>
+                <span>Supplier Company: </span>
                 <input
                   type='text'
-                  defaultValue={selectedTech.company}
-                  name='company'
+                  defaultValue={selectedTech.supplierCompany}
+                  name='supplierCompany'
                   onChange={this.updateField}
                 ></input>
               </td>
             </tr>
           </tbody>
         </table>
-        {this.state.eventDates.map((date, i) => {
-          const dateString = this.state.dateString;
-          if (!dateString) return;
-
-          const dateStrings = dateString.split(',');
-          let dates = [];
-          let techs = [];
-
-          for (let str of dateStrings) {
-            let dateStr = str.split(':')[0];
-            let techOnDate = str.split(':')[1];
-
-            dates.push(dateStr);
-            techs.push(techOnDate);
-          }
-
-          let checked = (
-            <input
-              type='checkbox'
-              id='checkbox'
-              onChange={this.updateDateString}
-            ></input>
-          );
-          let tech = '-- select a technology --';
-
-          for (let i = 0; i < dates.length; i++) {
-            if (dates[i] == date) {
-              checked = (
-                <input
-                  type='checkbox'
-                  id='checkbox'
-                  defaultChecked
-                  onChange={this.updateDateString}
-                ></input>
-              );
-              tech = techs[i];
-            }
-          }
-
-          return (
-            <div className='date-tech-selector-row' key={i} id={date}>
-              {checked}
-              <label>{date}</label>
-              <select
-                defaultValue={tech}
-                id='dropdown'
-                onChange={this.updateDateString}
-              >
-                <option disabled value='-- select a technology --'>
-                  -- select a technology --
-                </option>
-                {this.state.technologies.map((tech, k) => {
-                  return (
-                    <option key={k} value={tech}>
-                      {tech}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
-          );
-        })}
+        <span>Description:</span>
+        <br />
+        <textarea
+          rows='4'
+          cols='50'
+          name='description'
+          onChange={this.updateField}
+          style={{ resize: 'none', width: '100%' }}
+          defaultValue={selectedTech.description}
+        ></textarea>
         <span>Comments:</span>
         <br />
         <textarea
@@ -1016,7 +982,7 @@ class TechDB extends React.Component {
         <br />
         <button
           id='link-button'
-          onClick={this.updateExistingUser}
+          onClick={this.updateExistingTechnology}
           style={{
             width: '250px',
             display: 'inline-block',
@@ -1042,7 +1008,6 @@ class TechDB extends React.Component {
           Delete Technology
         </button>
         <br />
-        <span style={{ fontSize: '0.8em' }}>* - Supplier Only Fields</span>
       </div>
     ) : null;
 
@@ -1075,16 +1040,15 @@ class TechDB extends React.Component {
                 defaultValue='-- select an option --'
               >
                 <option disabled>-- select an option --</option>
-                <option value={0}>Last Name</option>
-                <option value={1}>First Name</option>
-                <option value={2}>Email</option>
-                <option value={3}>Type</option>
-                <option value={4}>Date Created</option>
-                <option value={5}>Date Last Modified</option>
-                <option value={6}>Last Modified By</option>
-                <option value={7}>Company</option>
-                <option value={8}>Country</option>
-                <option value={9}>City</option>
+                <option value={0}>ID</option>
+                <option value={1}>Category</option>
+                <option value={2}>Type</option>
+                <option value={3}>Date Created</option>
+                <option value={4}>Date Last Modified</option>
+                <option value={5}>Last Modified By</option>
+                <option value={6}>Company</option>
+                <option value={7}>Country</option>
+                <option value={8}>City</option>
               </select>
             </div>
             <div>

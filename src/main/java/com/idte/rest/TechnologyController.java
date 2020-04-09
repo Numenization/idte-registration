@@ -125,6 +125,7 @@ public class TechnologyController {
   public Object updateTechnology(Principal principal, @RequestBody Map<String, String> json) {
     int testId = -1;
     try {
+      System.out.println(json.get("id"));
       testId = Integer.parseInt(json.get("id"));
     }
     catch(Exception e) {

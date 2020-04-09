@@ -10,10 +10,13 @@ class BadgePage extends React.Component {
     this.state = {
       attendees: [],
       pages: [],
+      eventDates: [],
     };
 
     this.getAttendees = this.getAttendees.bind(this);
+    this.getEventDates = this.getEventDates.bind(this);
     this.pagifyAttendees = this.pagifyAttendees.bind(this);
+    this.getDayOfDate = this.getDayOfDate.bind(this);
     this.req = this.req.bind(this);
   }
 
@@ -64,6 +67,21 @@ class BadgePage extends React.Component {
     this.setState({ attendees: suppliers }, this.pagifyAttendees);
   }
 
+  async getEventDates() {
+    let res = await this.req('GET', '/idte/eventDateDetails');
+    let dates = [];
+    for (let event of Object.values(res)) {
+      dates.push(this.getDayOfDate(event));
+    }
+    dates.sort();
+    this.setState({ eventDates: dates });
+  }
+
+  getDayOfDate(date) {
+    let split = date.split('-');
+    return split[1];
+  }
+
   async addQRCodes(attendees) {
     for (let attendee of attendees) {
       try {
@@ -99,6 +117,7 @@ class BadgePage extends React.Component {
 
   componentDidMount() {
     this.getAttendees();
+    this.getEventDates();
   }
 
   render() {
@@ -106,8 +125,8 @@ class BadgePage extends React.Component {
       <div className='body'>
         {this.state.pages.map((page, i) => {
           return (
-            <div className='container'>
-              <div className='page' key={i}>
+            <div className='container' key={i}>
+              <div className='page'>
                 {page.map((attendee, j) => {
                   const company = attendee.company
                     ? attendee.company
@@ -119,6 +138,26 @@ class BadgePage extends React.Component {
                   if (attendee.type == 'Evaluator')
                     typeClass = 'evaluator-title';
                   const nameClass = attendee.nickname ? 'name' : 'nickname';
+
+                  let temp = [
+                    attendee.setUpOne,
+                    attendee.setUpTwo,
+                    attendee.setUpThree,
+                    attendee.dryRun,
+                    attendee.eventDayOne,
+                    attendee.eventDayTwo,
+                    attendee.eventDayThree,
+                    attendee.eventDayFour,
+                    attendee.eventDayFive,
+                  ];
+                  for (let attendeeDate of temp) {
+                    if (attendeeDate && attendeeDate.length > 0) {
+                      temp.push(this.getDayOfDate(attendeeDate));
+                    }
+                  }
+                  temp.sort();
+                  let attendeeDates = temp;
+
                   return (
                     <div className='badge' key={j}>
                       <img
@@ -138,9 +177,18 @@ class BadgePage extends React.Component {
                         {attendee.city}, {attendee.country}
                       </span>
                       <img className='qrCode' src={attendee.qrCode}></img>
-                      <span className='dates-of-attendance'>
-                        9 10 11 12 13{' '}
-                      </span>
+                      <div className='dates-of-attendance'>
+                        {this.state.eventDates.map((date, k) => {
+                          let dateClass = 'date';
+                          if (attendeeDates.includes(date))
+                            dateClass = 'date-registered';
+                          return (
+                            <span className={dateClass} key={k}>
+                              {date}
+                            </span>
+                          );
+                        })}
+                      </div>
                       <span className={typeClass}>
                         {attendee.type.toUpperCase()}
                       </span>

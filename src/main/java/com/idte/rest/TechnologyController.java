@@ -35,8 +35,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import javax.mail.MessagingException;
 
 @RestController
 @RequestMapping
@@ -331,8 +329,6 @@ public class TechnologyController {
     String director = json.get("director");
     String supplierCompany = json.get("supplierCompany");
     String source = json.get("source");
-    String subject = json.get("subject");
-    String body = json.get("body");
     String email = json.get("email");
 
     newTech.setComments("");
@@ -384,8 +380,8 @@ public class TechnologyController {
     SimpleMailMessage msg = new SimpleMailMessage();
 
     msg.setTo(email);
-    msg.setSubject(subject);
-    msg.setText(body);
+    msg.setSubject("Ford IDTE: Tech submission confirmation");
+    msg.setText("Thank you for your submission");
     javaMailSender.send(msg);
 
     return new ResponseEntity<>(HttpStatus.OK);

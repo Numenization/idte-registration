@@ -1,0 +1,119 @@
+body {
+  overflow-y: visible;
+}
+
+.container {
+  overflow-y: visible;
+  display: block;
+  float: none;
+  page-break-inside: avoid;
+  page-break-after: always;
+}
+
+.page {
+  display: flex;
+  flex-flow: row wrap;
+  align-content: stretch;
+  width: 595px;
+  height: 870px;
+  background-color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0;
+  margin: 0 auto;
+  overflow: auto;
+}
+
+.badge {
+  width: 280px;
+  height: 280px;
+  margin: 5px;
+  padding: 0;
+}
+
+.badge .logo {
+  display: block;
+  width: 85px;
+  height: 32px;
+  margin: 0 auto;
+}
+
+.badge .banner {
+  width: 100%;
+}
+
+.badge span {
+  display: block;
+  text-align: center;
+  line-height: 20px;
+  min-height: 20px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.dates-of-attendance {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.date {
+  width: auto;
+  display: block;
+  line-height: 20px;
+  color: #aaa;
+  font-weight: lighter;
+}
+
+.date-registered {
+  width: auto;
+  display: block;
+  line-height: 20px;
+  color: #cc3434aa;
+  font-weight: bold;
+}
+
+.badge .nickname {
+  font-weight: bold;
+  font-size: 120%;
+}
+
+.badge .qrCode {
+  display: block;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto;
+  background-color: #666;
+}
+
+.badge .supplier-title {
+  color: #cc3434;
+  border: 1px solid #cc3434;
+  font-weight: bold;
+  font-size: 150%;
+  line-height: 30px;
+  box-sizing: border-box;
+}
+
+.badge .presenter-title {
+  color: #2ab300;
+  border: 1px solid #2ab300;
+  font-weight: bold;
+  font-size: 150%;
+  line-height: 30px;
+  box-sizing: border-box;
+}
+
+.badge .evaluator-title {
+  color: #1d4999;
+  border: 1px solid #1d4999;
+  font-weight: bold;
+  font-size: 150%;
+  line-height: 30px;
+  box-sizing: border-box;
+}

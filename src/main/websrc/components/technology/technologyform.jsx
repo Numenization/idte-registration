@@ -73,14 +73,14 @@ class TestPage extends React.Component {
       body: 'Thank you for your submission',
       subject: 'Ford IDTE: Tech submission confirmation'
     }
-    let tech = Technology.createTechnologyObjectFromState(this.state)
-    data.merge(tech)
-    console.log(data)
+   //let tech = Technology.createTechnologyObjectFromState(this.state)
+ ///  data.merge(tech)
+  //  console.log(data)
     try {
       await this.req(
         'POST',
         '/idte/technologies',
-        data
+        Technology.createTechnologyObjectFromState(this.state)
       );
       window.location.href = 'http://localhost:8080/idte/thankyou.html';
     } catch (e) {

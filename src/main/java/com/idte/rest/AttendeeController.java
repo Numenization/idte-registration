@@ -833,7 +833,7 @@ public class AttendeeController {
       String filePath = "qrimgs/" + id + ".png";
       File file = new File(filePath);
       if(!file.exists()) {
-        QRCode.createQRImage(file, id, 125, filePath);
+        QRCode.createQRImage(file, id, 200, filePath);
       }
 
       MimeMessageHelper helper = new MimeMessageHelper(msg, true);
@@ -925,7 +925,7 @@ public class AttendeeController {
     try {
       File file = new File(filePath);
       if(!file.exists()) {
-        QRCode.createQRImage(file, attendee.getId(), 125, filePath);
+        QRCode.createQRImage(file, attendee.getId(), 200, filePath);
       }
       FileSystemResource resource = new FileSystemResource(file);
       InputStream in = resource.getInputStream();

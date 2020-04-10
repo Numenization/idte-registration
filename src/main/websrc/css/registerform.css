@@ -5,3 +5,10 @@
 .date-tech-selector-row select {
   float: right;
 }
+
+@media screen and (max-width: 600px) {
+  .date-tech-selector-row select {
+    float: none;
+    display: block;
+  }
+}

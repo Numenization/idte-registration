@@ -67,7 +67,8 @@ input {
   display: block;
   margin: 0;
   padding: 0;
-  height: 72px;
+  max-height: 72px;
+  max-width: 100%;
 }
 
 .navbar {
@@ -542,6 +543,7 @@ input {
 
 .registration-form {
   width: 40%;
+  min-width: 300px;
   margin: 0 auto;
 }
 

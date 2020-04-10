@@ -1,0 +1,52 @@
+.checkin-page {
+  margin: 0 auto;
+  width: 800px;
+  text-align: center;
+}
+
+.QR {
+  padding: 2em;
+}
+
+.checkin-page label {
+  width: 100%;
+  display: block;
+}
+
+.checkin-page input {
+  display: block;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.search-results {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.result {
+  width: 100%;
+  text-align: left;
+  border: 1px solid black;
+  border-top: none;
+  cursor: pointer;
+  margin: 0;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+}
+
+.result:hover {
+  background-color: rgb(233, 251, 255);
+}
+
+.result p {
+  padding: 0;
+  margin: 0;
+}
+
+.result .id {
+  font-weight: lighter;
+  color: rgb(99, 99, 99);
+}

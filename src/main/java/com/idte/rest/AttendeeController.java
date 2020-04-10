@@ -86,6 +86,55 @@ public class AttendeeController {
     return presenters.findAll();
   }
 
+  @PostMapping(path = "/admin/checkinFind")
+  public Object checkinFind(@RequestBody Map<String, String> json) {
+    String search = json.get("id");
+    if(search == null) {
+      return new ResponseEntity<>(new Error("Error parsing ID"), HttpStatus.BAD_REQUEST);
+    }
+
+    Attendee attendee = attendees.findById(search).orElse(null);
+    if(attendee == null) {
+      return new ResponseEntity<>(new Error("Could not find attendee"), HttpStatus.NOT_FOUND);
+    } else {
+      return new ResponseEntity<>(attendee, HttpStatus.OK);
+    }
+  }
+
+  @PostMapping(path = "/admin/markAttended")
+  public Object markAttended(@RequestBody Map<String, String> json) {
+    String search = json.get("id");
+    String dayType = json.get("dayType");
+    if(search == null || dayType == null) {
+      return new ResponseEntity<>(new Error("Error parsing request"), HttpStatus.BAD_REQUEST);
+    }
+    Attendee attendee = attendees.findById(search).orElse(null);
+    if(attendee == null) {
+      return new ResponseEntity<>(new Error("Could not find attendee"), HttpStatus.NOT_FOUND);
+    } else {
+      if(dayType.equals("setUpOne")) {
+        attendee.setSetUpOneAttended(!attendee.getSetUpOneAttended());
+      } else if(dayType.equals("setUpTwo")) {
+        attendee.setSetUpTwoAttended(!attendee.getSetUpTwoAttended());
+      } else if(dayType.equals("setUpThree")) {
+        attendee.setSetUpThreeAttended(!attendee.getSetUpThreeAttended());
+      } else if(dayType.equals("dryRun")) {
+        attendee.setDryRunAttended(!attendee.getDryRunAttended());
+      } else if(dayType.equals("eventDayOne")) {
+        attendee.setEventDayOneAttended(!attendee.getEventDayOneAttended());
+      } else if(dayType.equals("eventDayTwo")) {
+        attendee.setEventDayTwoAttended(!attendee.getEventDayTwoAttended());
+      } else if(dayType.equals("eventDayThree")) {
+        attendee.setEventDayThreeAttended(!attendee.getEventDayThreeAttended());
+      } else if(dayType.equals("eventDayFour")) {
+        attendee.setEventDayFourAttended(!attendee.getEventDayFourAttended());
+      } else if(dayType.equals("eventDayFive")) {
+        attendee.setEventDayFiveAttended(!attendee.getEventDayFiveAttended());
+      }
+      return new ResponseEntity<>(attendees.save(attendee), HttpStatus.OK);
+    }
+  }
+
   // get from email, id, first name, last name, nickname, phone number, cell
   // number, city, company, or country
   // due to incorrect implementation of javascripts XHRHttpRequest, this has to be

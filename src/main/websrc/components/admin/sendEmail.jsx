@@ -19,17 +19,21 @@ class SendEmail extends React.Component {
             file: null,
             isShowing: false,
             emailSent: false,
-            fname: null
+            fname: null,
+            blastOption: '',
+            useBlast: false
         };
         this.sendAnEmail = this.sendAnEmail.bind(this)
         this.handleInputChange = this.handleInputChange.bind(this)
         this.toggleFileInput = this.toggleFileInput.bind(this)
         this.fileInput = React.createRef()
         this.hideInputs = this.hideInputs.bind(this);
+        this.handleOptionChange = this.handleOptionChange.bind(this);
+        this.toggleBlast = this.toggleBlast.bind(this);
     }
 
     async sendAnEmail() {
-
+      
       //check email validity
       if(this.state.body == "" || this.state.body == null) {
         document.getElementById('error_msg').innerHTML 
@@ -41,12 +45,13 @@ class SendEmail extends React.Component {
                 = '*Enter a subject'
         return
       }
-      else if(this.state.to == "" || this.state.to == null) {
+      else if(this.state.useBlast == false && (this.state.to == "" || this.state.to == null)) {
+        console.log(this.state.useBlast)
         document.getElementById('error_msg').innerHTML 
                 = '*Enter the email to send to'
         return
       }
-      else if(!this.state.to.includes('@')) {
+      else if(this.state.useBlast == false && !this.state.to.includes('@')) {
         document.getElementById('error_msg').innerHTML 
                 = '*Enter a valid email'
         return
@@ -64,6 +69,11 @@ class SendEmail extends React.Component {
       else if (this.state.file != null && this.state.file.includes('.zip') && !this.state.file.includes('.ZIP')) {
         document.getElementById('error_msg').innerHTML 
                 = '*zip files are not allowed'
+        return
+      }
+      else if (this.state.blastOption == '') {
+        document.getElementById('error_msg').innerHTML 
+                = '*Please choose a blast option'
         return
       }
       //check if there is attachment
@@ -101,6 +111,7 @@ class SendEmail extends React.Component {
         
       }
       this.setState({emailSent: true})
+      this.setState({useBlast: false})
       document.getElementById('sending_msg').innerHTML 
                 = 'Email sent '
       document.getElementById('error_msg').innerHTML = ''
@@ -113,19 +124,38 @@ class SendEmail extends React.Component {
 
     handleInputChange() {
       //update state variables on change 
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
+      const target = event.target;
+      const value = target.value;
+      const name = target.name;
+      
+      this.setState({
+      [name]: value
+      })
+    }// end handleInputChange
 
-        this.setState({
+    handleOptionChange() {
+      const target = event.target;
+      const value = target.value;
+      const name = target.name;
+      //this.state.blastOption = value
+      this.setState({
         [name]: value
         })
-    }// end handleInputChange
+    }
 
     toggleFileInput() {
       //toggle isShowing variable
       this.setState({
-        isShowing: !this.state.isShowing
+        isShowing: !this.state.isShowing,
+        file: null
+      })
+    }// end toggleFileInput
+
+    toggleBlast() {
+      //toggle useBlast variable
+      this.setState({
+        useBlast: !this.state.useBlast,
+        blastOption: ''
       })
     }// end toggleFileInput
 
@@ -146,14 +176,83 @@ class SendEmail extends React.Component {
           <h1>Send an email</h1>
           <div>
             <form>
+              {
+                !this.state.emailSent?
+                <div className='sendemail-buttons'>
+                  <input id='field_button' className='email-button-style' type='button' value='Send blast email' onClick={this.toggleBlast} ></input>
+                  {
+                    this.state.useBlast?
+                    <div>
+                      <label>
+                        Who do you want to send this to?
+                      </label>
+
+                      <div className="radio">
+                        <label>
+                          <input 
+                          type="radio" 
+                          name="blastOption"
+                          value="allAttendees" 
+                          checked={this.state.blastOption === 'allAttendees'} 
+                          onChange={this.handleOptionChange}/>
+                          All attendees
+                        </label>
+                      </div>
+                      <div className="radio">
+                        <label>
+                          <input 
+                            type="radio" 
+                            name="blastOption"
+                            value="allPresenters" 
+                            checked={this.state.blastOption === 'allPresenters'} 
+                            onChange={this.handleOptionChange}/>
+                          All presenters
+                        </label>
+                      </div>
+                      <div className="radio">
+                        <label>
+                          <input 
+                            type="radio" 
+                            name="blastOption"
+                            value="allSuppliers" 
+                            checked={this.state.blastOption === 'allSuppliers'} 
+                            onChange={this.handleOptionChange}/>
+                          All suppliers
+                        </label>
+                      </div>
+                      <div className="radio">
+                        <label>
+                          <input 
+                            type="radio" 
+                            name="blastOption"
+                            value="allEvaluators" 
+                            checked={this.state.blastOption === 'allEvaluators'} 
+                            onChange={this.handleOptionChange}/>
+                          All evaluators
+                        </label>
+                      </div>
+                    </div>
+                    :null
+                  }
+                </div>
+                :null
+              }
+              
+              
+
               <div id='inputs'>
                 <label id='field_subject'>Subject:
                   <input name='subject' type='text' value={this.subject} onChange={this.handleInputChange}/>
                 </label>
                 &emsp;
-                <label id='field_to'>To: 
-                  <input name='to' type='text' value={this.to} onChange={this.handleInputChange}/>
-                </label >
+                {
+                  !this.state.useBlast?
+                  <label id='field_to'>To: 
+                    <input name='to' type='text' value={this.to} onChange={this.handleInputChange}/>
+                  </label >
+                  :null
+                }
+                
                 <br/>
                 <label id='field_body'>Body: 
                   <textarea

@@ -4,12 +4,18 @@ import java.util.Map;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
-import com.google.zxing.WriterException;
-import com.idte.rest.data.Attendee;
 import com.idte.rest.data.AttendeeRepository;
+import com.idte.rest.data.SupplierRepository;
+import com.idte.rest.data.EvaluatorRepository;
+import com.idte.rest.data.PresenterRepository;
+import com.idte.rest.data.Attendee;
+import com.idte.rest.data.Presenter;
+import com.idte.rest.data.Supplier;
+import com.idte.rest.data.Evaluator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +27,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.access.method.P;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -28,20 +35,35 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.MessagingException;
 import org.springframework.util.Base64Utils;
 
+
+
 @RestController
 @RequestMapping
 public class EmailController {
   @Autowired
   private JavaMailSender javaMailSender;
   @Autowired
-    private AttendeeRepository attendees;
+  private AttendeeRepository attendees;
+  @Autowired
+  private SupplierRepository suppliers;
+  @Autowired
+  private EvaluatorRepository evaluators;
+  @Autowired
+  private PresenterRepository presenters;
   // this is for the admin page
   @PostMapping(path = "/admin/email", consumes = "application/json", produces = "application/json")
   public void sendEmail(@RequestBody Map<String, String> json) {
     String to = json.get("to");
     String subject = json.get("subject");
     String body = json.get("body");
-    new Thread(() -> {sendNormalEmail(to, subject, body);}, "Email-Thread").start();
+    String blastOp = json.get("blastOption");
+
+    if(blastOp == null || blastOp == "") {
+      new Thread(() -> {sendNormalEmail(to, subject, body);}, "Email-Thread").start();
+    }
+    else {
+      new Thread(() -> {blastNormalEmail(subject, body, blastOp);}, "Blast-Thread").start();
+    }
   }
 
   @Async
@@ -53,31 +75,41 @@ public class EmailController {
     javaMailSender.send(msg);
   }
 
-  // // tech submission confirmation, not really a diff from above...
-  // @PostMapping(path = "/techconfirm", consumes = "application/json", produces = "application/json")
-  // public void sendTechConfirm(@RequestBody Map<String, String> json) {
-  //   SimpleMailMessage msg = new SimpleMailMessage();
+  @Async
+  public void blastNormalEmail(String subject, String body, String blastOp) {
+    SimpleMailMessage msg = new SimpleMailMessage();
 
-  //   String to = json.get("to");
-  //   String subject = json.get("subject");
-  //   String body = json.get("body");
-  //   msg.setTo(to);
-  //   msg.setSubject(subject);
-  //   msg.setText(body);
-  //   javaMailSender.send(msg);
-  // }
+    ArrayList<String> emails = parseBlastOption(blastOp);
+    if(emails.size() == 0) {
+      System.out.println("Error: there are no emails of the requested blast type");
+      return;
+    }
+    String[] emailArr = GetStringArray(emails);
+
+    msg.setTo(emailArr);
+    msg.setSubject(subject);
+    msg.setText(body);
+    javaMailSender.send(msg);
+  }
 
   @PostMapping(path = "/admin/emailwattachment", consumes = "application/json", produces = "application/json")
   public Object sendEmailwAttachment(@RequestBody Map<String, String> json){
 
     String to = json.get("to");
+    //check if there is multiple emails?
     String subject = json.get("subject");
     String body = json.get("body");
     String attachment = json.get("file");
     String name = json.get("name");
-    System.out.println(name);
+    String blastOp = json.get("blastOption");
+    //grab whether single email or blast email
 
-    new Thread(() -> {sendAttachmentEmail(to, subject, body, attachment, name);}, "Email-Thread").start();
+    if (blastOp == null || blastOp == "" ) {
+      new Thread(() -> {sendAttachmentEmail(to, subject, body, attachment, name);}, "Email-Thread").start();
+    }
+    else {
+      new Thread(() -> {blastAttachmentEmail(subject, body, attachment, name, blastOp);}, "Blast-Thread").start();
+    }
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
@@ -105,7 +137,7 @@ public class EmailController {
     try {
       MimeMessageHelper helper = new MimeMessageHelper(msg, true);
       helper.addAttachment(name, file);
-  
+
       helper.setTo(to);
       helper.setSubject(subject);
       helper.setText(body);
@@ -116,9 +148,121 @@ public class EmailController {
     }
     
     file.delete();
-    // STORE FILES BY UUID
   }
 
+  @Async
+  public void blastAttachmentEmail(String subject, String body, String attachment, String name, String blastOp){
+    // remove beginning of attachment
+    String[] arrofStrs = attachment.split(",");
+
+    attachment = arrofStrs[1];
+    // convert Base64 string to img
+    byte[] imgBytes = Base64Utils.decodeFromString(arrofStrs[1]);
+
+    File file = new File(name);
+
+    try {
+      OutputStream os = new FileOutputStream(file);
+      os.write(imgBytes);
+      os.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    ArrayList<String> emails = parseBlastOption(blastOp);
+    if(emails.size() == 0) {
+      System.out.println("Error: there are no emails of the requested blast type");
+      return;
+    }
+    String[] emailArr = GetStringArray(emails);
+    MimeMessage msg = javaMailSender.createMimeMessage();
+
+    try {
+      MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+      helper.addAttachment(name, file);
+  
+      helper.setTo(emailArr);
+      helper.setSubject(subject);
+      helper.setText(body);
+      javaMailSender.send(msg);
+    }
+    catch (MessagingException e){
+      System.out.println("FAILED TO SEND EMAIL");
+    }
+    
+    file.delete();
+  }
+
+  public ArrayList<String> parseBlastOption(String option) {
+    switch(option) {
+      case "allAttendees":
+      {
+        return grabAllAttendees();
+      }
+      case "allSuppliers":
+      {
+        return grabAllSuppliers();
+      }
+      case "allPresenters":
+      {
+        return grabAllPresenters();
+      }
+      case "allEvaluators":
+      {
+        return grabAllEvaluators();
+      }
+      default: {
+        return null;
+      }
+    }
+  }
+
+  public static String[] GetStringArray(ArrayList<String> arr) 
+    { 
+        String str[] = new String[arr.size()]; 
+        for (int j = 0; j < arr.size(); j++) { 
+  
+            // Assign each value to String array 
+            str[j] = arr.get(j); 
+        } 
+        return str; 
+    } 
+
+  public ArrayList<String> grabAllAttendees() {
+    ArrayList<String> allEmails = new ArrayList<>();
+    List<Attendee> newattendees = attendees.findAll();
+    for(int i = 0; i < newattendees.size(); i++) {
+      allEmails.add(newattendees.get(i).getEmail());
+    }
+    return allEmails;
+  }
+
+  public ArrayList<String> grabAllEvaluators() {
+    ArrayList<String> allEmails = new ArrayList<>();
+    List<Evaluator> evals = evaluators.findAll();
+    for(int i = 0; i < evals.size(); i++) {
+      allEmails.add(evals.get(i).getEmail());
+    }
+    return allEmails;
+  }
+
+  public ArrayList<String> grabAllSuppliers() {
+    ArrayList<String> allEmails = new ArrayList<>();
+    List<Supplier> sups = suppliers.findAll();
+    for(int i = 0; i < sups.size(); i++) {
+      allEmails.add(sups.get(i).getEmail());
+    }
+    return allEmails;
+  }
+
+  public ArrayList<String> grabAllPresenters() {
+    ArrayList<String> allEmails = new ArrayList<>();
+    List<Presenter> pres = presenters.findAll();
+    for(int i = 0; i < pres.size(); i++) {
+      allEmails.add(pres.get(i).getEmail());
+    }
+    return allEmails;
+  }
   // reg confirmation
   // @PostMapping(path = "/emailqr", consumes = "application/json", produces = "application/json")
   // public void sendEmailwQRCode(@RequestBody Map<String, String> json) throws MessagingException, WriterException, IOException {

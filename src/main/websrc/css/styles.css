@@ -1,777 +1,853 @@
 /* General CSS */
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    /*background-color: #1d4999;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  /*background-color: #1d4999;
   background-image: url('../images/main.jpg');
   background-repeat: repeat-y;
   background-size: 100% auto;*/
 }
 
 button:hover {
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
 }
 
 input {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
 }
 
 .background {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    margin: 0;
-    padding: 0;
-    z-index: -1;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  margin: 0;
+  padding: 0;
+  z-index: -1;
 }
 
 .background img {
-    object-fit: cover;
-    width: 100%;
-    height: 99.5%;
-    filter: opacity(0.6);
-    margin: 0;
-    padding: 0;
+  object-fit: cover;
+  width: 100%;
+  height: 99.5%;
+  filter: opacity(0.6);
+  margin: 0;
+  padding: 0;
 }
 
 .container {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 .top {
-    margin: 0;
-    padding: 0;
-    width: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 .header {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    width: 100%;
-    background-color: white;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  width: 100%;
+  background-color: white;
 }
 
 .header img {
-    display: block;
-    margin: 0;
-    padding: 0;
-    height: 72px;
+  display: block;
+  margin: 0;
+  padding: 0;
+  height: 72px;
 }
 
 .navbar {
+  background-color: #1d4999;
+  color: white;
+  /*margin: 1em auto;*/
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+  width: calc(60% + 2em);
+  /*border-radius: 15px;
+  border: 1px solid black;*/
+  box-shadow: 5px 5px #20293f66;
+}
+
+@media screen and (max-width: 600px) {
+  .navbar {
     background-color: #1d4999;
     color: white;
     /*margin: 1em auto;*/
     margin: 0 auto;
     padding: 0;
     text-align: center;
-    width: calc(60% + 2em);
+    width: 100%;
     /*border-radius: 15px;
-  border: 1px solid black;*/
+        border: 1px solid black;*/
     box-shadow: 5px 5px #20293f66;
+  }
 }
 
 .navbar ul {
+  display: flex;
+  justify-content: center;
+  /*width: 100%;*/
+  height: 3em;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+@media screen and (max-width: 600px) {
+  .navbar ul {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     /*width: 100%;*/
     height: 3em;
     padding: 0;
     margin: 0;
     list-style-type: none;
+  }
 }
 
 .navbar ul li {
-    padding: 0;
-    margin: 0;
-    height: 100%;
-    width: calc((60% + 2em) / 3.5);
-    /*float: left;*/
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: calc((60% + 2em) / 3.5);
+  /*float: left;*/
 }
 
 .navbar ul li a {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    background-color: #1d4999;
-    color: white;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    text-decoration: none;
-    box-sizing: border-box;
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  background-color: #1d4999;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
 }
 
 .navbar ul li a:hover {
-    background-color: #24789f;
+  background-color: #24789f;
 }
 
 .navbar ul li a:focus {
-    outline: 0;
-    border-bottom: 4px solid white;
+  outline: 0;
+  border-bottom: 4px solid white;
 }
 
 .navbar-second-tier {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    position: relative;
-    z-index: 1000;
-    top: 0;
-    display: none;
-    border: 1px solid black;
-    border-bottom: none;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  position: relative;
+  z-index: 1000;
+  top: 0;
+  display: none;
+  border: 1px solid black;
+  border-bottom: none;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
 
 .navbar-second-tier ul {
-    position: static;
-    width: 100%;
-    height: 12em !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    /*width: 100%;*/
-    height: 3em;
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
+  position: static;
+  width: 100%;
+  height: 12em !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /*width: 100%;*/
+  height: 3em;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
 }
 
 .navbar-second-tier li {
-    width: 100% !important;
+  width: 100% !important;
 }
 
 .navbar-second-tier li a {
-    width: 100%;
-    background-color: #1d4999;
-    border-bottom: 1px solid black;
+  width: 100%;
+  background-color: #1d4999;
+  border-bottom: 1px solid black;
 }
 
 .navbar-second-tier li a.last {
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
 
 .navbar-second-tier:hover {
-    display: block;
+  display: block;
 }
 
-.navbar li a#tiered:hover+.navbar-second-tier {
-    display: block;
+.navbar li a#tiered:hover + .navbar-second-tier {
+  display: block;
 }
 
 .active {
-    border-bottom: 4px solid #74ccf5;
+  border-bottom: 4px solid #74ccf5;
 }
 
 .footer {
-    color: white;
-    background-color: #1d4999;
-    width: 100%;
-    padding: 0;
-    text-align: center;
-    width: calc(60% + 2em);
-    margin: 0 auto;
-    box-shadow: 5px 5px #20293f66;
-    /*margin: 1em auto;
+  color: white;
+  background-color: #1d4999;
+  padding: 0;
+  text-align: center;
+  width: calc(60% + 2em);
+  margin: 0 auto;
+  box-shadow: 5px 5px #20293f66;
+  /*margin: 1em auto;
   border-radius: 15px;
   border: 1px solid black;*/
 }
 
-.footer p {
-    display: block;
-    align-content: center;
+@media screen and (max-width: 600px) {
+  .footer {
+    color: white;
+    background-color: #1d4999;
+    width: 100%;
+    padding: 0;
     text-align: center;
     width: 100%;
-    margin: 0;
-    padding: 0.75em 0;
+    margin: 0 auto;
+    box-shadow: 5px 5px #20293f66;
+    /*margin: 1em auto;
+        border-radius: 15px;
+        border: 1px solid black;*/
+  }
+}
+
+.footer p {
+  display: block;
+  align-content: center;
+  text-align: center;
+  width: 100%;
+  margin: 0;
+  padding: 0.75em 0;
 }
 
 .content {
-    padding: 1em;
-    width: 60%;
-    max-height: calc(100vh - 275px);
+  padding: 1em;
+  width: 60%;
+  max-height: calc(100vh - 275px);
+  overflow-y: auto;
+  margin: 0 auto;
+  /*margin-top: 1em;*/
+  background-color: white;
+  /*border-radius: 15px;
+  border: 1px solid black;*/
+  /*height: calc(100vh - (72px + 10em));*/
+  box-shadow: 5px 5px #2e2e2e66;
+  overflow-x: auto;
+}
+
+@media screen and (max-width: 600px) {
+  .content {
+    padding: 0.5em;
+    width: calc(100% - 1em);
+    max-height: calc(100vh - 162px);
     overflow-y: auto;
     margin: 0 auto;
     /*margin-top: 1em;*/
     background-color: white;
     /*border-radius: 15px;
-  border: 1px solid black;*/
+        border: 1px solid black;*/
     /*height: calc(100vh - (72px + 10em));*/
     box-shadow: 5px 5px #2e2e2e66;
+    overflow-x: auto;
+  }
 }
 
 #link-button {
-    margin: 0.5em;
-    padding: 0.2em 0.2em;
-    text-decoration: none;
-    text-align: center;
-    font-size: 115%;
-    /*   border-radius: 5px;
+  margin: 0.5em;
+  padding: 0.2em 0.2em;
+  text-decoration: none;
+  text-align: center;
+  font-size: 115%;
+  /*   border-radius: 5px;
   border: 1px solid black; */
-    border: none;
-    box-shadow: 3px 3px #20293f66;
-    background-color: #1d4999;
-    color: white;
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    position: relative;
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  background-color: #1d4999;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+  position: relative;
 }
 
 #link-button[disabled] {
-    background-color: gray;
-    cursor: default;
-    pointer-events: none;
+  background-color: gray;
+  cursor: default;
+  pointer-events: none;
 }
 
 #link-button:hover {
-    background-color: #24789f;
-    cursor: pointer;
+  background-color: #24789f;
+  cursor: pointer;
 }
 
 #link-button[disabled]:hover {
-    background-color: gray;
-    cursor: default;
+  background-color: gray;
+  cursor: default;
 }
 
 #link-button:active {
-    box-shadow: none;
-    bottom: -3px;
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .admin-database-table {
-    width: 100%;
-    margin: 0.5em 0;
-    padding: 0;
-    border: 1px solid black;
-    border-spacing: 0;
+  width: 100%;
+  margin: 0.5em 0;
+  padding: 0;
+  border: 1px solid black;
+  border-spacing: 0;
 }
 
 .admin-database-table thead {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .admin-database-table thead tr div {
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
 }
 
 .admin-database-table thead tr div:hover {
-    background-color: #b1e1f7;
+  background-color: #b1e1f7;
 }
 
 .admin-database-table thead tr td {
-    border-bottom: 1px solid black;
-    padding: 0.2em;
-    border-right: 1px solid black;
+  border-bottom: 1px solid black;
+  padding: 0.2em;
+  border-right: 1px solid black;
 }
 
 .admin-database-table tbody tr {
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
 }
 
 .admin-database-table tbody tr:hover {
-    background-color: #b1e1f7;
-    cursor: pointer;
+  background-color: #b1e1f7;
+  cursor: pointer;
 }
 
 .admin-database-table tbody tr td {
-    padding: 0.2em;
-    border-right: 1px solid black;
+  padding: 0.2em;
+  border-right: 1px solid black;
 }
 
 .pagination-buttons {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    flex-flow: row wrap;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  flex-flow: row wrap;
 }
 
 .pagination-buttons button {
-    display: inline-block;
-    margin: 0.1em;
-    height: 50px;
-    width: 50px;
-    text-decoration: none;
-    text-align: center;
-    border: 1px solid rgb(73, 73, 73);
-    border-radius: 5px;
-    background-color: #f1f5ff;
-    color: black;
-    cursor: pointer;
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
+  display: inline-block;
+  margin: 0.1em;
+  height: 50px;
+  width: 50px;
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid rgb(73, 73, 73);
+  border-radius: 5px;
+  background-color: #f1f5ff;
+  color: black;
+  cursor: pointer;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
 }
 
 .pagination-buttons button::-moz-focus-inner {
-    border: 0;
+  border: 0;
 }
 
 .pagination-buttons button:hover {
-    background-color: #caeeff;
-    border: 1px solid #112dc9;
+  background-color: #caeeff;
+  border: 1px solid #112dc9;
 }
 
 .pagination-buttons button.selected {
-    background-color: #caeeff;
-    border: 1px solid #112dc9;
+  background-color: #caeeff;
+  border: 1px solid #112dc9;
 }
 
 .pagination-buttons button:focus {
-    border: 1px solid #001277;
+  border: 1px solid #001277;
 }
-
 
 /* Home Page CSS */
 
 .home-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (max-width: 600px) {
+  .home-container {
     width: 100%;
     height: 100%;
     display: flex;
-    flex-direction: column;
+    flex-flow: row wrap;
+  }
 }
 
 .home-container-row {
+  display: flex;
+  flex-basis: fit-content;
+  flex-grow: 1;
+}
+
+@media screen and (max-width: 600px) {
+  .home-container-row {
     display: flex;
+    flex-flow: row wrap;
     flex-basis: fit-content;
     flex-grow: 1;
+  }
 }
 
 .home-container-cell {
-    border: 1px solid black;
-    width: 25%;
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    margin: 1em;
-    border-radius: 5px;
+  /*border: 1px solid black;*/
+  width: 25%;
+  min-width: 150px;
+  max-height: 150px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 1em;
+  border-radius: 5px;
 }
 
 .home-container-row h1 {
-    padding: 0;
-    margin: 0.5em 0.5em 0.5em 0.5em;
+  padding: 0;
+  margin: 0.5em 0.5em 0.5em 0.5em;
 }
 
 .home-container-cell h3 {
-    margin: 0.2em 0.5em;
-    text-align: center;
+  margin: 0.2em 0.5em;
+  text-align: center;
 }
 
 .home-container-cell span {
-    margin: 0.2em 0.5em;
-    text-align: center;
+  margin: 0.2em 0.5em;
+  text-align: center;
 }
 
 .home-container-cell a {
-    margin: 0.5em;
-    padding: 0.2em 0.2em;
-    text-decoration: none;
-    text-align: center;
-    font-size: 115%;
-    /*   border-radius: 5px;
+  margin: 0.5em;
+  padding: 0.2em 0.2em;
+  text-decoration: none;
+  text-align: center;
+  font-size: 115%;
+  /*   border-radius: 5px;
   border: 1px solid black; */
-    border: none;
-    box-shadow: 3px 3px #20293f66;
-    background-color: #1d4999;
-    color: white;
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    position: relative;
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  background-color: #1d4999;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+  position: relative;
 }
 
 .home-container-cell a:hover {
-    background-color: #24789f;
-    cursor: pointer;
+  background-color: #24789f;
+  cursor: pointer;
 }
 
 .home-container-cell a:active {
-    box-shadow: none;
-    bottom: -3px;
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .home-container-cell button:focus {
-    outline: 0;
+  outline: 0;
 }
-
 
 /* Registration page CSS */
 
 .registration-buttons {
-    display: flex;
-    flex-direction: column;
-    width: 40%;
-    margin: 0 auto;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .registration-buttons a {
-    margin: 0.5em;
-    padding: 0.2em 0.2em;
-    text-decoration: none;
-    text-align: center;
-    font-size: 115%;
-    /*   border-radius: 5px;
+  margin: 0.5em;
+  padding: 0.2em 0.2em;
+  text-decoration: none;
+  text-align: center;
+  font-size: 115%;
+  /*   border-radius: 5px;
   border: 1px solid black; */
-    border: none;
-    box-shadow: 3px 3px #20293f66;
-    background-color: #1d4999;
-    color: white;
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    position: relative;
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  background-color: #1d4999;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+  position: relative;
 }
 
 .registration-buttons a:hover {
-    background-color: #24789f;
-    cursor: pointer;
+  background-color: #24789f;
+  cursor: pointer;
 }
 
 .registration-buttons a:active {
-    box-shadow: none;
-    bottom: -3px;
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .registration-form {
-    width: 40%;
-    margin: 0 auto;
+  width: 40%;
+  margin: 0 auto;
 }
 
 .registration-form form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .registration-form label {
-    margin: 0.5em 0 0 0;
+  margin: 0.5em 0 0 0;
 }
 
 .registration-form button {
-    padding: 0.2em 0;
-    margin: 0.5em 0;
-    width: 100%;
-    text-decoration: none;
-    text-align: center;
-    /*   border-radius: 5px;
+  padding: 0.2em 0;
+  margin: 0.5em 0;
+  width: 100%;
+  text-decoration: none;
+  text-align: center;
+  /*   border-radius: 5px;
   border: 1px solid black; */
-    border: none;
-    box-shadow: 3px 3px #20293f66;
-    font-size: 115%;
-    background-color: #1d4999;
-    color: white;
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    position: relative;
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  font-size: 115%;
+  background-color: #1d4999;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+  position: relative;
 }
 
 .registration-form button:hover {
-    background-color: #24789f;
-    cursor: pointer;
+  background-color: #24789f;
+  cursor: pointer;
 }
 
 .registration-form button:active {
-    box-shadow: none;
-    bottom: -3px;
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .technology-form {
-    width: 70%;
-    margin: 0 auto;
+  width: 70%;
+  margin: 0 auto;
 }
 
 .technology-form form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .technology-form button {
-    padding: 0.2em 0;
-    margin: 0.5em 0;
-    width: 100%;
-    text-decoration: none;
-    text-align: center;
-    /*   border-radius: 5px;
+  padding: 0.2em 0;
+  margin: 0.5em 0;
+  width: 100%;
+  text-decoration: none;
+  text-align: center;
+  /*   border-radius: 5px;
   border: 1px solid black; */
-    border: none;
-    box-shadow: 3px 3px #20293f66;
-    font-size: 115%;
-    background-color: #1d4999;
-    color: white;
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    position: relative;
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  font-size: 115%;
+  background-color: #1d4999;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+  position: relative;
 }
 
 .technology-form button:hover {
-    background-color: #24789f;
-    cursor: pointer;
+  background-color: #24789f;
+  cursor: pointer;
 }
 
 .technology-form button:active {
-    box-shadow: none;
-    bottom: -3px;
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .technology-form table {
-    width: 100%;
+  width: 100%;
 }
 
 .technology-form td {
-    min-width: 340px;
+  min-width: 340px;
 }
 
 .technology-form span {
-    float: left;
+  float: left;
 }
 
 .technology-form input {
-    float: right;
-    width: 50%;
-    min-width: 170px;
+  float: right;
+  width: 50%;
+  min-width: 170px;
 }
 
 .technology-form select {
-    float: right;
-    width: 50%;
-    min-width: 170px;
+  float: right;
+  width: 50%;
+  min-width: 170px;
 }
 
 .technology-form#col2 {
-    width: 60%;
+  width: 60%;
 }
 
 .technology-form textarea {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    resize: none;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  resize: none;
 }
 
 #map {
-    border: 1px solid black;
-    border-radius: 15px;
-    box-shadow: 2px 2px black;
+  border: 1px solid black;
+  border-radius: 15px;
+  box-shadow: 2px 2px black;
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
-
 
 /* Admin CSS */
 
 .admin-buttons {
-    display: flex;
-    flex-direction: column;
-    width: 60%;
-    margin: 0 auto;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .admin-buttons a {
-    margin: 0.5em;
-    padding: 0.2em 0.2em;
-    text-decoration: none;
-    text-align: center;
-    font-size: 115%;
-    /*   border-radius: 5px;
+  margin: 0.5em;
+  padding: 0.2em 0.2em;
+  text-decoration: none;
+  text-align: center;
+  font-size: 115%;
+  /*   border-radius: 5px;
   border: 1px solid black; */
-    border: none;
-    box-shadow: 3px 3px #20293f66;
-    background-color: #1d4999;
-    color: white;
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    position: relative;
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  background-color: #1d4999;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+  position: relative;
 }
 
 .admin-buttons a:hover {
-    background-color: #24789f;
-    cursor: pointer;
+  background-color: #24789f;
+  cursor: pointer;
 }
 
 .admin-buttons a:active {
-    box-shadow: none;
-    bottom: -3px;
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .on-off-registration {
-    display: flex;
-    flex-direction: column;
-    width: 60%;
-    margin: 0 auto;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .on-off-registration a {
-    margin: 0.5em;
-    padding: 0.2em 0.2em;
-    text-decoration: none;
-    text-align: center;
-    font-size: 115%;
-    /*   border-radius: 5px;
+  margin: 0.5em;
+  padding: 0.2em 0.2em;
+  text-decoration: none;
+  text-align: center;
+  font-size: 115%;
+  /*   border-radius: 5px;
   border: 1px solid black; */
-    border: none;
-    box-shadow: 3px 3px #20293f66;
-    background-color: #1d4999;
-    color: white;
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    position: relative;
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  background-color: #1d4999;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+  position: relative;
 }
 
 .on-off-registration a:hover {
-    background-color: #24789f;
-    cursor: pointer;
+  background-color: #24789f;
+  cursor: pointer;
 }
 
 .on-off-registration a:active {
-    box-shadow: none;
-    bottom: -3px;
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .submit {
-    display: flex;
-    flex-direction: column;
-    width: 60%;
-    margin: 0 auto;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .submit a {
-    margin: 0.5em;
-    padding: 0.2em 0.2em;
-    text-decoration: none;
-    text-align: center;
-    font-size: 115%;
-    /*   border-radius: 5px;
+  margin: 0.5em;
+  padding: 0.2em 0.2em;
+  text-decoration: none;
+  text-align: center;
+  font-size: 115%;
+  /*   border-radius: 5px;
   border: 1px solid black; */
-    border: none;
-    box-shadow: 3px 3px #20293f66;
-    background-color: #1d4999;
-    color: white;
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
-    position: relative;
+  border: none;
+  box-shadow: 3px 3px #20293f66;
+  background-color: #1d4999;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+  position: relative;
 }
 
 .submit a:hover {
-    background-color: #24789f;
-    cursor: pointer;
+  background-color: #24789f;
+  cursor: pointer;
 }
 
 .submit a:active {
-    box-shadow: none;
-    bottom: -3px;
+  box-shadow: none;
+  bottom: -3px;
 }
 
 .email-buttons {
-    width: 80%;
-    margin: 0auto;
-    padding: 20px;
-    background: #f0e68c;
-    text-align: center;
+  width: 80%;
+  margin: 0auto;
+  padding: 20px;
+  background: #f0e68c;
+  text-align: center;
 }
-
 
 /* Email page style*/
 
 .loader {
-    border: 4px solid #000000;
-    border-radius: 50%;
-    border-top: 4px solid #24489f;
-    width: 10px;
-    height: 10px;
-    -webkit-animation: spin 2s linear infinite;
-    /* Safari */
-    animation: spin 2s linear infinite;
+  border: 4px solid #000000;
+  border-radius: 50%;
+  border-top: 4px solid #24489f;
+  width: 10px;
+  height: 10px;
+  -webkit-animation: spin 2s linear infinite;
+  /* Safari */
+  animation: spin 2s linear infinite;
 }
 
 @-webkit-keyframes spin {
-    0% {
-        -webkit-transform: rotate(0deg);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 @keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .email-button-style {
-    margin: 0.5em;
-    padding: 0.2em 0;
-    text-decoration: none;
-    text-align: center;
-    border: 1px solid rgba(0, 0, 0, 0.541);
-    font-size: 115%;
-    border-radius: 5px;
-    background-color: #24489f;
-    color: white;
-    transition: background-color 100ms linear;
-    -webkit-transition: background-color 100ms linear;
-    -moz-transition: background-color 100ms linear;
-    -o-transition: background-color 100ms linear;
+  margin: 0.5em;
+  padding: 0.2em 0;
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.541);
+  font-size: 115%;
+  border-radius: 5px;
+  background-color: #24489f;
+  color: white;
+  transition: background-color 100ms linear;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
 }
 
 .sendemail-buttons {
-    display: flex;
-    flex-direction: column;
-    width: 60%;
-    margin: 0 auto;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .sending-status {
-    display: inline-flex;
-    margin: 0 auto;
-    width: 60%;
-    text-align: match-parent;
+  display: inline-flex;
+  margin: 0 auto;
+  width: 60%;
+  text-align: match-parent;
 }

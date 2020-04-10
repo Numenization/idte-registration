@@ -10,7 +10,8 @@ class Email{
           subject: state.subject,
           to: state.to,
           body: state.body,
-          attachment: state.attachment
+          attachment: state.attachment,
+          blastOption: state.blastOption
         };
     
         for (let [key, val] of Object.entries(email)) {
@@ -56,7 +57,8 @@ class Email{
     file: await toBase64(file),
     subject: opts.subject,
     body: opts.body,
-    name: x
+    name: x,
+    blastOption: opts.blastOption
     }
 
     try {

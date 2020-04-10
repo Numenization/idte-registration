@@ -56,6 +56,7 @@ class TechDB extends React.Component {
     this.updateDateString = this.updateDateString.bind(this);
     this.postATech = this.postATech.bind(this);
     this.getTechCategories = this.getTechCategories.bind(this);
+    this.searchTechnologies = this.searchTechnologies.bind(this);
   }
   async postATech() {
     for (let i = 0; i < this.state.errors.length; i++) {
@@ -252,12 +253,12 @@ class TechDB extends React.Component {
   async getTechnologies() {
     // set ourselves to loading and start
     this.setLoading(true);
-
+    
     const opts =
       this.state.search.length > 0 ? { search: this.state.search } : null;
 
     
-    var techs = await this.getTechs();
+    var techs = await this.getTechs(opts);
     if (techs.statusText) {
       this.setError(techs.statusText);
       this.setLoading(false);
@@ -278,26 +279,29 @@ class TechDB extends React.Component {
     this.setLoading(false);
   }
 
-async getTechs() {
+async getTechs(opts = null) {
+  let url = opts ? '/idte/admin/technologies/search' : '/idte/admin/technologies';
   let res = await this.req('GET', '/idte/technologies/all');
   this.setState({ technologies: res });
   return res;
 }
   async searchTechnologies() {
+    console.log(this.state.search);
     if (this.state.search.length == 0) return;
 
     this.setLoading(true);
 
-    var techs = await Technology.findAllTechnologies();
+    const opts = {search: this.state.search}
+    var techs = await Technology.findAllTechnologies(opts);
     
-
+    console.log(this.state.search);
     if (techs.statusText) {
       this.setError(techs.statusText);
       this.setLoading(false);
       return;
     }
-
-    if (evaluators.statusText) {
+    console.log(techs.statusText);
+    if (techs.statusText) {
       var numPages = 0;
 
       if (techs.length > this.state.rowsPerPage) {
@@ -306,11 +310,12 @@ async getTechs() {
         numPages = 1;
       }
 
-      this.setNumPages(numPages);
-      this.setData(techs);
-      this.setPage(0);
-      this.setLoading(false);
     }
+  
+    this.setNumPages(numPages);
+    this.setData(techs);
+    this.setPage(0);
+    this.setLoading(false);
   }
   pageButtonClick(e) {
     this.setPage(parseInt(e.target.id));
@@ -1062,12 +1067,12 @@ async getTechs() {
                   if (e.keyCode == 13) {
                     this.setState(
                       { search: e.target.value },
-                      this.getTechnologies
+                      this.searchTechnologies
                     );
                   }
                 }}
               ></input>
-              <button onClick={this.getTechnologies}>Submit Search</button>
+              <button onClick={this.searchTechnologies}>Submit Search</button>
             </div>
             <div>
               <label htmlFor='rows-per-page-select'>Entries per page: </label>
@@ -1075,6 +1080,7 @@ async getTechs() {
                 id='rows-per-page-select'
                 onChange={(e) => {
                   this.setRowsPerPage(parseInt(e.target.value));
+                
                 }}
               >
                 <option value='10'>10</option>

@@ -6,6 +6,7 @@ import java.security.Principal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Example;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -119,6 +121,18 @@ public class TechnologyController {
       System.out.println(e);
       return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  @PostMapping(path = "/admin/technologies/search")
+  public Object techSearch(@RequestBody Map<String, String> json) {
+
+    String search = json.get("search");
+    List<String> attributes = Arrays.asList("type", "category", "description", "director", "fordContact", "fordPresenter",
+        "shippingCity", "shippingCountry", "source","supplerCompany", "title");
+
+    List<Technology> technology = technologies
+        .findAll(Specification.where(TechnologyRepository.containsTextInAttributes(search, attributes)));
+    return new ResponseEntity<>(technology, HttpStatus.OK);
   }
 
   @PutMapping(path = "/admin/technologies", consumes = "application/json", produces = "application/json")

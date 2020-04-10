@@ -111,6 +111,16 @@ class Technology {
       );
     }
   }
+  
+  static async findAllTechnologies(opts = null) {
+    let url = opts ? '/idte/admin/technologies/search' : '/idte/admin/technologies';
+    let method = opts ? 'POST' : 'GET';
+    let res = await Technology.req(method, url, opts);
+    if (res.statusText) {
+      return res;
+    }
+    return res;
+  }
 
   static async deleteCategory(opts = null) {
     try {

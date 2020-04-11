@@ -86,7 +86,7 @@ public class EmailController {
     }
     String[] emailArr = GetStringArray(emails);
 
-    msg.setTo(emailArr);
+    msg.setBcc(emailArr);
     msg.setSubject(subject);
     msg.setText(body);
     javaMailSender.send(msg);
@@ -181,7 +181,7 @@ public class EmailController {
       MimeMessageHelper helper = new MimeMessageHelper(msg, true);
       helper.addAttachment(name, file);
   
-      helper.setTo(emailArr);
+      helper.setBcc(emailArr);
       helper.setSubject(subject);
       helper.setText(body);
       javaMailSender.send(msg);

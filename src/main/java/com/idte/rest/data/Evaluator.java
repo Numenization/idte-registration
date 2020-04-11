@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 @Entity
 public class Evaluator extends Attendee {
 
+    public String categoryOne;
+    public String categoryTwo;
+    public String categoryThree;
+
     public static Evaluator from(Evaluator evaluator) {
         Evaluator newEvaluator = new Evaluator();
 
@@ -38,7 +42,35 @@ public class Evaluator extends Attendee {
         newEvaluator.eventDayFourTech = evaluator.eventDayFourTech;
         newEvaluator.eventDayFiveTech = evaluator.eventDayFiveTech;
 
+        newEvaluator.categoryOne = evaluator.categoryOne;
+        newEvaluator.categoryTwo = evaluator.categoryTwo;
+        newEvaluator.categoryThree = evaluator.categoryThree;
+
         return newEvaluator;
+    }
+
+    public void setCategoryOne(String category) {
+        this.categoryOne = category;
+    }
+
+    public void setCategoryTwo(String category) {
+        this.categoryTwo = category;
+    }
+
+    public void setCategoryThree(String category) {
+        this.categoryThree = category;
+    }
+
+    public String getCategoryOne() {
+        return categoryOne;
+    }
+
+    public String getCategoryTwo() {
+        return categoryTwo;
+    }
+
+    public String getCategoryThree() {
+        return categoryThree;
     }
 
     @Override

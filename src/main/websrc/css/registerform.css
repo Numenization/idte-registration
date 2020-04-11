@@ -6,6 +6,12 @@
   float: right;
 }
 
+.category-selector-row {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+}
+
 @media screen and (max-width: 600px) {
   .date-tech-selector-row select {
     float: none;

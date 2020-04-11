@@ -1147,7 +1147,7 @@ class DatabasePage extends React.Component {
         </div>
 
         <div className='content'>
-          <h1>Database Administration Interface</h1>
+          <h1>Attendee Database</h1>
           <div style={{ display: 'flex', justifyContent: 'space-around' }}>
             <div>
               <label htmlFor='sort-by-select'>Sort Table By: </label>

@@ -35,8 +35,9 @@ class RegistrationPage extends React.Component {
         '/idte/setRegistrationStatus',
         requestbody
       );
-      console.log(res);
-      window.location.href = 'registerwaiver.html';
+      if (res.iid) {
+        window.location.href = '/idte/registerwaiver.html';
+      }
     } catch (e) {
       if (e.errors) {
         console.log(e.errors);
@@ -69,21 +70,26 @@ class RegistrationPage extends React.Component {
           <div className='registration-buttons'>
             <h1>Registration</h1>
             <p>Sample Text</p>
-            <a onClick={async () => this.submitSupp('supplier')}>
-              <font color='white'>Register as Supplier</font>
-            </a>
-            <a
+            <button
+              id='link-button'
+              onClick={async () => this.submitSupp('supplier')}
+            >
+              Register as Supplier
+            </button>
+            <button
+              id='link-button'
               onClick={async () => this.submitSupp('presenter')}
               href='registerwaiver.html'
             >
-              <font color='white'>Register as Presenter</font>
-            </a>
-            <a
+              Register as Presenter
+            </button>
+            <button
+              id='link-button'
               onClick={async () => this.submitSupp('evaluator')}
               href='registerwaiver.html'
             >
-              <font color='white'>Register as Evaluator</font>
-            </a>
+              Register as Evaluator
+            </button>
           </div>
         </div>
 

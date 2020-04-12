@@ -6,33 +6,38 @@ import NavBar from './navbar.jsx';
 import Footer from './footer.jsx';
 import '../css/styles.css';
 import RegStatus from '../data/regStatus.js';
-import Event from "../data/changeregistration.js";
+import Event from '../data/changeregistration.js';
 
 class RegistrationPage extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      type: ""
-    }
+      type: '',
+    };
     this.submitSupp = this.submitSupp.bind(this);
     this.isRegOpen = this.isRegOpen.bind(this);
   }
-  async isRegOpen(){
+  async isRegOpen() {
     let k = await Event.getRegStatus();
-   if (k.status == "false"){
-    window.location.href = "http://localhost:8080/idte/index.html";
-    alert("Registration is Closed.");
-   
-   }
-  } 
-  async submitSupp(regtype){
-    this.setState({type: regtype})
-    let requestbody = {
-      type: regtype
+    if (k.status == 'false') {
+      window.location.href = 'http://localhost:8080/idte/index.html';
+      alert('Registration is Closed.');
     }
+  }
+  async submitSupp(regtype) {
+    this.setState({ type: regtype });
+    let requestbody = {
+      type: regtype,
+    };
     try {
-      let res = await RegStatus.req('POST', '/idte/setRegistrationStatus', requestbody);
-      window.location.href = "registerwaiver.html";
+      let res = await RegStatus.req(
+        'POST',
+        '/idte/setRegistrationStatus',
+        requestbody
+      );
+      if (res.iid) {
+        window.location.href = '/idte/registerwaiver.html';
+      }
     } catch (e) {
       if (e.errors) {
         console.log(e.errors);
@@ -46,10 +51,12 @@ class RegistrationPage extends React.Component {
 
   render() {
     return (
-      <div className='container'onLoad={async e => {
-        await this.isRegOpen();
-        
-      }}>
+      <div
+        className='container'
+        onLoad={async (e) => {
+          await this.isRegOpen();
+        }}
+      >
         <div className='background'>
           <img src={require('../images/main.jpg')}></img>
         </div>
@@ -63,15 +70,26 @@ class RegistrationPage extends React.Component {
           <div className='registration-buttons'>
             <h1>Registration</h1>
             <p>Sample Text</p>
-            <a onClick={() => this.submitSupp("supplier")}>
-              <font color='white'>Register as Supplier</font>
-            </a>
-            <a onClick={() => this.submitSupp("presenter")} href="registerwaiver.html">
-              <font color='white'>Register as Presenter</font>
-            </a>
-            <a onClick={() => this.submitSupp("evaluator")} href="registerwaiver.html">
-              <font color='white'>Register as Evaluator</font>
-            </a>
+            <button
+              id='link-button'
+              onClick={async () => this.submitSupp('supplier')}
+            >
+              Register as Supplier
+            </button>
+            <button
+              id='link-button'
+              onClick={async () => this.submitSupp('presenter')}
+              href='registerwaiver.html'
+            >
+              Register as Presenter
+            </button>
+            <button
+              id='link-button'
+              onClick={async () => this.submitSupp('evaluator')}
+              href='registerwaiver.html'
+            >
+              Register as Evaluator
+            </button>
           </div>
         </div>
 

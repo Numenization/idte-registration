@@ -453,6 +453,34 @@ public class AttendeeController {
       return new ResponseEntity<>(new Error(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    // evaluator specific fields
+    String categoryOne = json.get("categoryOne");
+    String categoryTwo = json.get("categoryTwo");
+    String categoryThree = json.get("categoryThree");
+
+    try {
+      if(categoryOne != null && ((Evaluator)attendee).getCategoryOne() != null) {
+        if(!categoryOne.equals(((Evaluator)attendee).getCategoryOne())) {
+          ((Evaluator)attendee).setCategoryOne(categoryOne);
+          changes = true;
+        }
+      }
+      if(categoryTwo != null && ((Evaluator)attendee).getCategoryTwo() != null) {
+        if(!categoryTwo.equals(((Evaluator)attendee).getCategoryTwo())) {
+          ((Evaluator)attendee).setCategoryTwo(categoryTwo);
+          changes = true;
+        }
+      }
+      if(categoryThree != null && ((Evaluator)attendee).getCategoryThree() != null) {
+        if(!categoryThree.equals(((Evaluator)attendee).getCategoryThree())) {
+          ((Evaluator)attendee).setCategoryThree(categoryThree);
+          changes = true;
+        }
+      }
+    } catch (Exception e) {
+      return new ResponseEntity<>(new Error(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     // if we made changes, update the attendee's last modified date and send HTTP OK
     // otherwise send HTTP NOT MODIFIED
     if (changes) {
@@ -536,7 +564,6 @@ public class AttendeeController {
 
   @PostMapping(path = "/attendees", consumes = "application/json", produces = "application/json")
   public Object submitRegistration(@RequestBody Map<String, String> json) {
-    // TODO: Set dates to attend and associated technologies on those dates, except for evaluators who only need dates
     Attendee newAttendee;
     List<Error> errors = new ArrayList<>();
     
@@ -570,6 +597,10 @@ public class AttendeeController {
     String event4Tech = json.get("event4Tech");
     String event5Tech = json.get("event5Tech");
 
+    String category1 = json.get("category1");
+    String category2 = json.get("category2");
+    String category3 = json.get("category3");
+
     if(email == null || firstName == null || lastName == null ||
       email.length() == 0 || firstName.length() == 0 ||
       lastName.length() == 0) {
@@ -588,49 +619,106 @@ public class AttendeeController {
       newAttendee.setFirstName(firstName);
       newAttendee.setLastName(lastName);
 
-      if(setup1.length() > 0) 
-        newAttendee.setSetUpOne(setup1);
-      if(setup2.length() > 0) 
-        newAttendee.setSetUpTwo(setup2);
-      if(setup3.length() > 0) 
-        newAttendee.setSetUpThree(setup3);
-      if(dryRun.length() > 0) 
-        newAttendee.setDryRun(dryRun);
-      if(event1.length() > 0) 
-        newAttendee.setEventDayOne(event1);
-      if(event2.length() > 0) 
-        newAttendee.setEventDayOne(event2);
-      if(event3.length() > 0) 
-        newAttendee.setEventDayOne(event3);
-      if(event4.length() > 0) 
-        newAttendee.setEventDayOne(event4);
-      if(event5.length() > 0) 
-        newAttendee.setEventDayOne(event5);
+      int attendedDays = 0;
 
-      if(setup1Tech.length() > 0) 
-        newAttendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
-      if(setup2Tech.length() > 0) 
-        newAttendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
-      if(setup3Tech.length() > 0) 
-        newAttendee.setSetUpThreeTech(Integer.parseInt(setup3Tech));
-      if(dryRunTech.length() > 0) 
-        newAttendee.setDryRunTech(Integer.parseInt(dryRunTech));
-      if(event1Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event1Tech));
-      if(event2Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event2Tech));
-      if(event3Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event3Tech));
-      if(event4Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event4Tech));
-      if(event5Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event5Tech));
+      if(setup1.length() > 0) {
+        newAttendee.setSetUpOne(setup1);
+        attendedDays++;
+        if(setup1Tech.length() > 0) {
+          newAttendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
+        } else {
+          errors.add(new Error("Please select a technology for set up day one!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(setup2.length() > 0) {
+        newAttendee.setSetUpTwo(setup2);
+        attendedDays++;
+        if(setup2Tech.length() > 0) {
+          newAttendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
+        } else {
+          errors.add(new Error("Please select a technology for set up day two!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(setup3.length() > 0) {
+        newAttendee.setSetUpThree(setup3);
+        attendedDays++;
+        if(setup3Tech.length() > 0) {
+          newAttendee.setSetUpThreeTech(Integer.parseInt(setup3Tech));
+        } else {
+          errors.add(new Error("Please select a technology for set up day three!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(dryRun.length() > 0) {
+        newAttendee.setDryRun(dryRun);
+        attendedDays++;
+        if(dryRunTech.length() > 0) {
+          newAttendee.setDryRunTech(Integer.parseInt(dryRunTech));
+        } else {
+          errors.add(new Error("Please select a technology for the dry run!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(event1.length() > 0) {
+        newAttendee.setEventDayOne(event1);
+        attendedDays++;
+        if(event1Tech.length() > 0) {
+          newAttendee.setEventDayOneTech(Integer.parseInt(event1Tech));
+        } else {
+          errors.add(new Error("Please select a technology for event day one!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(event2.length() > 0) {
+        newAttendee.setEventDayOne(event2);
+        attendedDays++;
+        if(event2Tech.length() > 0) {
+          newAttendee.setEventDayOneTech(Integer.parseInt(event2Tech));
+        } else {
+          errors.add(new Error("Please select a technology for event day two!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(event3.length() > 0) {
+        newAttendee.setEventDayOne(event3);
+        attendedDays++;
+        if(event3Tech.length() > 0) {
+          newAttendee.setEventDayOneTech(Integer.parseInt(event3Tech));
+        } else {
+          errors.add(new Error("Please select a technology for event day three!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(event4.length() > 0) {
+        newAttendee.setEventDayOne(event4);
+        attendedDays++;
+        if(event4Tech.length() > 0) {
+          newAttendee.setEventDayOneTech(Integer.parseInt(event4Tech));
+        } else {
+          errors.add(new Error("Please select a technology for event day four!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(event5.length() > 0) {
+        newAttendee.setEventDayOne(event5);
+        attendedDays++;
+        if(event5Tech.length() > 0) {
+          newAttendee.setEventDayOneTech(Integer.parseInt(event5Tech));
+        } else {
+          errors.add(new Error("Please select a technology for event day five!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+
+      if(attendedDays == 0) {
+        errors.add(new Error("Select at least one day to attend!"));
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+      }
 
       
       // set optional fields
-      if(phone != null) {
-        newAttendee.setPhoneNumber(phone);
-      }
       if(cell != null) {
         newAttendee.setCellNumber(cell);
       }
@@ -639,13 +727,14 @@ public class AttendeeController {
       }
 
       // set supplier specific fields
-      if(city == null || country == null || company == null ||
-        city.length() == 0 || country.length() == 0 || company.length() == 0) {
+      if(city == null || country == null || company == null || phone == null ||
+        city.length() == 0 || country.length() == 0 || company.length() == 0 || phone.length() == 0) {
         errors.add(new Error("Make sure all required fields are filled out!"));
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
       }
 
       newAttendee.setCity(city);
+      newAttendee.setPhoneNumber(phone);
       newAttendee.setCountry(country);
       ((Supplier)newAttendee).setCompany(company);
     } else if(type.equals("presenter")) {
@@ -656,48 +745,105 @@ public class AttendeeController {
       newAttendee.setFirstName(firstName);
       newAttendee.setLastName(lastName);
 
-      if(setup1.length() > 0) 
-        newAttendee.setSetUpOne(setup1);
-      if(setup2.length() > 0) 
-        newAttendee.setSetUpTwo(setup2);
-      if(setup3.length() > 0) 
-        newAttendee.setSetUpThree(setup3);
-      if(dryRun.length() > 0) 
-        newAttendee.setDryRun(dryRun);
-      if(event1.length() > 0) 
-        newAttendee.setEventDayOne(event1);
-      if(event2.length() > 0) 
-        newAttendee.setEventDayOne(event2);
-      if(event3.length() > 0) 
-        newAttendee.setEventDayOne(event3);
-      if(event4.length() > 0) 
-        newAttendee.setEventDayOne(event4);
-      if(event5.length() > 0) 
-        newAttendee.setEventDayOne(event5);
+      int attendedDays = 0;
 
-      if(setup1Tech.length() > 0) 
-        newAttendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
-      if(setup2Tech.length() > 0) 
-        newAttendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
-      if(setup3Tech.length() > 0) 
-        newAttendee.setSetUpThreeTech(Integer.parseInt(setup3Tech));
-      if(dryRunTech.length() > 0) 
-        newAttendee.setDryRunTech(Integer.parseInt(dryRunTech));
-      if(event1Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event1Tech));
-      if(event2Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event2Tech));
-      if(event3Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event3Tech));
-      if(event4Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event4Tech));
-      if(event5Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event5Tech));
+      if(setup1.length() > 0) {
+        newAttendee.setSetUpOne(setup1);
+        attendedDays++;
+        if(setup1Tech.length() > 0) {
+          newAttendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
+        } else {
+          errors.add(new Error("Please select a technology for set up day one!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(setup2.length() > 0) {
+        newAttendee.setSetUpTwo(setup2);
+        attendedDays++;
+        if(setup2Tech.length() > 0) {
+          newAttendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
+        } else {
+          errors.add(new Error("Please select a technology for set up day two!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(setup3.length() > 0) {
+        newAttendee.setSetUpThree(setup3);
+        attendedDays++;
+        if(setup3Tech.length() > 0) {
+          newAttendee.setSetUpThreeTech(Integer.parseInt(setup3Tech));
+        } else {
+          errors.add(new Error("Please select a technology for set up day three!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(dryRun.length() > 0) {
+        newAttendee.setDryRun(dryRun);
+        attendedDays++;
+        if(dryRunTech.length() > 0) {
+          newAttendee.setDryRunTech(Integer.parseInt(dryRunTech));
+        } else {
+          errors.add(new Error("Please select a technology for the dry run!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(event1.length() > 0) {
+        newAttendee.setEventDayOne(event1);
+        attendedDays++;
+        if(event1Tech.length() > 0) {
+          newAttendee.setEventDayOneTech(Integer.parseInt(event1Tech));
+        } else {
+          errors.add(new Error("Please select a technology for event day one!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(event2.length() > 0) {
+        newAttendee.setEventDayOne(event2);
+        attendedDays++;
+        if(event2Tech.length() > 0) {
+          newAttendee.setEventDayOneTech(Integer.parseInt(event2Tech));
+        } else {
+          errors.add(new Error("Please select a technology for event day two!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(event3.length() > 0) {
+        newAttendee.setEventDayOne(event3);
+        attendedDays++;
+        if(event3Tech.length() > 0) {
+          newAttendee.setEventDayOneTech(Integer.parseInt(event3Tech));
+        } else {
+          errors.add(new Error("Please select a technology for event day three!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(event4.length() > 0) {
+        newAttendee.setEventDayOne(event4);
+        attendedDays++;
+        if(event4Tech.length() > 0) {
+          newAttendee.setEventDayOneTech(Integer.parseInt(event4Tech));
+        } else {
+          errors.add(new Error("Please select a technology for event day four!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+      if(event5.length() > 0) {
+        newAttendee.setEventDayOne(event5);
+        attendedDays++;
+        if(event5Tech.length() > 0) {
+          newAttendee.setEventDayOneTech(Integer.parseInt(event5Tech));
+        } else {
+          errors.add(new Error("Please select a technology for event day five!"));
+          return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+      }
+
+      if(attendedDays == 0) {
+        errors.add(new Error("Select at least one day to attend!"));
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+      }
 
       // set optional fields
-      if(phone != null) {
-        newAttendee.setPhoneNumber(phone);
-      }
       if(cell != null) {
         newAttendee.setCellNumber(cell);
       }
@@ -706,13 +852,14 @@ public class AttendeeController {
       }
 
       // set presenter specific fields
-      if(city == null || country == null || 
+      if(city == null || country == null || phone == null || phone.length() == 0 ||
         city.length() == 0 || country.length() == 0) {
         errors.add(new Error("Make sure all required fields are filled out!"));
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
       }
 
       newAttendee.setCity(city);
+      newAttendee.setPhoneNumber(phone);
       newAttendee.setCountry(country);
     } else if(type.equals("evaluator")) {
       newAttendee = new Evaluator();
@@ -722,62 +869,70 @@ public class AttendeeController {
       newAttendee.setFirstName(firstName);
       newAttendee.setLastName(lastName);
 
-      if(setup1.length() > 0) 
-        newAttendee.setSetUpOne(setup1);
-      if(setup2.length() > 0) 
-        newAttendee.setSetUpTwo(setup2);
-      if(setup3.length() > 0) 
-        newAttendee.setSetUpThree(setup3);
-      if(dryRun.length() > 0) 
-        newAttendee.setDryRun(dryRun);
-      if(event1.length() > 0) 
-        newAttendee.setEventDayOne(event1);
-      if(event2.length() > 0) 
-        newAttendee.setEventDayOne(event2);
-      if(event3.length() > 0) 
-        newAttendee.setEventDayOne(event3);
-      if(event4.length() > 0) 
-        newAttendee.setEventDayOne(event4);
-      if(event5.length() > 0) 
-        newAttendee.setEventDayOne(event5);
+      int attendedDays = 0;
 
-      if(setup1Tech.length() > 0) 
-        newAttendee.setSetUpOneTech(Integer.parseInt(setup1Tech));
-      if(setup2Tech.length() > 0) 
-        newAttendee.setSetUpTwoTech(Integer.parseInt(setup2Tech));
-      if(setup3Tech.length() > 0) 
-        newAttendee.setSetUpThreeTech(Integer.parseInt(setup3Tech));
-      if(dryRunTech.length() > 0) 
-        newAttendee.setDryRunTech(Integer.parseInt(dryRunTech));
-      if(event1Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event1Tech));
-      if(event2Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event2Tech));
-      if(event3Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event3Tech));
-      if(event4Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event4Tech));
-      if(event5Tech.length() > 0) 
-        newAttendee.setEventDayOneTech(Integer.parseInt(event5Tech));
+      if(setup1.length() > 0) {
+        newAttendee.setSetUpOne(setup1);
+        attendedDays++;
+      }
+      if(setup2.length() > 0) {
+        newAttendee.setSetUpTwo(setup2);
+        attendedDays++;
+      }
+      if(setup3.length() > 0) {
+        newAttendee.setSetUpThree(setup3);
+        attendedDays++;
+      }
+      if(dryRun.length() > 0) {
+        newAttendee.setDryRun(dryRun);
+        attendedDays++;
+      }
+      if(event1.length() > 0) {
+        newAttendee.setEventDayOne(event1);
+        attendedDays++;
+      }
+      if(event2.length() > 0) {
+        newAttendee.setEventDayOne(event2);
+        attendedDays++;
+      }
+      if(event3.length() > 0) {
+        newAttendee.setEventDayOne(event3);
+        attendedDays++;
+      }
+      if(event4.length() > 0) {
+        newAttendee.setEventDayOne(event4);
+        attendedDays++;
+      }
+      if(event5.length() > 0) {
+        newAttendee.setEventDayOne(event5);
+        attendedDays++;
+      }
+
+      if(attendedDays == 0) {
+        errors.add(new Error("Select a day to attend!"));
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+      }
 
       // set optional fields
       if(phone != null) {
         newAttendee.setPhoneNumber(phone);
       }
-      if(cell != null) {
-        newAttendee.setCellNumber(cell);
-      }
       if(nickname != null) {
         newAttendee.setNickname(nickname);
       }
 
-      // set presenter specific fields
-      if(city == null || country == null || 
-        city.length() == 0 || country.length() == 0) {
+      // set evaluator specific fields
+      if(city == null || country == null || cell == null || 
+        category1 == null || category2 == null || category3 == null ||
+        cell.length() == 0 || city.length() == 0 || country.length() == 0 ||
+        category1.length() == 0 || category2.length() == 0 || category3.length() == 0) {
         errors.add(new Error("Make sure all required fields are filled out!"));
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
       }
-
+      ((Evaluator)newAttendee).setCategoryOne(category1);
+      ((Evaluator)newAttendee).setCategoryTwo(category2);
+      ((Evaluator)newAttendee).setCategoryThree(category3);
+      newAttendee.setCellNumber(cell);
       newAttendee.setCity(city);
       newAttendee.setCountry(country);
     } else {
@@ -833,7 +988,7 @@ public class AttendeeController {
       String filePath = "qrimgs/" + id + ".png";
       File file = new File(filePath);
       if(!file.exists()) {
-        QRCode.createQRImage(file, id, 125, filePath);
+        QRCode.createQRImage(file, id, 200, filePath);
       }
 
       MimeMessageHelper helper = new MimeMessageHelper(msg, true);
@@ -925,7 +1080,7 @@ public class AttendeeController {
     try {
       File file = new File(filePath);
       if(!file.exists()) {
-        QRCode.createQRImage(file, attendee.getId(), 125, filePath);
+        QRCode.createQRImage(file, attendee.getId(), 200, filePath);
       }
       FileSystemResource resource = new FileSystemResource(file);
       InputStream in = resource.getInputStream();
@@ -997,6 +1152,10 @@ public class AttendeeController {
     header.createCell(40).setCellValue("Event Day Four Attendance");
     header.createCell(41).setCellValue("Event Day Five Attendance");
 
+    header.createCell(42).setCellValue("Category One Pick");
+    header.createCell(43).setCellValue("Category Two Pick");
+    header.createCell(44).setCellValue("Category Three Pick");
+
     int rowNum = 0;
 
     for(Supplier s: supps) {
@@ -1046,6 +1205,10 @@ public class AttendeeController {
       row.createCell(39).setCellValue(s.getEventDayThreeAttended());
       row.createCell(40).setCellValue(s.getEventDayFourAttended());
       row.createCell(41).setCellValue(s.getEventDayFiveAttended());
+
+      row.createCell(42).setCellValue(" ");
+      row.createCell(43).setCellValue(" ");
+      row.createCell(44).setCellValue(" ");
     }
 
     for(Presenter s: presents) {
@@ -1095,6 +1258,10 @@ public class AttendeeController {
       row.createCell(39).setCellValue(s.getEventDayThreeAttended());
       row.createCell(40).setCellValue(s.getEventDayFourAttended());
       row.createCell(41).setCellValue(s.getEventDayFiveAttended());
+
+      row.createCell(42).setCellValue(" ");
+      row.createCell(43).setCellValue(" ");
+      row.createCell(44).setCellValue(" ");
     }
 
     for(Evaluator s: evals) {
@@ -1144,6 +1311,10 @@ public class AttendeeController {
       row.createCell(39).setCellValue(s.getEventDayThreeAttended());
       row.createCell(40).setCellValue(s.getEventDayFourAttended());
       row.createCell(41).setCellValue(s.getEventDayFiveAttended());
+
+      row.createCell(42).setCellValue(s.getCategoryOne());
+      row.createCell(43).setCellValue(s.getCategoryTwo());
+      row.createCell(44).setCellValue(s.getCategoryThree());
     }
 
     try {

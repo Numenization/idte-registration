@@ -216,6 +216,7 @@ class Webcam extends React.Component {
   }
 
   handleScan(data) {
+    console.log(data);
     if (data) {
       this.setState(
         {
@@ -227,6 +228,7 @@ class Webcam extends React.Component {
   }
 
   handleError(err) {
+    console.log(err);
     this.setState({ error: err.message });
   }
 

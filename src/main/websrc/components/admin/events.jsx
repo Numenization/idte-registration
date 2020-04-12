@@ -147,9 +147,8 @@ class Events extends React.Component {
   </tbody>
 </table>
     </div>
-    <div>
      <div  align= "center">
-            <button onClick= {this.postAnEvent,
+      <button onClick= {this.postAnEvent,
             alert("Event Created")
             
             } >Create Event</button>
@@ -157,14 +156,7 @@ class Events extends React.Component {
             
             </div>
     
-            <Footer />
-          </div>
-
-          <div align='center'>
-            <button onClick={this.postAnEvent}>Create Event</button>
-          </div>
-      
-        <Footer />
+       
       </div>
     );
   }

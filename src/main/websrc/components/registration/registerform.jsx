@@ -79,7 +79,15 @@ class FormPage extends React.Component {
     this.setState({
       type: res.type,
     });
-    document.getElementById('mytype').innerText = this.state.type;
+    if (res.type == 'supplier') {
+      document.getElementById('mytype').innerText = 'Supplier';
+    } else if (res.type == 'evaluator') {
+      document.getElementById('mytype').innerText = 'Evaluator';
+    } else if (res.type == 'presenter') {
+      document.getElementById('mytype').innerText = 'Presenter';
+    } else {
+      document.getElementById('mytype').innerText = '';
+    }
   }
 
   async getEventDates() {

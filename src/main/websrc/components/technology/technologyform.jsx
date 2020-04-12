@@ -28,7 +28,7 @@ class TestPage extends React.Component {
       email: '',
       to: '',
       body: '',
-      subject: ''
+      subject: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.postATech = this.postATech.bind(this);
@@ -67,13 +67,9 @@ class TestPage extends React.Component {
     for (let i = 0; i < this.state.errors.length; i++) {
       this.removeError(0);
     }
-    let tech = Technology.createTechnologyObjectFromState(this.state)
+    let tech = Technology.createTechnologyObjectFromState(this.state);
     try {
-      await this.req(
-        'POST',
-        '/idte/technologies',
-        tech
-      );
+      await this.req('POST', '/idte/technologies', tech);
       window.location.href = 'http://localhost:8080/idte/thankyou.html';
     } catch (e) {
       console.log(e.errors);
@@ -178,7 +174,6 @@ class TestPage extends React.Component {
           </div>
           <div className='technology-form'>
             <h1>Technology Submission Form</h1>
-            <p>Sample Text</p>
             <table>
               <tbody>
                 <tr>

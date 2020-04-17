@@ -21,7 +21,8 @@ class EventLayout extends React.Component {
 
         <div className='content'>
           <h1>Event Layout Map</h1>
-          <p>Display a map?</p>
+          <p>Below is the map of IDTE</p>
+          <img id='LayoutMap' src={require('../../images/LayoutMap.png')}></img>
         </div>
 
         <Footer />

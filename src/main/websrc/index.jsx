@@ -86,10 +86,7 @@ class App extends React.Component {
             </div>
             <div className='home-container-row'>
               <p style={{ width: '40%', minWidth: '250px' }}>
-                Sample Text Sample Text Sample Text Sample Text Sample Text
-                Sample Text Sample Text Sample Text Sample TextSample Text
-                Sample Text Sample Text Sample Text Sample Text Sample Text
-                Sample Text Sample Text Sample Text
+                Welcome to the IDTE site.
               </p>
               <div className='home-container-cell'>
                 <h3>Technology Submission</h3>

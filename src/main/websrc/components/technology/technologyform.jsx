@@ -178,7 +178,6 @@ class TestPage extends React.Component {
           </div>
           <div className='technology-form'>
             <h1>Technology Submission Form</h1>
-            <p>Sample Text</p>
             <table>
               <tbody>
                 <tr>

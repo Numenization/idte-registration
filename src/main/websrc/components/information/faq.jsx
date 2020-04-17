@@ -22,19 +22,13 @@ class FaqPage extends React.Component {
         <div className='content'>
           <h1>Event information</h1>
           <p>
-            Sample TextSample TextSample TextSample TextSample TextSample
-            TextSample TextSample TextSample TextSample TextSample TextSample
-            TextSample TextSample TextSample TextSample TextSample TextSample
-            TextSample TextSample TextSample TextSample TextSample TextSample
-            TextSample TextSample TextSample TextSample TextSample TextSample
-            TextSample TextSample TextSample TextSample TextSample TextSample
-            TextSample Text
+            This is the page where you can see information regarding IDTE.
+            Any other questions that need to be answered, please refer to the contact page.
           </p>
           <ul>
-            <li>Sample Text</li>
-            <li>Sample Text</li>
-            <li>Sample Text</li>
-            <li>Sample Text</li>
+            <li>Technologies can be submitted through the Technology tab</li>
+            <li>Attendee registration is submitted through the Registration tab</li>
+            <li>Technology and Registration dates are shown on the homepage</li>
           </ul>
         </div>
 

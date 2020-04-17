@@ -20,6 +20,7 @@ static async changeCurrentTech(opts = null){
     }
     return res;
 }
+/*
 static async replaceCurrent(opts = null){
     let url = "/idte/admin/replaceCurrent";
     let method = "PUT";
@@ -30,6 +31,26 @@ static async replaceCurrent(opts = null){
     }
     return res;
 }
+*/
+static async replaceCurrent(opts = null) {
+  try {
+     if (!opts) return;
+     let res = await req('PUT', '/idte/admin/replaceCurrent', opts);     
+     return res;
+   } catch (e) {
+     console.log(e.request);
+     alert(
+       'Error: ' +
+         e.status +
+         '\n' +
+         e.statusText +
+         '\n' +
+         'Make sure all required fields are filled with valid values'
+         
+     );
+   }
+ 
+ }
 static async changeCurrent(opts = null){
   let url = "/idte/admin/changeCurrent";
   let method = "PUT";
@@ -208,25 +229,30 @@ static async updateEventDates(opts = null) {
   }
 }
 static async deleteEvent(opts = null) {
-  try {
-    if (!opts) return;
-    let res = await ChangeRegistration.req(
-      "DELETE",
-      "/idte/admin/events",
-      opts
-    );
-    return res;
-  } catch (e) {
-    console.log(e.request);
-    alert(
-      "Error: " +
-        e.status +
-        "\n" +
-        e.statusText +
-        "\n" +
-        "Event not found"
-    );
+  var r=confirm("Are you sure you want to delete this event?");
+if (r==true)
+  {
+    try {
+      if (!opts) return;
+      let res = await ChangeRegistration.req(
+        "DELETE",
+        "/idte/admin/events",
+        opts
+      );
+      return res;
+    } catch (e) {
+      console.log(e.request);
+      alert(
+        "Error: " +
+          e.status +
+          "\n" +
+          e.statusText +
+          "\n" +
+          "Event not found"
+      );
+    }
   }
+
 }
 //-----------------------------------------
 

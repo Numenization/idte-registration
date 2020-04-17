@@ -1,4 +1,4 @@
-import Attendee from './attendee';
+import changeReg from './changeregistration';
 class Event {
     static createEventObjectFromState(state = null) {
       if (!state) return;
@@ -27,10 +27,10 @@ class Event {
 
 
     static async postEvent(opts = null) {
-
        try {
           if (!opts) return;
-          let res = await Attendee.req('POST', '/idte/admin/events', opts);     
+          let res = await changeReg.req('POST', '/idte/admin/events', opts);     
+          alert('Event Created');
           return res;
         } catch (e) {
           console.log(e.request);

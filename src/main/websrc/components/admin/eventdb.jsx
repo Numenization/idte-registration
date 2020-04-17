@@ -52,10 +52,10 @@ render(){
         <table>
                       <td width="110px"><b>Reg. Start</b></td>
                       <td width="90px"><b>Reg. End</b></td> 
-                      <td width="85px"><b>Sub. Start</b></td> 
-                      <td width="95px"><b>Sub. End</b></td> 
-                      <td width="60px"><b>Reg. Status</b></td> 
-                      <td width="65px"><b>Tech. Status</b></td> 
+                      <td width="100px"><b>Sub. Start</b></td> 
+                      <td width="100px"><b>Sub. End</b></td> 
+                      <td width="75px"><b>Reg. Status</b></td> 
+                      <td width="75px"><b>Tech. Status</b></td> 
                       <td width="80px"><b>Current Event</b></td> 
                       <td width="180px"><b>Event ID</b></td>
                       <td width="115px"><b>Modified Time</b></td>

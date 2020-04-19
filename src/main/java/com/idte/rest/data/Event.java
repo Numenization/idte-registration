@@ -1,4 +1,5 @@
 package com.idte.rest.data;
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Random;
@@ -156,6 +157,21 @@ public class Event{
       return "null";
     }
     
+  }
+  public Date convert(String date){
+    SimpleDateFormat original = new SimpleDateFormat("yyyy-MM-dd");
+
+    try{
+      Date newDate;
+      newDate = (Date) original.parse(date);
+    
+      return newDate;
+    }
+    catch (ParseException e) {
+      e.printStackTrace();
+      return null;
+    }
+
   }
   public void setRegistrationDates(String firstDay, String lastDay){
     SimpleDateFormat original = new SimpleDateFormat("yyyy-MM-dd");

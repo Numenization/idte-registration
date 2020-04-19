@@ -33,7 +33,9 @@ class Events extends React.Component {
     const opts = null;
     await change.replaceCurrent(opts);
     await Event.postEvent(Event.createEventObjectFromState(this.state));
-    window.location.href = '/idte/admin/changeregistration.html';
+    //window.location.href = '/idte/admin/changeregistration.html';
+     
+            
   }
 
   handleChange() {
@@ -60,6 +62,7 @@ class Events extends React.Component {
         <div className='content'>
           <h1>Event Details</h1>
           <p>Creating an event will replace the last active event. </p>
+          <p>Both technology submission dates must take place before both registration dates.</p>
           <div>
             <table align='center'>
               <tbody>
@@ -148,10 +151,7 @@ class Events extends React.Component {
 </table>
     </div>
      <div  align= "center">
-      <button onClick= {this.postAnEvent,
-            alert("Event Created")
-            
-            } >Create Event</button>
+      <button onClick= {this.postAnEvent} >Create Event</button>
             </div>
             
             </div>

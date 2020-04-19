@@ -39,59 +39,44 @@ public class EventController {
     String techSubStart = json.get("techSubStart");
     String techSubEnd = json.get("techSubEnd");
     
-    /*
-    String setUpOne = event.formatConverter(json.get("setUpOne"));
-    String setUpTwo= event.formatConverter(json.get("setUpTwo"));
-    String setUpThree= event.formatConverter(json.get("setUpThree"));
-    String dryRun= event.formatConverter(json.get("dryRun"));
-    String eventDayOne= event.formatConverter(json.get("eventDayOne"));
-    String eventDayTwo= event.formatConverter(json.get("eventDayTwo"));
-    String eventDayThree= event.formatConverter(json.get("eventDayThree"));
-    String eventDayFour= event.formatConverter(json.get("eventDayFour"));
-    String eventDayFive= event.formatConverter(json.get("eventDayFive"));
-    */
-
-    event.setSetUpOne(event.formatConverter(json.get("setUpOne")));
-    event.setSetUpTwo(event.formatConverter(json.get("setUpTwo")));
-    event.setSetUpThree(event.formatConverter(json.get("setUpThree")));
-    event.setDryRun(event.formatConverter(json.get("dryRun")));
-    event.setEventDayOne(event.formatConverter(json.get("eventDayOne")));
-    event.setEventDayTwo(event.formatConverter(json.get("eventDayTwo")));
-    event.setEventDayThree(event.formatConverter(json.get("eventDayThree")));
-    event.setEventDayFour(event.formatConverter(json.get("eventDayFour")));
-    event.setEventDayFive(event.formatConverter(json.get("eventDayFive")));
-
-    event.setEventID(event.GenerateKey());
-    event.setRegistrationDates(registrationStart, registrationEnd);
-    event.setTechnologyDates(techSubStart, techSubEnd);
-    event.setRegStatus(false);
-    event.setTechStatus(false);
-    /*
-    event.setEventDates(String.join(",",
-     setUpOne,
-     setUpTwo,
-     setUpThree,
-     dryRun,
-     eventDayOne,
-     eventDayTwo,
-     eventDayThree,
-     eventDayFour,
-     eventDayFive
-     ));
-     */
-    try {
-      // set all other events currentEvent to false
-      List<Event> eventList = events.findAll();
-      for(Event ev: eventList) {
-        ev.setCurrentEvent("false");
-        events.save(ev);
-      }
-
-      // save new event (which will be current event)
-      return new ResponseEntity<>(events.save(event), HttpStatus.CREATED);
-    } catch (Exception e) {
-      return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    Date regDateOne = event.convert(json.get("registrationStart"));
+    Date regDateTwo = event.convert(json.get("registrationEnd"));
+    Date techDateOne = event.convert(json.get("techSubStart"));
+    Date techDateTwo = event.convert(json.get("techSubEnd"));
+  
+    if(techDateOne.before(regDateOne) && techDateOne.before(regDateTwo)&& techDateTwo.before(regDateOne) && techDateTwo.before(regDateTwo)){
+      event.setSetUpOne(event.formatConverter(json.get("setUpOne")));
+      event.setSetUpTwo(event.formatConverter(json.get("setUpTwo")));
+      event.setSetUpThree(event.formatConverter(json.get("setUpThree")));
+      event.setDryRun(event.formatConverter(json.get("dryRun")));
+      event.setEventDayOne(event.formatConverter(json.get("eventDayOne")));
+      event.setEventDayTwo(event.formatConverter(json.get("eventDayTwo")));
+      event.setEventDayThree(event.formatConverter(json.get("eventDayThree")));
+      event.setEventDayFour(event.formatConverter(json.get("eventDayFour")));
+      event.setEventDayFive(event.formatConverter(json.get("eventDayFive")));
+  
+      event.setEventID(event.GenerateKey());
+      event.setRegistrationDates(registrationStart, registrationEnd);
+      event.setTechnologyDates(techSubStart, techSubEnd);
+      event.setRegStatus(false);
+      event.setTechStatus(false);
+      try {
+        // set all other events currentEvent to false
+        List<Event> eventList = events.findAll();
+        for(Event ev: eventList) {
+          ev.setCurrentEvent("false");
+          events.save(ev);
+        }
+        // save new event (which will be current event)
+        return new ResponseEntity<>(events.save(event), HttpStatus.CREATED);
+      } catch (Exception e) {
+        return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+      }   
     }
+    else{
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    } 
+    
 
   }
 
@@ -122,6 +107,7 @@ public class EventController {
         }
       }
     }
+    
     // Change oldEvent's currentEvent = false
     oldEvent.setCurrentEvent("false");
 
@@ -165,7 +151,7 @@ public class EventController {
   // ---------- Used when you create a new event, and it makes that new event the
   // new current event
   @PutMapping(path = "/admin/replaceCurrent", consumes = "application/json", produces = "application/json")
-  public Object replaceCurrentEvent() {
+  public Object replaceCurrentEvent(@RequestBody Map <String, String> json) {
     Event testEvent = new Event();
     Example<Event> example = Example.of(testEvent);
     Event oldEvent = events.findOne(example).orElse(null);
@@ -191,6 +177,11 @@ public class EventController {
         }
       }
 
+      Date regDateOne = oldEvent.convert(json.get("registrationStart"));
+      Date regDateTwo = oldEvent.convert(json.get("registrationEnd"));
+      Date techDateOne = oldEvent.convert(json.get("techSubStart"));
+      Date techDateTwo = oldEvent.convert(json.get("techSubEnd"));
+     if(techDateOne.before(regDateOne) && techDateOne.before(regDateTwo)&& techDateTwo.before(regDateOne) && techDateTwo.before(regDateTwo)){
       oldEvent.setCurrentEvent("false");
       try {
         events.save(oldEvent);
@@ -198,9 +189,15 @@ public class EventController {
       } catch (Exception e) {
         return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
       }
-    } else {
+    }
+    else{
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    } 
+  }
+    else {
       return new ResponseEntity<>(HttpStatus.OK);
     }
+    
   }
 
   // Inverts an events regStatus value

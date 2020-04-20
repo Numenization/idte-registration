@@ -94,7 +94,7 @@ class App extends React.Component {
                 <span id='techMessage'></span>
               </div>
               <div className='home-container-cell'>
-                <h3>IDTE Registration</h3>
+                <h3>Attendee Registration</h3>
                 <span id='regStatus'></span>
                 <span id='regMessage'></span>
               </div>

@@ -69,7 +69,6 @@ class RegistrationPage extends React.Component {
         <div className='content'>
           <div className='registration-buttons'>
             <h1>Registration</h1>
-            <p>Sample Text</p>
             <button
               id='link-button'
               onClick={async () => this.submitSupp('supplier')}

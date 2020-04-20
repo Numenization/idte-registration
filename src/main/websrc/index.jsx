@@ -86,10 +86,7 @@ class App extends React.Component {
             </div>
             <div className='home-container-row'>
               <p style={{ width: '40%', minWidth: '250px' }}>
-                Sample Text Sample Text Sample Text Sample Text Sample Text
-                Sample Text Sample Text Sample Text Sample TextSample Text
-                Sample Text Sample Text Sample Text Sample Text Sample Text
-                Sample Text Sample Text Sample Text
+                Welcome to the IDTE site.
               </p>
               <div className='home-container-cell'>
                 <h3>Technology Submission</h3>
@@ -97,7 +94,7 @@ class App extends React.Component {
                 <span id='techMessage'></span>
               </div>
               <div className='home-container-cell'>
-                <h3>IDTE Registration</h3>
+                <h3>Attendee Registration</h3>
                 <span id='regStatus'></span>
                 <span id='regMessage'></span>
               </div>

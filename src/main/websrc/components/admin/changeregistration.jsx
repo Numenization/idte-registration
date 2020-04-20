@@ -81,7 +81,7 @@ class ChangeRegistration extends React.Component {
     let k = await Event.getEventDates(opts);
     let date = k.status;
     let listDates = date.split(',');
-    console.log(k);
+    
     document.getElementById('setOne').innerText = listDates[0];
     document.getElementById('setTwo').innerText = listDates[1];
     document.getElementById('setThree').innerText = listDates[2];
@@ -205,7 +205,7 @@ class ChangeRegistration extends React.Component {
           ></input>
           <br></br>
           <label>
-            Tech. Sub. Start Date:<label id='techEnd'></label>
+            Tech. Sub. End Date:<label id='techEnd'></label>
           </label>{' '}
           <input
             name='techSubEnd'

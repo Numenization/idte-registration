@@ -49,39 +49,34 @@ render(){
         <div>
               <label>Archived Events: </label>
         </div>
-        <table>
-                      <td width="110px"><b>Reg. Start</b></td>
-                      <td width="90px"><b>Reg. End</b></td> 
-                      <td width="100px"><b>Sub. Start</b></td> 
-                      <td width="100px"><b>Sub. End</b></td> 
-                      <td width="75px"><b>Reg. Status</b></td> 
-                      <td width="75px"><b>Tech. Status</b></td> 
-                      <td width="80px"><b>Current Event</b></td> 
-                      <td width="180px"><b>Event ID</b></td>
-                      <td width="115px"><b>Modified Time</b></td>
-                      <td width="115px"><b>Modified By</b></td>
-                      </table>
-          {events.map((event, i) => {
-              return(
-                  <div>
+        <table border="2px">
+            
+                <thead>
+                    <tr>
+                      <td ><b>Reg. Start</b></td>
+                      <td><b>Reg. End</b></td> 
+                      <td ><b>Sub. Start</b></td> 
+                      <td ><b>Sub. End</b></td> 
+                      <td ><b>Reg. Status</b></td> 
+                      <td ><b>Tech. Status</b></td> 
+                      <td><b>Current Event</b></td> 
+                      <td ><b>Event ID</b></td>
+                      </tr>
+                      </thead>
+                      <tbody>
+                          {events.map((event, i) => {
+                              return(
+                              <tr key={i} id={event.eventID} className="event-row" >
                       
-                  <div key={i} id={event.eventID} className="event-row" >
-                      
-                      <table  border="2">
-                    <tbody>
-                      <tr>
-                      <td width="110px">{event.registrationStart}</td> 
-                      <td width="110px">{event.registrationEnd}</td> 
-                      <td width="110px">{event.technologyStart}</td> 
-                      <td width="110px">{event.technologyEnd}</td>
-                      <td width="80px">{event.registrationStatus.toString()}</td>
-                      <td width="80px">{event.technologyStatus.toString()}</td>
-                      <td width="80px">{event.currentEvent.toString()}</td> 
-                      <td width="180px">{event.eventID}</td>
-                      <td width="180px">{event.lastModified}</td>
-                      <td width="180px">{event.lastModifiedBy}</td>
-                       </tr>
-                       <button id= "link-button" 
+                      <td >{event.registrationStart}</td> 
+                      <td >{event.registrationEnd}</td> 
+                      <td>{event.technologyStart}</td> 
+                      <td >{event.technologyEnd}</td>
+                      <td >{event.registrationStatus.toString()}</td>
+                      <td >{event.technologyStatus.toString()}</td>
+                      <td >{event.currentEvent.toString()}</td> 
+                      <td >{event.eventID}</td>
+                        <button id= "link-button" 
                       onClick={
                         async e=> {
                             await Event.changeCurrent({
@@ -99,15 +94,12 @@ render(){
                               await this.getEvents();
                           }}
                       >Delete</button>
-                       </tbody>
-                      </table>
-                      </div>
-                      
-                  </div>
+                      </tr>
               )
           })
           }
-    
+          </tbody>
+    </table>
         </div> 
         <Footer />
     </div>
